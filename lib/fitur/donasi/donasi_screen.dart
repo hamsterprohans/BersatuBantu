@@ -40,30 +40,43 @@ class _DonasiScreenState extends State<DonasiScreen> {
     });
 
     try {
-      var query = supabase
+      final response = await supabase
           .from('donation_campaigns')
           .select('*')
           .order('created_at', ascending: false);
 
-      final response = await query;
-      
-      // Update status berdasarkan end_time
       final now = DateTime.now();
+      final List<String> expiredIds = [];
+
       final updatedDonations = List<Map<String, dynamic>>.from(response).map((donation) {
         final endTime = DateTime.parse(donation['end_time']);
         if (now.isAfter(endTime) && donation['status'] == 'active') {
           donation['status'] = 'Selesai';
+          expiredIds.add(donation['id'].toString());
         } else if (donation['status'] == 'active') {
           donation['status'] = 'Aktif';
         }
         return donation;
       }).toList();
-      
+
+      // Auto-update expired campaigns di DB
+      if (expiredIds.isNotEmpty) {
+        try {
+          await supabase
+              .from('donation_campaigns')
+              .update({'status': 'Selesai'})
+              .inFilter('id', expiredIds);
+          print('[Donasi] Auto-closed ${expiredIds.length} expired campaigns in DB');
+        } catch (e) {
+          print('[Donasi] Failed to update expired status in DB: $e');
+        }
+      }
+
       setState(() {
         _donations = updatedDonations;
         _isLoading = false;
       });
-      
+
       print('[Donasi] Loaded ${_donations.length} donations');
     } catch (e) {
       print('[Donasi] Error loading donations: $e');
@@ -73,14 +86,32 @@ class _DonasiScreenState extends State<DonasiScreen> {
     }
   }
 
+  bool _isExpired(Map<String, dynamic> donation) {
+    try {
+      final endTime = DateTime.parse(donation['end_time']);
+      return DateTime.now().isAfter(endTime);
+    } catch (_) {
+      return false;
+    }
+  }
+
   List<Map<String, dynamic>> get _filteredDonations {
     return _donations.where((donation) {
-      // Filter by status
-      if (_selectedFilter != 'Semua') {
-        final status = donation['status'] ?? 'Aktif';
-        if (status != _selectedFilter) return false;
+      final status = (donation['status'] ?? '').toString().toLowerCase();
+
+      if (_selectedFilter == 'Semua') {
+        // Sembunyikan expired (by end_time) atau status bukan active
+        if (_isExpired(donation)) return false;
+        if (status == 'selesai' || status == 'draft' || status == 'closed') return false;
+      } else if (_selectedFilter == 'Aktif') {
+        if (_isExpired(donation)) return false;
+        if (status == 'selesai' || status == 'draft' || status == 'closed') return false;
+      } else if (_selectedFilter == 'Selesai') {
+        // Tampilkan yang expired atau status Selesai
+        final isSelesai = _isExpired(donation) || status == 'selesai' || status == 'closed';
+        if (!isSelesai) return false;
       }
-      
+
       // Filter by category
       if (_selectedCategory != 'Semua') {
         final category = (donation['category'] ?? '').toString();
@@ -88,7 +119,7 @@ class _DonasiScreenState extends State<DonasiScreen> {
           return false;
         }
       }
-      
+
       return true;
     }).toList();
   }

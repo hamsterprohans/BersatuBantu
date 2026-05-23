@@ -228,6 +228,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             break;
           } catch (e) {
             final msg = e.toString();
+            // If duplicate key, trigger already created the profile — treat as success
+            if (msg.contains('duplicate key') || msg.contains('violates unique constraint')) {
+              print('[Register] Profile already created by trigger. Treating as success.');
+              inserted = true;
+              break;
+            }
             // If foreign key error (user row not present yet) then instead of
             // repeatedly attempting inserts (which will fail until auth.users exists),
             // poll for the profile row created by the trigger on auth.users.
@@ -338,9 +344,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Registrasi berhasil! Silakan login.'),
+          content: Text('Registrasi berhasil! Cek email untuk konfirmasi akun, lalu login.'),
           backgroundColor: Colors.green,
-          duration: Duration(seconds: 3),
+          duration: Duration(seconds: 5),
         ),
       );
 

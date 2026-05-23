@@ -3,18 +3,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'place_suggestion.dart';
 
 // Web interop
 // ignore_for_file: uri_does_not_exist, avoid_web_libraries_in_flutter, deprecated_member_use
 import 'dart:js_util' as js_util;
 import 'dart:html' as html;
-
-class PlaceSuggestion {
-  final String placeId;
-  final String description;
-
-  PlaceSuggestion({required this.placeId, required this.description});
-}
 
 class PlaceService {
   final String? apiKey = dotenv.env['GOOGLE_MAPS_API_KEY'];
