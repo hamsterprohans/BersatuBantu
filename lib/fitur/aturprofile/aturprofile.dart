@@ -9,45 +9,7 @@ import 'package:bersatubantu/fitur/dashboard/dashboard_screen.dart';
 import 'package:bersatubantu/fitur/donasi/donasi_screen.dart';
 
 // ------------------------------------------------------------------
-// 1. MAIN & INISIALISASI
-// ------------------------------------------------------------------
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Pastikan URL & KEY Supabase kamu sudah benar
-  await Supabase.initialize(
-    url: 'https://PROJECT-ID.supabase.co',
-    anonKey: 'PUBLIC-ANON-KEY',
-  );
-
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'BersatuBantu',
-      theme: ThemeData(
-        primaryColor: const Color(0xFF768BBD),
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: const Color(0xFF768BBD),
-          secondary: const Color(0xFF768BBD),
-        ),
-        scaffoldBackgroundColor: Colors.white,
-        fontFamily: 'Poppins',
-      ),
-      // Langsung masuk ke ProfileScreen (Tanpa Login Screen)
-      home: const ProfileScreen(),
-    );
-  }
-}
-
-// ------------------------------------------------------------------
-// 2. HALAMAN PROFIL (REAL DB CONNECTION)
+// HALAMAN PROFIL (REAL DB CONNECTION)
 // ------------------------------------------------------------------
 class ProfileScreen extends StatefulWidget {
   final bool isAdmin;

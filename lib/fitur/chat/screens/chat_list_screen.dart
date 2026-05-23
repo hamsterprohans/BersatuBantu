@@ -38,70 +38,88 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
 
       print('[ChatList] Current user ID: ${currentUser.id}');
 
-      // Get all conversations (assuming conversation_id groups messages)
-      // If no conversations table, group by conversation using message data
-      final messages = await supabase
-          .from('messages')
-          .select('id, conversation_id, sender_id, content, created_at, is_read')
-          .order('created_at', ascending: false)
-          .limit(1000);
-      
-      print('[ChatList] Total messages found: ${messages.length}');
+      // Get conversations user is part of via conversation_participants
+      final participantRows = await supabase
+          .from('conversation_participants')
+          .select('conversation_id')
+          .eq('user_id', currentUser.id);
 
-      if (messages.isEmpty) {
-        print('[ChatList] No messages found');
+      final conversationIds = (participantRows as List)
+          .map((r) => r['conversation_id'] as String)
+          .toList();
+
+      print('[ChatList] User in ${conversationIds.length} conversations');
+
+      if (conversationIds.isEmpty) {
         setState(() => _chatList = []);
         return;
       }
 
-      // Group messages by conversation_id
+      // Get latest message per conversation
+      final messages = await supabase
+          .from('messages')
+          .select('id, conversation_id, sender_id, content, created_at, is_read')
+          .inFilter('conversation_id', conversationIds)
+          .order('created_at', ascending: false);
+
+      print('[ChatList] Total messages found: ${messages.length}');
+
+      if (messages.isEmpty) {
+        setState(() => _chatList = []);
+        return;
+      }
+
+      // Group by conversation_id — keep only latest message per conversation
       Map<String, Map<String, dynamic>> conversations = {};
-
       for (var msg in messages) {
-        final conversationId = msg['conversation_id'] as String?;
+        final conversationId = msg['conversation_id'] as String? ?? 'unknown';
         final senderId = msg['sender_id'] as String?;
-        
-        // Use conversation_id as key, or fallback to sender_id
-        String conversationKey = conversationId ?? senderId ?? 'unknown';
 
-        if (!conversations.containsKey(conversationKey)) {
-          conversations[conversationKey] = {
+        if (!conversations.containsKey(conversationId)) {
+          conversations[conversationId] = {
             'conversation_id': conversationId,
             'sender_id': senderId,
             'last_message': msg['content'] ?? '',
             'last_message_time': msg['created_at'],
             'unread_count': msg['is_read'] == false ? 1 : 0,
-            'name': '', // Will be loaded from profiles
+            'name': '',
           };
         } else {
-          // Count unread messages
           if (msg['is_read'] == false) {
-            conversations[conversationKey]!['unread_count'] = 
-              (conversations[conversationKey]!['unread_count'] ?? 0) + 1;
+            conversations[conversationId]!['unread_count'] =
+                (conversations[conversationId]!['unread_count'] ?? 0) + 1;
           }
         }
       }
 
-      // Load names for each conversation from profiles
+      // Load other participant's name for each conversation
       List<Map<String, dynamic>> chatList = [];
-      
       for (var convo in conversations.values) {
         try {
-          if (convo['sender_id'] != null) {
-            // Load profile name for sender
+          // Find other participant in conversation (not current user)
+          final otherParticipants = await supabase
+              .from('conversation_participants')
+              .select('user_id')
+              .eq('conversation_id', convo['conversation_id'])
+              .neq('user_id', currentUser.id)
+              .limit(1);
+
+          final otherId = otherParticipants.isNotEmpty
+              ? otherParticipants[0]['user_id'] as String?
+              : convo['sender_id'];
+
+          if (otherId != null) {
             final profileData = await supabase
                 .from('profiles')
                 .select('full_name')
-                .eq('id', convo['sender_id'])
+                .eq('id', otherId)
                 .maybeSingle();
-            
             convo['name'] = profileData?['full_name'] ?? 'User';
-            convo['avatar_type'] = 'user';
+            convo['sender_id'] = otherId;
           }
-          
           chatList.add(convo);
         } catch (e) {
-          print('[ChatList] Error loading name for conversation: $e');
+          print('[ChatList] Error loading name: $e');
           convo['name'] = 'Unknown';
           chatList.add(convo);
         }
