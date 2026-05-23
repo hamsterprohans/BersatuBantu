@@ -33,7 +33,7 @@ class DocumentUploadService {
   }) async {
     try {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final uniqueFileName = '${documentType}_${timestamp}.pdf';
+      final uniqueFileName = '${documentType}_$timestamp.pdf';
       final remotePath = 'org_$organizationId/$uniqueFileName';
 
       if (kIsWeb) {
@@ -60,9 +60,7 @@ class DocumentUploadService {
             );
 
         // Get public URL
-        final publicUrl = _client.storage
-            .from(bucket)
-            .getPublicUrl(remotePath);
+        final publicUrl = _client.storage.from(bucket).getPublicUrl(remotePath);
 
         return publicUrl;
       }
@@ -81,7 +79,7 @@ class DocumentUploadService {
   }) async {
     try {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final uniqueFileName = '${documentType}_${timestamp}.pdf';
+      final uniqueFileName = '${documentType}_$timestamp.pdf';
       final remotePath = 'org_$organizationId/$uniqueFileName';
 
       print('[DocumentUpload] ========== START UPLOAD ==========');
@@ -102,7 +100,7 @@ class DocumentUploadService {
         throw Exception(
           'Bucket "$bucket" tidak ditemukan atau tidak bisa diakses.\n'
           'Silakan create bucket "$bucket" di Supabase Storage.\n'
-          'Error: $e'
+          'Error: $e',
         );
       }
 
@@ -113,19 +111,14 @@ class DocumentUploadService {
           .uploadBinary(
             remotePath,
             bytes,
-            fileOptions: const FileOptions(
-              cacheControl: '3600',
-              upsert: true,
-            ),
+            fileOptions: const FileOptions(cacheControl: '3600', upsert: true),
           );
 
       print('[DocumentUpload] ✅ uploadBinary completed successfully');
 
       // Get public URL
       print('[DocumentUpload] Getting public URL...');
-      final publicUrl = _client.storage
-          .from(bucket)
-          .getPublicUrl(remotePath);
+      final publicUrl = _client.storage.from(bucket).getPublicUrl(remotePath);
 
       print('[DocumentUpload] ✅ Public URL obtained: $publicUrl');
       print('[DocumentUpload] ========== UPLOAD SUCCESS ==========');
@@ -134,16 +127,18 @@ class DocumentUploadService {
     } on StorageException catch (e) {
       print('[DocumentUpload] ❌ StorageException: ${e.message}');
       print('[DocumentUpload] Status code: ${e.statusCode}');
-      
+
       String errorMsg = 'Gagal upload dokumen';
       if (e.statusCode == '404') {
-        errorMsg = 'Bucket "document_organisasi" tidak ditemukan.\n'
+        errorMsg =
+            'Bucket "document_organisasi" tidak ditemukan.\n'
             'Silakan create bucket di Supabase Storage terlebih dahulu.';
       } else if (e.statusCode == '401' || e.statusCode == '403') {
-        errorMsg = 'Tidak ada izin untuk upload dokumen.\n'
+        errorMsg =
+            'Tidak ada izin untuk upload dokumen.\n'
             'Pastikan policies sudah di-set dengan benar.';
       }
-      
+
       throw Exception(errorMsg);
     } catch (e) {
       print('[DocumentUpload] ❌ Error uploading document from bytes: $e');

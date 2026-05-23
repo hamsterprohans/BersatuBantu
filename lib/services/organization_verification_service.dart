@@ -19,7 +19,7 @@ class OrganizationVerificationService {
   }) async {
     try {
       final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final filename = '${fileType}_${timestamp}.pdf';
+      final filename = '${fileType}_$timestamp.pdf';
       final remotePath = '$ownerId/$filename';
 
       if (kIsWeb && fileBytes != null) {

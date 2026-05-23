@@ -13,10 +13,8 @@ Future<void> testOrganizationRequestTable() async {
   try {
     // Test 1: Fetch all records
     print('[Test 1] Fetching ALL records from organization_request...');
-    final allRecords = await supabase
-        .from('organization_request')
-        .select('*');
-    
+    final allRecords = await supabase.from('organization_request').select('*');
+
     print('[Test 1] ✅ Total records: ${allRecords.length}');
     if (allRecords.isNotEmpty) {
       print('[Test 1] First record: ${allRecords[0]}');
@@ -31,7 +29,7 @@ Future<void> testOrganizationRequestTable() async {
         .from('organization_request')
         .select('*')
         .eq('status', 'pending');
-    
+
     print('[Test 2] ✅ Pending records: ${pendingRecords.length}');
     if (pendingRecords.isNotEmpty) {
       print('[Test 2] First pending record: ${pendingRecords[0]}');
@@ -41,7 +39,7 @@ Future<void> testOrganizationRequestTable() async {
     // Test 3: Check specific fields
     print('[Test 3] Checking field values in first record...');
     if (allRecords.isNotEmpty) {
-      final record = allRecords[0] as Map<String, dynamic>;
+      final record = allRecords[0];
       print('[Test 3] request_id: ${record['request_id']}');
       print('[Test 3] nama_organisasi: ${record['nama_organisasi']}');
       print('[Test 3] nama_pemilik: ${record['nama_pemilik']}');
@@ -87,11 +85,12 @@ Future<void> testInsertSimpleRecord() async {
 
   try {
     print('[Insert] Attempting to insert test record...');
-    
+
     final testData = {
       'nama_organisasi': 'Test Organisasi',
       'nama_pemilik': 'Test Pemilik',
-      'email_organisasi': 'test_${DateTime.now().millisecondsSinceEpoch}@test.com',
+      'email_organisasi':
+          'test_${DateTime.now().millisecondsSinceEpoch}@test.com',
       'email_pemilik': 'pemilik@test.com',
       'password_organisasi': 'hashed_password_test',
       'no_telpon_pemilik': '0812345678',
@@ -108,13 +107,13 @@ Future<void> testInsertSimpleRecord() async {
         .select('request_id');
 
     print('[Insert] ✅ Success! Request ID: ${response[0]['request_id']}');
-    
+
     // Verify it was inserted
     final verify = await supabase
         .from('organization_request')
         .select('*')
         .eq('request_id', response[0]['request_id']);
-    
+
     print('[Insert] ✅ Verification: ${verify[0]}');
   } catch (e) {
     print('[Insert] ❌ ERROR: $e');

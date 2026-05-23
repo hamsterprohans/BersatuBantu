@@ -11,10 +11,7 @@ import 'dart:convert';
 class BerikanDonasiScreen extends StatefulWidget {
   final Map<String, dynamic> donation;
 
-  const BerikanDonasiScreen({
-    super.key,
-    required this.donation,
-  });
+  const BerikanDonasiScreen({super.key, required this.donation});
 
   @override
   State<BerikanDonasiScreen> createState() => _BerikanDonasiScreenState();
@@ -112,17 +109,31 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
           lng = double.tryParse(maybeLng.toString());
         }
       } else if (loc is Map) {
-        final dynamic maybeLat = loc['lat'] ?? loc['latitude'] ?? (loc['location'] != null ? loc['location']['lat'] : null);
-        final dynamic maybeLng = loc['lng'] ?? loc['longitude'] ?? (loc['location'] != null ? loc['location']['lng'] : null);
-        lat = maybeLat is num ? maybeLat.toDouble() : double.tryParse(maybeLat?.toString() ?? '');
-        lng = maybeLng is num ? maybeLng.toDouble() : double.tryParse(maybeLng?.toString() ?? '');
+        final dynamic maybeLat =
+            loc['lat'] ??
+            loc['latitude'] ??
+            (loc['location'] != null ? loc['location']['lat'] : null);
+        final dynamic maybeLng =
+            loc['lng'] ??
+            loc['longitude'] ??
+            (loc['location'] != null ? loc['location']['lng'] : null);
+        lat = maybeLat is num
+            ? maybeLat.toDouble()
+            : double.tryParse(maybeLat?.toString() ?? '');
+        lng = maybeLng is num
+            ? maybeLng.toDouble()
+            : double.tryParse(maybeLng?.toString() ?? '');
       } else if (loc is String) {
         try {
           final parsed = jsonDecode(loc) as Map<String, dynamic>;
           final maybeLat = parsed['lat'] ?? parsed['latitude'];
           final maybeLng = parsed['lng'] ?? parsed['longitude'];
-          lat = maybeLat is num ? maybeLat.toDouble() : double.tryParse(maybeLat?.toString() ?? '');
-          lng = maybeLng is num ? maybeLng.toDouble() : double.tryParse(maybeLng?.toString() ?? '');
+          lat = maybeLat is num
+              ? maybeLat.toDouble()
+              : double.tryParse(maybeLat?.toString() ?? '');
+          lng = maybeLng is num
+              ? maybeLng.toDouble()
+              : double.tryParse(maybeLng?.toString() ?? '');
         } catch (_) {
           // ignore
         }
@@ -133,13 +144,22 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
         setState(() {
           _campaignPosition = pos;
           _mapMarkers.clear();
-          _mapMarkers.add(Marker(
-            markerId: const MarkerId('campaign_location'),
-            position: pos,
-            infoWindow: InfoWindow(title: _campaignLocationName ?? widget.donation['title']?.toString() ?? 'Lokasi'),
-          ));
+          _mapMarkers.add(
+            Marker(
+              markerId: const MarkerId('campaign_location'),
+              position: pos,
+              infoWindow: InfoWindow(
+                title:
+                    _campaignLocationName ??
+                    widget.donation['title']?.toString() ??
+                    'Lokasi',
+              ),
+            ),
+          );
           // read location_name if present
-          final ln = widget.donation['location_name'] ?? loc is Map ? (loc['name'] ?? loc['location_name']) : null;
+          final ln = widget.donation['location_name'] ?? loc is Map
+              ? (loc['name'] ?? loc['location_name'])
+              : null;
           _campaignLocationName = ln?.toString();
         });
         // If map controller already exists, animate to the campaign location
@@ -186,7 +206,8 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
 
       // If it's a money donation, start Midtrans payment flow via backend
       if (_donationType == 'uang') {
-        final orderId = 'don-${widget.donation['id']}-${DateTime.now().millisecondsSinceEpoch}';
+        final orderId =
+            'don-${widget.donation['id']}-${DateTime.now().millisecondsSinceEpoch}';
 
         // Call backend to create a Midtrans transaction (server must use Server Key)
         final res = await _createMidtransTransactionOnServer(
@@ -199,7 +220,12 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
 
         // Insert transaction with status 'pending'. NOTE: Do NOT update collected amount here.
         // Try to extract Midtrans payment id from backend response so we can map webhooks later.
-        final midtransId = (res['raw'] is Map) ? (res['raw']['id'] ?? res['raw']['payment_link_id'] ?? res['raw']['external_id'] ?? res['raw']['order_id']) : (res['id'] ?? res['payment_link_id'] ?? res['external_id'] ?? null);
+        final midtransId = (res['raw'] is Map)
+            ? (res['raw']['id'] ??
+                  res['raw']['payment_link_id'] ??
+                  res['raw']['external_id'] ??
+                  res['raw']['order_id'])
+            : (res['id'] ?? res['payment_link_id'] ?? res['external_id']);
 
         await supabase.from('donation_transactions').insert({
           'campaign_id': widget.donation['id'],
@@ -208,9 +234,13 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
           'donor_email': _emailController.text.trim(),
           'amount': amount,
           'donation_type': _donationType,
-          'payment_method': _donationType == 'uang' ? _selectedPaymentMethod : null,
+          'payment_method': _donationType == 'uang'
+              ? _selectedPaymentMethod
+              : null,
           'message': _messageController.text.trim(),
-          'address': _donationType == 'barang' ? _addressController.text.trim() : null,
+          'address': _donationType == 'barang'
+              ? _addressController.text.trim()
+              : null,
           'is_anonymous': _isAnonymous,
           'status': 'pending',
           'midtrans_order_id': midtransId,
@@ -218,8 +248,16 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
         });
 
         // Launch payment URL returned by backend (support common response fields)
-        final paymentUrl = res['redirect_url'] ?? res['payment_url'] ?? res['redirectUrl'] ?? res['url'] ?? res['payment_link_url'] ?? res['invoice_url'];
-        if (paymentUrl != null && paymentUrl is String && paymentUrl.isNotEmpty) {
+        final paymentUrl =
+            res['redirect_url'] ??
+            res['payment_url'] ??
+            res['redirectUrl'] ??
+            res['url'] ??
+            res['payment_link_url'] ??
+            res['invoice_url'];
+        if (paymentUrl != null &&
+            paymentUrl is String &&
+            paymentUrl.isNotEmpty) {
           await _launchPaymentUrl(paymentUrl);
 
           // After launching the payment page, prompt the user to check the payment status
@@ -228,10 +266,18 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
               context: context,
               builder: (ctx) => AlertDialog(
                 title: const Text('Pembayaran dimulai'),
-                content: const Text('Selesaikan pembayaran pada halaman yang terbuka. Ketuk "Periksa sekarang" untuk mengecek status pembayaran.'),
+                content: const Text(
+                  'Selesaikan pembayaran pada halaman yang terbuka. Ketuk "Periksa sekarang" untuk mengecek status pembayaran.',
+                ),
                 actions: [
-                  TextButton(onPressed: () => Navigator.of(ctx).pop('nanti'), child: const Text('Nanti')),
-                  TextButton(onPressed: () => Navigator.of(ctx).pop('periksa'), child: const Text('Periksa sekarang')),
+                  TextButton(
+                    onPressed: () => Navigator.of(ctx).pop('nanti'),
+                    child: const Text('Nanti'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(ctx).pop('periksa'),
+                    child: const Text('Periksa sekarang'),
+                  ),
                 ],
               ),
             );
@@ -261,9 +307,13 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
         'donor_email': _emailController.text.trim(),
         'amount': amount,
         'donation_type': _donationType,
-        'payment_method': _donationType == 'uang' ? _selectedPaymentMethod : null,
+        'payment_method': _donationType == 'uang'
+            ? _selectedPaymentMethod
+            : null,
         'message': _messageController.text.trim(),
-        'address': _donationType == 'barang' ? _addressController.text.trim() : null,
+        'address': _donationType == 'barang'
+            ? _addressController.text.trim()
+            : null,
         'is_anonymous': _isAnonymous,
         'status': 'pending',
         'created_at': DateTime.now().toIso8601String(),
@@ -324,17 +374,14 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
       'order_id': orderId,
       'gross_amount': amount,
       'payment_method': paymentMethod,
-      'customer': {
-        'first_name': name,
-        'email': email,
-      },
+      'customer': {'first_name': name, 'email': email},
       'item_details': [
         {
           'id': widget.donation['id']?.toString() ?? 'donation',
           'price': amount,
           'quantity': 1,
           'name': widget.donation['title'] ?? 'Donasi',
-        }
+        },
       ],
     };
 
@@ -367,7 +414,11 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
 
   Future<void> _refreshCampaign() async {
     try {
-      final resp = await supabase.from('donation_campaigns').select('collected_amount').eq('id', widget.donation['id']).maybeSingle();
+      final resp = await supabase
+          .from('donation_campaigns')
+          .select('collected_amount')
+          .eq('id', widget.donation['id'])
+          .maybeSingle();
       if (resp != null) {
         setState(() {
           _latestCollectedAmount = (resp['collected_amount'] ?? 0) as int;
@@ -380,14 +431,30 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
 
   Future<void> _checkTransactionStatus(String? midtransId) async {
     if (midtransId == null || midtransId.isEmpty) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('ID pembayaran tidak tersedia'), backgroundColor: Colors.orange));
+      if (mounted)
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('ID pembayaran tidak tersedia'),
+            backgroundColor: Colors.orange,
+          ),
+        );
       return;
     }
 
     try {
-      final tx = await supabase.from('donation_transactions').select('status,amount,campaign_id').eq('midtrans_order_id', midtransId).maybeSingle();
+      final tx = await supabase
+          .from('donation_transactions')
+          .select('status,amount,campaign_id')
+          .eq('midtrans_order_id', midtransId)
+          .maybeSingle();
       if (tx == null) {
-        if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Transaksi belum ditemukan'), backgroundColor: Colors.orange));
+        if (mounted)
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Transaksi belum ditemukan'),
+              backgroundColor: Colors.orange,
+            ),
+          );
         return;
       }
 
@@ -396,14 +463,32 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
 
       final settled = ['settlement', 'paid', 'capture', 'completed'];
       if (settled.contains(status.toLowerCase())) {
-        if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Donasi masuk: ${_formatCurrency(amount)}'), backgroundColor: Colors.green));
+        if (mounted)
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Donasi masuk: ${_formatCurrency(amount)}'),
+              backgroundColor: Colors.green,
+            ),
+          );
         await _refreshCampaign();
       } else {
-        if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Status pembayaran: $status'), backgroundColor: Colors.orange));
+        if (mounted)
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Status pembayaran: $status'),
+              backgroundColor: Colors.orange,
+            ),
+          );
       }
     } catch (e) {
       print('[BerikanDonasi] Error checking tx status: $e');
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Gagal memeriksa status pembayaran'), backgroundColor: Colors.red));
+      if (mounted)
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Gagal memeriksa status pembayaran'),
+            backgroundColor: Colors.red,
+          ),
+        );
     }
   }
 
@@ -413,7 +498,8 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
     final description = widget.donation['description'] ?? '';
     final imageUrl = widget.donation['cover_image_url'];
     final targetAmount = widget.donation['target_amount'] ?? 1;
-    final collectedAmount = _latestCollectedAmount ?? (widget.donation['collected_amount'] ?? 0);
+    final collectedAmount =
+        _latestCollectedAmount ?? (widget.donation['collected_amount'] ?? 0);
     final progress = collectedAmount / targetAmount;
     final daysRemaining = _getDaysRemaining();
 
@@ -521,7 +607,8 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
 
                                     // Progress
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           '${_formatNumber(collectedAmount)} / ${_formatNumber(targetAmount)}',
@@ -549,9 +636,10 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                       child: LinearProgressIndicator(
                                         value: progress.clamp(0.0, 1.0),
                                         backgroundColor: Colors.grey[200],
-                                        valueColor: const AlwaysStoppedAnimation<Color>(
-                                          Color(0xFF8FA3CC),
-                                        ),
+                                        valueColor:
+                                            const AlwaysStoppedAnimation<Color>(
+                                              Color(0xFF8FA3CC),
+                                            ),
                                         minHeight: 8,
                                       ),
                                     ),
@@ -577,7 +665,10 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
 
                       // Location Map (if available)
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 8,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -643,7 +734,8 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                       fontFamily: 'CircularStd',
                                     ),
                                   ),
-                                  controlAffinity: ListTileControlAffinity.leading,
+                                  controlAffinity:
+                                      ListTileControlAffinity.leading,
                                   activeColor: const Color(0xFF8FA3CC),
                                   contentPadding: EdgeInsets.zero,
                                 ),
@@ -658,7 +750,9 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 12,
+                                    ),
                                   ),
                                   child: const Text(
                                     'Isi Sesuai Profile',
@@ -683,7 +777,8 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                 ),
                                 decoration: _buildInputDecoration('Nama'),
                                 validator: (value) {
-                                  if (!_isAnonymous && (value == null || value.trim().isEmpty)) {
+                                  if (!_isAnonymous &&
+                                      (value == null || value.trim().isEmpty)) {
                                     return 'Nama tidak boleh kosong';
                                   }
                                   return null;
@@ -751,7 +846,9 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                     if (value == null || value.trim().isEmpty) {
                                       return 'Nominal donasi tidak boleh kosong';
                                     }
-                                    final amount = int.tryParse(value.replaceAll('.', ''));
+                                    final amount = int.tryParse(
+                                      value.replaceAll('.', ''),
+                                    );
                                     if (amount == null || amount <= 0) {
                                       return 'Nominal harus lebih dari 0';
                                     }
@@ -764,7 +861,8 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                 _buildLabel('Metode Pembayaran'),
                                 const SizedBox(height: 12),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: _paymentMethods.map((method) {
                                     return _buildPaymentMethodButton(method);
                                   }).toList(),
@@ -791,7 +889,9 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                     fontSize: 15,
                                     fontFamily: 'CircularStd',
                                   ),
-                                  decoration: _buildInputDecoration('Alamat lengkap'),
+                                  decoration: _buildInputDecoration(
+                                    'Alamat lengkap',
+                                  ),
                                   validator: (value) {
                                     if (value == null || value.trim().isEmpty) {
                                       return 'Alamat tidak boleh kosong';
@@ -812,7 +912,9 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                   fontSize: 15,
                                   fontFamily: 'CircularStd',
                                 ),
-                                decoration: _buildInputDecoration('Pesan (opsional)'),
+                                decoration: _buildInputDecoration(
+                                  'Pesan (opsional)',
+                                ),
                               ),
                               const SizedBox(height: 32),
 
@@ -821,7 +923,9 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                 width: double.infinity,
                                 height: 50,
                                 child: ElevatedButton(
-                                  onPressed: _isLoading ? null : _submitDonation,
+                                  onPressed: _isLoading
+                                      ? null
+                                      : _submitDonation,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color(0xFF5E72E4),
                                     shape: RoundedRectangleBorder(
@@ -835,9 +939,10 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                           width: 20,
                                           child: CircularProgressIndicator(
                                             strokeWidth: 2,
-                                            valueColor: AlwaysStoppedAnimation<Color>(
-                                              Colors.white,
-                                            ),
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                  Colors.white,
+                                                ),
                                           ),
                                         )
                                       : const Text(
@@ -901,7 +1006,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
 
   Widget _buildPaymentMethodButton(String method) {
     final isSelected = _selectedPaymentMethod == method;
-    
+
     Widget logo;
     if (method == 'OVO') {
       logo = Container(
@@ -930,11 +1035,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
           color: Color(0xFFEE4D2D),
           shape: BoxShape.circle,
         ),
-        child: const Icon(
-          Icons.shopping_bag,
-          color: Colors.white,
-          size: 30,
-        ),
+        child: const Icon(Icons.shopping_bag, color: Colors.white, size: 30),
       );
     } else {
       logo = Container(
@@ -992,20 +1093,14 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
   InputDecoration _buildInputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: TextStyle(
-        color: Colors.grey[400],
-        fontFamily: 'CircularStd',
-      ),
+      hintStyle: TextStyle(color: Colors.grey[400], fontFamily: 'CircularStd'),
       filled: true,
       fillColor: const Color(0xFFF5F6FA),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
       ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 14,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     );
   }
 
@@ -1030,13 +1125,18 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: GoogleMap(
-                    initialCameraPosition: CameraPosition(target: _campaignPosition!, zoom: 13),
+                    initialCameraPosition: CameraPosition(
+                      target: _campaignPosition!,
+                      zoom: 13,
+                    ),
                     markers: _mapMarkers,
                     onMapCreated: (c) => _mapController = c,
                     onTap: (pos) {
                       // center map on tap
                       try {
-                        _mapController?.animateCamera(CameraUpdate.newLatLng(pos));
+                        _mapController?.animateCamera(
+                          CameraUpdate.newLatLng(pos),
+                        );
                       } catch (_) {}
                     },
                     myLocationEnabled: false,
@@ -1064,11 +1164,18 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                 ),
                 const SizedBox(width: 8),
                 ElevatedButton(
-                  onPressed: _campaignPosition == null ? null : _openInExternalMaps,
+                  onPressed: _campaignPosition == null
+                      ? null
+                      : _openInExternalMaps,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF8FA3CC),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   child: const Text('Buka di Maps'),
                 ),
@@ -1103,25 +1210,39 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
           const SizedBox(height: 12),
           ElevatedButton(
             onPressed: () async {
-              final apiKey = dotenv.env['GOOGLE_MAPS_API_KEY'] ?? 
-                          const String.fromEnvironment('GOOGLE_MAPS_API_KEY', defaultValue: '');
+              final apiKey =
+                  dotenv.env['GOOGLE_MAPS_API_KEY'] ??
+                  const String.fromEnvironment(
+                    'GOOGLE_MAPS_API_KEY',
+                    defaultValue: '',
+                  );
               final loaded = await injectGoogleMapsScript(apiKey);
               if (loaded) {
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Google Maps berhasil dimuat — silakan reload halaman jika perlu')),
+                    const SnackBar(
+                      content: Text(
+                        'Google Maps berhasil dimuat — silakan reload halaman jika perlu',
+                      ),
+                    ),
                   );
                 }
                 setState(() {});
               } else {
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Gagal memuat Google Maps — periksa API key dan index.html')),
+                    const SnackBar(
+                      content: Text(
+                        'Gagal memuat Google Maps — periksa API key dan index.html',
+                      ),
+                    ),
                   );
                 }
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8FA3CC)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF8FA3CC),
+            ),
             child: const Text('Petunjuk setup'),
           ),
         ],
@@ -1133,14 +1254,22 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
     if (_campaignPosition == null) return;
     final lat = _campaignPosition!.latitude;
     final lng = _campaignPosition!.longitude;
-    final googleUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng');
+    final googleUrl = Uri.parse(
+      'https://www.google.com/maps/search/?api=1&query=$lat,$lng',
+    );
     try {
       if (!await launchUrl(googleUrl, mode: LaunchMode.externalApplication)) {
-        if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Gagal membuka Maps')));
+        if (mounted)
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Gagal membuka Maps')));
       }
     } catch (e) {
       print('[BerikanDonasi] Error opening external maps: $e');
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Gagal membuka Maps')));
+      if (mounted)
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Gagal membuka Maps')));
     }
   }
 }

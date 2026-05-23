@@ -33,17 +33,21 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           .order('tanggal_request', ascending: false);
 
       print('[AdminDashboard] Query response length: ${response.length}');
-      
+
       // Debug: Print each record with all fields
       for (int i = 0; i < response.length; i++) {
         print('[AdminDashboard] ========== RECORD $i ==========');
-        final record = response[i] as Map<String, dynamic>;
+        final record = response[i];
         print('[AdminDashboard] All fields: $record');
         print('[AdminDashboard] request_id: ${record['request_id']}');
         print('[AdminDashboard] nama_organisasi: ${record['nama_organisasi']}');
         print('[AdminDashboard] nama_pemilik: ${record['nama_pemilik']}');
-        print('[AdminDashboard] email_organisasi: ${record['email_organisasi']}');
-        print('[AdminDashboard] no_telpon_organisasi: ${record['no_telpon_organisasi']}');
+        print(
+          '[AdminDashboard] email_organisasi: ${record['email_organisasi']}',
+        );
+        print(
+          '[AdminDashboard] no_telpon_organisasi: ${record['no_telpon_organisasi']}',
+        );
         print('[AdminDashboard] status: ${record['status']}');
       }
 
@@ -221,9 +225,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               Navigator.pop(context);
               _rejectOrganization(requestId);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red[600],
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red[600]),
             child: const Text('Ya, Tolak'),
           ),
         ],
@@ -331,13 +333,25 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     itemCount: verifications.length,
                     itemBuilder: (context, index) {
                       final verification = verifications[index];
-                      print('[AdminDashboard] ========== CARD $index ==========');
-                      print('[AdminDashboard] All keys in record: ${verification.keys.toList()}');
+                      print(
+                        '[AdminDashboard] ========== CARD $index ==========',
+                      );
+                      print(
+                        '[AdminDashboard] All keys in record: ${verification.keys.toList()}',
+                      );
                       print('[AdminDashboard] Full record: $verification');
-                      print('[AdminDashboard] nama_organisasi=${verification['nama_organisasi']}');
-                      print('[AdminDashboard] nama_pemilik=${verification['nama_pemilik']}');
-                      print('[AdminDashboard] email_organisasi=${verification['email_organisasi']}');
-                      print('[AdminDashboard] no_telpon_organisasi=${verification['no_telpon_organisasi']}');
+                      print(
+                        '[AdminDashboard] nama_organisasi=${verification['nama_organisasi']}',
+                      );
+                      print(
+                        '[AdminDashboard] nama_pemilik=${verification['nama_pemilik']}',
+                      );
+                      print(
+                        '[AdminDashboard] email_organisasi=${verification['email_organisasi']}',
+                      );
+                      print(
+                        '[AdminDashboard] no_telpon_organisasi=${verification['no_telpon_organisasi']}',
+                      );
                       return _buildVerificationCard(context, verification);
                     },
                   ),
@@ -437,7 +451,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () => _showRejectConfirmation(context, verification['request_id']?.toString() ?? ''),
+                  onPressed: () => _showRejectConfirmation(
+                    context,
+                    verification['request_id']?.toString() ?? '',
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red[600],
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -458,7 +475,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               const SizedBox(width: 8),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () => _showApproveConfirmation(context, verification['request_id']?.toString() ?? ''),
+                  onPressed: () => _showApproveConfirmation(
+                    context,
+                    verification['request_id']?.toString() ?? '',
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF768BBD),
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -500,13 +520,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               const SizedBox(height: 12),
               _buildDetailRow('Nama Pemilik', verification['nama_pemilik']),
               const SizedBox(height: 12),
-              _buildDetailRow('Email Organisasi', verification['email_organisasi']),
+              _buildDetailRow(
+                'Email Organisasi',
+                verification['email_organisasi'],
+              ),
               const SizedBox(height: 12),
               _buildDetailRow('Email Pemilik', verification['email_pemilik']),
               const SizedBox(height: 12),
-              _buildDetailRow('No. Telepon Pemilik', verification['no_telpon_pemilik']),
+              _buildDetailRow(
+                'No. Telepon Pemilik',
+                verification['no_telpon_pemilik'],
+              ),
               const SizedBox(height: 12),
-              _buildDetailRow('No. Telepon Organisasi', verification['no_telpon_organisasi']),
+              _buildDetailRow(
+                'No. Telepon Organisasi',
+                verification['no_telpon_organisasi'],
+              ),
               const SizedBox(height: 12),
               _buildDetailRow('Status', verification['status']),
               const SizedBox(height: 16),
@@ -520,14 +549,17 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              if (verification['akta_berkas'] != null && verification['akta_berkas'].toString().isNotEmpty)
+              if (verification['akta_berkas'] != null &&
+                  verification['akta_berkas'].toString().isNotEmpty)
                 _buildDocumentLink(
                   'Akta Pendirian',
                   verification['akta_berkas'],
                 ),
-              if (verification['npwp_berkas'] != null && verification['npwp_berkas'].toString().isNotEmpty)
+              if (verification['npwp_berkas'] != null &&
+                  verification['npwp_berkas'].toString().isNotEmpty)
                 _buildDocumentLink('NPWP', verification['npwp_berkas']),
-              if (verification['other_berkas'] != null && verification['other_berkas'].toString().isNotEmpty)
+              if (verification['other_berkas'] != null &&
+                  verification['other_berkas'].toString().isNotEmpty)
                 _buildDocumentLink(
                   'Surat Keterangan',
                   verification['other_berkas'],

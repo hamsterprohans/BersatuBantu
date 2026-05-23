@@ -19,34 +19,32 @@ class PostingKegiatanDonasiScreen extends StatefulWidget {
   const PostingKegiatanDonasiScreen({super.key});
 
   @override
-  State<PostingKegiatanDonasiScreen> createState() => _PostingKegiatanDonasiScreenState();
+  State<PostingKegiatanDonasiScreen> createState() =>
+      _PostingKegiatanDonasiScreenState();
 }
 
-class _PostingKegiatanDonasiScreenState extends State<PostingKegiatanDonasiScreen> {
+class _PostingKegiatanDonasiScreenState
+    extends State<PostingKegiatanDonasiScreen> {
   final _formKey = GlobalKey<FormState>();
   final supabase = Supabase.instance.client;
-  
+
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _targetAmountController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
-  
+
   // Category for donation (saved to DB column `category`)
   String _selectedCategory = 'Bencana Alam';
-  final List<String> _categories = [
-    'Bencana Alam',
-    'Kemiskinan',
-    'Hak Asasi',
-  ];
+  final List<String> _categories = ['Bencana Alam', 'Kemiskinan', 'Hak Asasi'];
 
   File? _selectedImage;
-  Uint8List? _imageBytes; 
+  Uint8List? _imageBytes;
   String? _imageUrl;
   bool _isLoading = false;
   bool _isSavingDraft = false;
   DateTime? _selectedEndDate;
-  bool _isInjectingMap = false;
-  
+  final bool _isInjectingMap = false;
+
   // Location data
   double? _latitude;
   double? _longitude;
@@ -71,7 +69,11 @@ class _PostingKegiatanDonasiScreenState extends State<PostingKegiatanDonasiScree
     try {
       final user = supabase.auth.currentUser;
       if (user == null) return;
-      final resp = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle();
+      final resp = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .maybeSingle();
       final role = resp == null ? null : (resp['role'] as String?);
       if (role != 'organization' && role != 'user') {
         if (mounted) {
@@ -79,9 +81,14 @@ class _PostingKegiatanDonasiScreenState extends State<PostingKegiatanDonasiScree
             context: context,
             builder: (c) => AlertDialog(
               title: const Text('Akses Ditolak'),
-              content: const Text('Hanya akun organisasi yang dapat memposting kegiatan.'),
+              content: const Text(
+                'Hanya akun organisasi yang dapat memposting kegiatan.',
+              ),
               actions: [
-                TextButton(onPressed: () => Navigator.of(c).pop(), child: const Text('Tutup')),
+                TextButton(
+                  onPressed: () => Navigator.of(c).pop(),
+                  child: const Text('Tutup'),
+                ),
               ],
             ),
           );
@@ -105,7 +112,7 @@ class _PostingKegiatanDonasiScreenState extends State<PostingKegiatanDonasiScree
 
       if (image != null) {
         final bytes = await image.readAsBytes();
-        
+
         setState(() {
           if (!kIsWeb) {
             _selectedImage = File(image.path);
@@ -152,7 +159,14 @@ class _PostingKegiatanDonasiScreenState extends State<PostingKegiatanDonasiScree
 
     if (picked != null) {
       setState(() {
-        _selectedEndDate = DateTime(picked.year, picked.month, picked.day, 23, 59, 59);
+        _selectedEndDate = DateTime(
+          picked.year,
+          picked.month,
+          picked.day,
+          23,
+          59,
+          59,
+        );
       });
     }
   }
@@ -216,10 +230,12 @@ class _PostingKegiatanDonasiScreenState extends State<PostingKegiatanDonasiScree
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Kolom database hilang'),
-        content: const Text('''Kolom untuk menyimpan lokasi (location_name/location) tidak ditemukan di tabel `donation_campaigns` pada database.
+        content: const Text(
+          '''Kolom untuk menyimpan lokasi (location_name/location) tidak ditemukan di tabel `donation_campaigns` pada database.
 Silakan tambahkan kolom `location_name` (text) dan `location` (jsonb) di Supabase (atau sesuaikan sesuai skema Anda).
 
-Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan kolom tersebut langsung melalui Supabase SQL editor atau panel admin.'''),
+Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan kolom tersebut langsung melalui Supabase SQL editor atau panel admin.''',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -229,11 +245,21 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
       ),
     );
   }
- 
+
   String _formatDate(DateTime date) {
     final months = [
-      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember',
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
@@ -266,24 +292,26 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
 
     try {
       print('[PostingDonasi] Uploading image...');
-      
+
       final bytes = _imageBytes!;
       final fileExt = 'jpg';
-      
+
       // Simpan file dengan struktur folder per user agar tidak tabrakan dan memudahkan policy RLS
       final userId = supabase.auth.currentUser!.id;
       final fileName = '${DateTime.now().millisecondsSinceEpoch}.$fileExt';
       final filePath = 'donations/$fileName';
 
       try {
-        await supabase.storage.from('donations').uploadBinary(
-          filePath,
-          bytes,
-          fileOptions: FileOptions(
-            contentType: 'image/$fileExt',
-            upsert: false,
-          ),
-        );
+        await supabase.storage
+            .from('donations')
+            .uploadBinary(
+              filePath,
+              bytes,
+              fileOptions: FileOptions(
+                contentType: 'image/$fileExt',
+                upsert: false,
+              ),
+            );
       } on StorageException catch (e) {
         if (e.statusCode == '404') {
           throw 'Bucket "donations" tidak ditemukan. Silakan buat bucket di Supabase Storage terlebih dahulu.';
@@ -291,14 +319,16 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
         rethrow;
       }
 
-      final imageUrl = supabase.storage.from('donations').getPublicUrl(filePath);
+      final imageUrl = supabase.storage
+          .from('donations')
+          .getPublicUrl(filePath);
       print('[PostingDonasi] Image uploaded: $imageUrl');
-      
+
       return imageUrl;
     } catch (e) {
       print('[PostingDonasi] Error uploading image: $e');
       if (e is String) {
-        throw e;
+        rethrow;
       }
       throw 'Gagal mengupload gambar: ${e.toString()}';
     }
@@ -326,14 +356,15 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
           ? 0
           : int.parse(_targetAmountController.text.replaceAll('.', ''));
 
-      final endTime = _selectedEndDate ?? DateTime.now().add(const Duration(days: 30));
+      final endTime =
+          _selectedEndDate ?? DateTime.now().add(const Duration(days: 30));
 
       // Note: We store the human-readable address in `location_name` (text)
       // and the coordinates in `location` as a JSON object { lat, lng } (jsonb in DB).
       await supabase.from('donation_campaigns').insert({
         'organization_id': user.id,
-        'title': _titleController.text.trim().isEmpty 
-            ? 'Draft' 
+        'title': _titleController.text.trim().isEmpty
+            ? 'Draft'
             : _titleController.text.trim(),
         'description': _descriptionController.text.trim(),
         'target_amount': targetAmount,
@@ -343,10 +374,9 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
         'start_time': DateTime.now().toIso8601String(),
         'end_time': endTime.toIso8601String(),
         'location_name': _locationName,
-        'location': (_latitude != null && _longitude != null) ? {
-          'lat': _latitude,
-          'lng': _longitude,
-        } : null,
+        'location': (_latitude != null && _longitude != null)
+            ? {'lat': _latitude, 'lng': _longitude}
+            : null,
         'category': _selectedCategory,
         'created_at': DateTime.now().toIso8601String(),
       });
@@ -364,7 +394,10 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
       print('[PostingDonasi] Error saving draft: $e');
       if (mounted) {
         final message = e.toString();
-        if (message.contains("Could not find the 'latitude'") || message.contains("Could not find the 'longitude'") || message.contains("Could not find the 'location'") || message.contains("Could not find the 'location_name'")) {
+        if (message.contains("Could not find the 'latitude'") ||
+            message.contains("Could not find the 'longitude'") ||
+            message.contains("Could not find the 'location'") ||
+            message.contains("Could not find the 'location_name'")) {
           _showMissingColumnDialog();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -417,7 +450,9 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
         imageUrl = await _uploadImage();
       }
 
-      final targetAmount = int.parse(_targetAmountController.text.replaceAll('.', ''));
+      final targetAmount = int.parse(
+        _targetAmountController.text.replaceAll('.', ''),
+      );
 
       // Store address and coordinates as JSON for DB compatibility
       await supabase.from('donation_campaigns').insert({
@@ -431,7 +466,9 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
         'start_time': DateTime.now().toIso8601String(),
         'end_time': _selectedEndDate!.toIso8601String(),
         'location_name': _locationName,
-        'location': (_latitude != null && _longitude != null) ? {'lat': _latitude, 'lng': _longitude} : null,
+        'location': (_latitude != null && _longitude != null)
+            ? {'lat': _latitude, 'lng': _longitude}
+            : null,
         'category': _selectedCategory,
         'created_at': DateTime.now().toIso8601String(),
       });
@@ -451,7 +488,10 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
       print('[PostingDonasi] Error posting donation: $e');
       if (mounted) {
         final message = e.toString();
-        if (message.contains("Could not find the 'latitude'") || message.contains("Could not find the 'longitude'") || message.contains("Could not find the 'location'") || message.contains("Could not find the 'location_name'")) {
+        if (message.contains("Could not find the 'latitude'") ||
+            message.contains("Could not find the 'longitude'") ||
+            message.contains("Could not find the 'location'") ||
+            message.contains("Could not find the 'location_name'")) {
           _showMissingColumnDialog();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -499,7 +539,10 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
               child: GestureDetector(
                 onTap: _isSavingDraft ? null : _saveDraft,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFE8EAF6),
                     borderRadius: BorderRadius.circular(20),
@@ -693,8 +736,10 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
-                  value: _selectedCategory,
-                  items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                  initialValue: _selectedCategory,
+                  items: _categories
+                      .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                      .toList(),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: const Color(0xFFF5F6FA),
@@ -702,7 +747,10 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                   ),
                   onChanged: (v) {
                     setState(() {
@@ -710,7 +758,8 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                     });
                   },
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty) return 'Pilih kategori';
+                    if (value == null || value.trim().isEmpty)
+                      return 'Pilih kategori';
                     return null;
                   },
                 ),
@@ -730,7 +779,10 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                 GestureDetector(
                   onTap: _selectEndDate,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFF5F6FA),
                       borderRadius: BorderRadius.circular(12),
@@ -788,12 +840,17 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                 GestureDetector(
                   onTap: _pickLocation,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFF5F6FA),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: _latitude != null ? const Color(0xFF8FA3CC) : Colors.grey[300]!,
+                        color: _latitude != null
+                            ? const Color(0xFF8FA3CC)
+                            : Colors.grey[300]!,
                         width: 1,
                       ),
                     ),
@@ -818,8 +875,8 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                         Icon(
                           Icons.location_on,
                           size: 20,
-                          color: _latitude != null 
-                              ? const Color(0xFF8FA3CC) 
+                          color: _latitude != null
+                              ? const Color(0xFF8FA3CC)
                               : Colors.grey[600],
                         ),
                       ],
@@ -847,10 +904,7 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                     decoration: BoxDecoration(
                       color: const Color(0xFFF5F6FA),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Colors.grey[300]!,
-                        width: 1,
-                      ),
+                      border: Border.all(color: Colors.grey[300]!, width: 1),
                     ),
                     child: _imageBytes != null
                         ? ClipRRect(
@@ -904,7 +958,9 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                       child: SizedBox(
                         height: 50,
                         child: OutlinedButton(
-                          onPressed: _isLoading ? null : () => Navigator.pop(context),
+                          onPressed: _isLoading
+                              ? null
+                              : () => Navigator.pop(context),
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(
                               color: Color(0xFF8FA3CC),
@@ -978,10 +1034,7 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
 class LocationPickerScreen extends StatefulWidget {
   final LatLng initialPosition;
 
-  const LocationPickerScreen({
-    super.key,
-    required this.initialPosition,
-  });
+  const LocationPickerScreen({super.key, required this.initialPosition});
 
   @override
   State<LocationPickerScreen> createState() => _LocationPickerScreenState();
@@ -1046,14 +1099,22 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
         });
         if (res.isEmpty && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Tidak ditemukan hasil. Periksa konfigurasi API key dan aktifkan Places API.')),
+            const SnackBar(
+              content: Text(
+                'Tidak ditemukan hasil. Periksa konfigurasi API key dan aktifkan Places API.',
+              ),
+            ),
           );
         }
       } catch (e) {
         print('[LocationPicker] Autocomplete error: $e');
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Gagal mencari tempat. Periksa koneksi dan konfigurasi API key.')),
+            const SnackBar(
+              content: Text(
+                'Gagal mencari tempat. Periksa koneksi dan konfigurasi API key.',
+              ),
+            ),
           );
         }
       } finally {
@@ -1094,7 +1155,9 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
     });
 
     try {
-      final url = Uri.parse('https://maps.googleapis.com/maps/api/geocode/json?latlng=${pos.latitude},${pos.longitude}&key=$apiKey');
+      final url = Uri.parse(
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=${pos.latitude},${pos.longitude}&key=$apiKey',
+      );
       final resp = await http.get(url).timeout(const Duration(seconds: 8));
       if (resp.statusCode == 200) {
         final data = jsonDecode(resp.body) as Map<String, dynamic>;
@@ -1122,10 +1185,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
         backgroundColor: const Color(0xFF8FA3CC),
         title: const Text(
           'Pilih Lokasi',
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'CircularStd',
-          ),
+          style: TextStyle(color: Colors.white, fontFamily: 'CircularStd'),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -1137,7 +1197,9 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
               Navigator.pop(context, {
                 'latitude': _selectedPosition.latitude,
                 'longitude': _selectedPosition.longitude,
-                'locationName': _resolvedAddress ?? 'Lat: ${_selectedPosition.latitude.toStringAsFixed(6)}, Lng: ${_selectedPosition.longitude.toStringAsFixed(6)}',
+                'locationName':
+                    _resolvedAddress ??
+                    'Lat: ${_selectedPosition.latitude.toStringAsFixed(6)}, Lng: ${_selectedPosition.longitude.toStringAsFixed(6)}',
               });
             },
             child: const Text(
@@ -1209,23 +1271,42 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                                 title: Text(s.description),
                                 onTap: () async {
                                   // fetch place details
-                                  final details = await _placeService.getPlaceDetails(s.placeId);
+                                  final details = await _placeService
+                                      .getPlaceDetails(s.placeId);
                                   if (details != null) {
-                                    final loc = details['geometry']?['location'];
+                                    final loc =
+                                        details['geometry']?['location'];
                                     if (loc != null) {
-                                      final lat = (loc['lat'] as num).toDouble();
-                                      final lng = (loc['lng'] as num).toDouble();
+                                      final lat = (loc['lat'] as num)
+                                          .toDouble();
+                                      final lng = (loc['lng'] as num)
+                                          .toDouble();
                                       setState(() {
                                         _selectedPosition = LatLng(lat, lng);
                                         _markers.clear();
-                                        _markers.add(Marker(markerId: const MarkerId('selected_location'), position: _selectedPosition));
-                                        _resolvedAddress = details['formatted_address'] as String? ?? details['name'] as String?;
+                                        _markers.add(
+                                          Marker(
+                                            markerId: const MarkerId(
+                                              'selected_location',
+                                            ),
+                                            position: _selectedPosition,
+                                          ),
+                                        );
+                                        _resolvedAddress =
+                                            details['formatted_address']
+                                                as String? ??
+                                            details['name'] as String?;
                                         _suggestions = [];
-                                        _searchController.text = _resolvedAddress ?? '';
+                                        _searchController.text =
+                                            _resolvedAddress ?? '';
                                       });
                                       // move camera if map loaded
                                       try {
-                                        _mapController.animateCamera(CameraUpdate.newLatLng(_selectedPosition));
+                                        _mapController.animateCamera(
+                                          CameraUpdate.newLatLng(
+                                            _selectedPosition,
+                                          ),
+                                        );
                                       } catch (_) {}
                                     }
                                   }
@@ -1266,14 +1347,17 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                               SizedBox(
                                 width: 16,
                                 height: 16,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               ),
                               SizedBox(width: 8),
                               Text('Mencari alamat...'),
                             ],
                           )
                         : Text(
-                            _resolvedAddress ?? 'Lat: ${_selectedPosition.latitude.toStringAsFixed(6)}, Lng: ${_selectedPosition.longitude.toStringAsFixed(6)}',
+                            _resolvedAddress ??
+                                'Lat: ${_selectedPosition.latitude.toStringAsFixed(6)}, Lng: ${_selectedPosition.longitude.toStringAsFixed(6)}',
                             style: const TextStyle(fontSize: 13),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -1332,12 +1416,20 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                       final loaded = await injectGoogleMapsScript(apiKey);
                       if (loaded) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Google Maps berhasil dimuat. Jika peta belum muncul, tekan kembali atau reload halaman.')),
+                          const SnackBar(
+                            content: Text(
+                              'Google Maps berhasil dimuat. Jika peta belum muncul, tekan kembali atau reload halaman.',
+                            ),
+                          ),
                         );
                         setState(() {});
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Gagal memuat Google Maps. Tambahkan script ke web/index.html dan isi API key Anda.')),
+                          const SnackBar(
+                            content: Text(
+                              'Gagal memuat Google Maps. Tambahkan script ke web/index.html dan isi API key Anda.',
+                            ),
+                          ),
                         );
                       }
                     } finally {
