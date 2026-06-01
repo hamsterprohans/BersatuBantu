@@ -169,7 +169,8 @@ class _DashboardScreenState extends State<DashboardScreen>
             'id, title, cover_image_url, end_time, description, target_amount, collected_amount, location, location_name, category',
           )
           .eq('status', 'active')
-          .order('end_time', ascending: true)
+          .gt('end_time', DateTime.now().toIso8601String())
+          .order('created_at', ascending: false)
           .limit(50);
       setState(() => _campaigns = List<Map<String, dynamic>>.from(response));
     } catch (e) {
@@ -267,6 +268,11 @@ class _DashboardScreenState extends State<DashboardScreen>
         setState(() {
           _selectedIndex = index;
         });
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AksiScreen()),
+        );
+        _onRoutePopped(null);
         break;
       case 3:
         setState(() {

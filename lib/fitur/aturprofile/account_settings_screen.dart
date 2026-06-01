@@ -240,7 +240,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: const Color(0xFF768BBD),
+            activeThumbColor: const Color(0xFF768BBD),
           ),
         ],
       ),
@@ -303,7 +303,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
     final oldPasswordController = TextEditingController();
     final newPasswordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
-    bool _isLoading = false;
+    bool isLoading = false;
 
     showDialog(
       context: context,
@@ -319,7 +319,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 TextField(
                   controller: oldPasswordController,
                   obscureText: true,
-                  enabled: !_isLoading,
+                  enabled: !isLoading,
                   decoration: InputDecoration(
                     labelText: "Password Lama",
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -330,7 +330,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 TextField(
                   controller: newPasswordController,
                   obscureText: true,
-                  enabled: !_isLoading,
+                  enabled: !isLoading,
                   decoration: InputDecoration(
                     labelText: "Password Baru",
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -341,7 +341,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                 TextField(
                   controller: confirmPasswordController,
                   obscureText: true,
-                  enabled: !_isLoading,
+                  enabled: !isLoading,
                   decoration: InputDecoration(
                     labelText: "Konfirmasi Password",
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -353,11 +353,11 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: _isLoading ? null : () => Navigator.pop(context),
+              onPressed: isLoading ? null : () => Navigator.pop(context),
               child: const Text("Batal", style: TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
-              onPressed: _isLoading
+              onPressed: isLoading
                   ? null
                   : () async {
                       // Validasi input
@@ -398,7 +398,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
 
                       // Start loading
                       setDialogState(() {
-                        _isLoading = true;
+                        isLoading = true;
                       });
 
                       try {
@@ -437,7 +437,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                         print('[ChangePassword] Auth error: ${e.message}');
                         if (context.mounted) {
                           setDialogState(() {
-                            _isLoading = false;
+                            isLoading = false;
                           });
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -450,7 +450,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                         print('[ChangePassword] Error: $e');
                         if (context.mounted) {
                           setDialogState(() {
-                            _isLoading = false;
+                            isLoading = false;
                           });
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -464,7 +464,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF768BBD),
               ),
-              child: _isLoading
+              child: isLoading
                   ? const SizedBox(
                       height: 20,
                       width: 20,

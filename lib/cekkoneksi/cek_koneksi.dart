@@ -82,7 +82,7 @@ class _CekKoneksiPageState extends State<CekKoneksiPage> {
       onRefresh: _fetchEvents,
       child: ListView.separated(
         itemCount: _events.length,
-        separatorBuilder: (_, __) => const Divider(height: 1),
+        separatorBuilder: (_, _) => const Divider(height: 1),
         itemBuilder: (context, index) {
           final event = _events[index];
 

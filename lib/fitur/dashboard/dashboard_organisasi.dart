@@ -211,10 +211,11 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi> with Widget
             'id, title, cover_image_url, end_time, description, target_amount, collected_amount, location, location_name',
           )
           .eq('status', 'active')
-          .order('end_time', ascending: true)
+          .gt('end_time', DateTime.now().toIso8601String())
+          .order('created_at', ascending: false)
           .limit(50);
 
-      if (response != null && response is List) {
+      if (response is List) {
         setState(() {
           _campaigns = List<Map<String, dynamic>>.from(response);
         });

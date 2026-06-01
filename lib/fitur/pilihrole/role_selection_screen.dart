@@ -28,8 +28,9 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
 
     // Map UI choices to DB roles
     String mappedRole;
-    if (role == 'personal') mappedRole = 'user';
-    else if (role == 'organization') mappedRole = 'volunteer';
+    if (role == 'personal') {
+      mappedRole = 'user';
+    } else if (role == 'organization') mappedRole = 'volunteer';
     else if (role == 'admin') mappedRole = 'admin';
     else mappedRole = 'user';
 

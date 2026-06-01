@@ -178,13 +178,13 @@ class _AksiScreenState extends State<AksiScreen> {
         return;
     }
 
-    Navigator.pushReplacement(
-      context,
+    Navigator.of(context).pushAndRemoveUntil(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => screen,
         transitionDuration: Duration.zero,
         reverseTransitionDuration: Duration.zero,
       ),
+      (route) => false,
     );
   }
 
@@ -310,10 +310,12 @@ class _AksiScreenState extends State<AksiScreen> {
                               final now = DateTime.now();
                               final isCompleted = e.endTime.isBefore(now);
 
-                              if (_selectedFilter == 'Aktif' && isCompleted)
+                              if (_selectedFilter == 'Aktif' && isCompleted) {
                                 return false;
-                              if (_selectedFilter == 'Selesai' && !isCompleted)
+                              }
+                              if (_selectedFilter == 'Selesai' && !isCompleted) {
                                 return false;
+                              }
                             }
 
                             // Filter by category (search in title, description)

@@ -3,6 +3,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bersatubantu/fitur/widgets/bottom_navbar.dart';
 import 'package:bersatubantu/fitur/postingkegiatandonasi/postingkegiatandonasi.dart';
 import 'package:bersatubantu/fitur/berikandonasi/berikandonasi.dart';
+import 'package:bersatubantu/fitur/dashboard/dashboard_screen.dart';
+import 'package:bersatubantu/fitur/aksi/aksi_screen.dart';
+import 'package:bersatubantu/fitur/aturprofile/aturprofile.dart';
 
 class DonasiScreen extends StatefulWidget {
   const DonasiScreen({super.key});
@@ -715,6 +718,28 @@ class _DonasiScreenState extends State<DonasiScreen> {
   }
 
   void _navigateToScreen(BuildContext context, int index) {
-    Navigator.of(context).pop();
+    if (index == _selectedIndex) return;
+    Widget screen;
+    switch (index) {
+      case 0:
+        screen = const DashboardScreen();
+        break;
+      case 2:
+        screen = const AksiScreen();
+        break;
+      case 3:
+        screen = const ProfileScreen();
+        break;
+      default:
+        return;
+    }
+    Navigator.of(context).pushAndRemoveUntil(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => screen,
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
+      ),
+      (route) => false,
+    );
   }
 }

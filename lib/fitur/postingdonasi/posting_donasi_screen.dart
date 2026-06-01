@@ -83,7 +83,7 @@ class _PostingDonasiScreenState extends State<PostingDonasiScreen> {
         }
 
       // 1. Upload Gambar ke Supabase Storage
-        final fileName = '${widget.organizationId}_${DateTime.now().millisecondsSinceEpoch}_${_imageName}';
+        final fileName = '${widget.organizationId}_${DateTime.now().millisecondsSinceEpoch}_$_imageName';
 
         await supabase.storage.from('donation_covers').uploadBinary(
         fileName,

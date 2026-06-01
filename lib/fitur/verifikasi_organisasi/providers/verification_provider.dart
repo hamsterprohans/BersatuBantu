@@ -140,6 +140,7 @@ class OrganizationVerificationProvider extends ChangeNotifier {
       print('[Verification]   email_pemilik: ${data.ownerEmail}');
       print('[Verification]   status: pending');
 
+      final currentUser = _supabase.auth.currentUser;
       final insertData = {
         'nama_organisasi': data.orgLegalName ?? '',
         'nama_pemilik': data.ownerName ?? '',
@@ -152,6 +153,7 @@ class OrganizationVerificationProvider extends ChangeNotifier {
         'npwp_berkas': npwpUrl ?? '',
         'other_berkas': otherUrl ?? '',
         'status': 'pending',
+        'profil_pemilik_id': currentUser?.id,
       };
 
       print('[Verification] Insert payload: $insertData');

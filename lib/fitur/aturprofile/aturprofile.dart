@@ -7,6 +7,7 @@ import 'package:bersatubantu/fitur/aturprofile/my_activities_screen.dart';
 import 'package:bersatubantu/fitur/widgets/bottom_navbar.dart';
 import 'package:bersatubantu/fitur/dashboard/dashboard_screen.dart';
 import 'package:bersatubantu/fitur/donasi/donasi_screen.dart';
+import 'package:bersatubantu/fitur/aksi/aksi_screen.dart';
 
 // ------------------------------------------------------------------
 // HALAMAN PROFIL (REAL DB CONNECTION)
@@ -311,30 +312,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
         bottomNavigationBar: BottomNavBar(
           currentIndex: 3,
           onTap: (index) {
+            if (index == 3) return;
+            Widget screen;
             switch (index) {
               case 0:
-                // Navigate to Dashboard (replace current)
-                print('[ProfileScreen] Navigate to Dashboard via BottomNav');
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const DashboardScreen(),
-                  ),
-                );
+                screen = const DashboardScreen();
                 break;
               case 1:
-                // Navigate to Donasi screen
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const DonasiScreen()),
-                );
+                screen = const DonasiScreen();
                 break;
               case 2:
-                // Navigate to Aksi (placeholder) screen
-                // Navigator.of(context).push(MaterialPageRoute(builder: (context) => AksiScreen(requestId: widget.requestId,)));
+                screen = const AksiScreen();
                 break;
-              case 3:
-                // already on profile
-                break;
+              default:
+                return;
             }
+            Navigator.of(context).pushAndRemoveUntil(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) => screen,
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+              (route) => false,
+            );
           },
         ),
       ),

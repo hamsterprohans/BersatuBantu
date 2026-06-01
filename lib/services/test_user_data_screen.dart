@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'debug_user_data.dart';
 
 class TestUserDataScreen extends StatefulWidget {
   const TestUserDataScreen({super.key});
