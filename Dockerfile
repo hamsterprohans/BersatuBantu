@@ -29,11 +29,8 @@ FROM nginx:alpine
 # Copy built web app to nginx
 COPY --from=build /app/build/web /usr/share/nginx/html
 
-# Copy nginx config template
-COPY nginx.conf.template /etc/nginx/templates/default.conf.template
-
-# Install envsubst (already included in nginx:alpine)
-# The nginx image will automatically process templates and substitute $PORT
+# Copy nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080
 
