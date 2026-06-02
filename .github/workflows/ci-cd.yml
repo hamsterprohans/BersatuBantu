@@ -31,13 +31,11 @@ jobs:
 
       - name: Create .env file
         run: |
-          cat > .env << EOF
-          SUPABASE_URL=${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
-          GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}
-          MIDTRANS_CLIENT_KEY=${{ secrets.MIDTRANS_CLIENT_KEY }}
-          MIDTRANS_CREATE_TRANSACTION_URL=${{ secrets.MIDTRANS_CREATE_TRANSACTION_URL }}
-          EOF
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > .env
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
+          echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> .env
+          echo "MIDTRANS_CLIENT_KEY=${{ secrets.MIDTRANS_CLIENT_KEY }}" >> .env
+          echo "MIDTRANS_CREATE_TRANSACTION_URL=${{ secrets.MIDTRANS_CREATE_TRANSACTION_URL }}" >> .env
 
       - name: Flutter pub get
         run: flutter pub get
@@ -73,6 +71,14 @@ jobs:
 
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Create .env file for Docker build
+        run: |
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > .env
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
+          echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> .env
+          echo "MIDTRANS_CLIENT_KEY=${{ secrets.MIDTRANS_CLIENT_KEY }}" >> .env
+          echo "MIDTRANS_CREATE_TRANSACTION_URL=${{ secrets.MIDTRANS_CREATE_TRANSACTION_URL }}" >> .env
 
       - name: Build Docker image
         run: |
