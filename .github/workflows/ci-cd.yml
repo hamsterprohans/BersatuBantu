@@ -70,11 +70,11 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Login to Artifact Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGION }}-docker.pkg.dev
-          username: _json_key
-          password: ${{ secrets.GCP_CREDENTIALS }}
+        run: |
+          gcloud auth print-access-token | docker login \
+            -u oauth2accesstoken \
+            --password-stdin \
+            https://${{ env.REGION }}-docker.pkg.dev
 
       - name: Create .env file for Docker build
         run: |
