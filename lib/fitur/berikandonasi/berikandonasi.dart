@@ -29,6 +29,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
 
   bool _isAnonymous = false;
   bool _isLoading = false;
+  bool _waitingForPayment = false;
   String _selectedPaymentMethod = 'OVO';
   String _donationType = 'uang'; // 'uang' atau 'barang'
 
@@ -38,6 +39,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
   int? _latestCollectedAmount;
   // Store last midtrans id for the current donation flow (used to check status)
   String? _lastMidtransId;
+  RealtimeChannel? _paymentChannel;
 
   String _formatCurrency(int amount) => 'Rp ${_formatNumber(amount)}';
 
@@ -61,6 +63,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
     _amountController.dispose();
     _messageController.dispose();
     _addressController.dispose();
+    _paymentChannel?.unsubscribe();
     super.dispose();
   }
 
@@ -260,43 +263,22 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
             paymentUrl.isNotEmpty) {
           await _launchPaymentUrl(paymentUrl);
 
-          // After launching the payment page, prompt the user to check the payment status
-          if (mounted) {
-            final action = await showDialog<String>(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                title: const Text('Pembayaran dimulai'),
-                content: const Text(
-                  'Selesaikan pembayaran pada halaman yang terbuka. Ketuk "Periksa sekarang" untuk mengecek status pembayaran.',
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(ctx).pop('nanti'),
-                    child: const Text('Nanti'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(ctx).pop('periksa'),
-                    child: const Text('Periksa sekarang'),
-                  ),
-                ],
-              ),
-            );
-
-            if (action == 'periksa') {
-              // Store midtrans id locally (if available) and check status
-              _lastMidtransId = midtransId?.toString();
-              await _checkTransactionStatus(_lastMidtransId);
-            }
-
-            // Close the donation screen (keep behavior similar to before)
-            Navigator.pop(context, true);
+          _lastMidtransId = midtransId?.toString();
+          if (_lastMidtransId != null) {
+            _startPaymentListener(_lastMidtransId!, amount);
           }
+
+          if (mounted) {
+            setState(() {
+              _waitingForPayment = true;
+              _isLoading = false;
+            });
+          }
+          return;
         } else {
           throw 'Server tidak mengembalikan URL pembayaran.';
         }
 
-        // Note: final settlement must be handled by server-side webhook which updates transaction status
-        return;
       }
 
       // For goods donations (jenis barang), proceed as before
@@ -429,6 +411,47 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
     }
   }
 
+  void _startPaymentListener(String midtransId, int amount) {
+    _paymentChannel?.unsubscribe();
+    _paymentChannel = supabase
+        .channel('payment-$midtransId')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.update,
+          schema: 'public',
+          table: 'donation_transactions',
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq,
+            column: 'midtrans_order_id',
+            value: midtransId,
+          ),
+          callback: (payload) async {
+            final newStatus =
+                (payload.newRecord['status'] as String? ?? '').toLowerCase();
+            const settled = ['settlement', 'paid', 'capture', 'completed'];
+            if (settled.contains(newStatus)) {
+              _paymentChannel?.unsubscribe();
+              _paymentChannel = null;
+              await _refreshCampaign();
+              if (mounted) {
+                setState(() => _waitingForPayment = false);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Pembayaran berhasil! Donasi ${_formatCurrency(amount)} dikonfirmasi.',
+                    ),
+                    backgroundColor: Colors.green,
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+                await Future.delayed(const Duration(seconds: 2));
+                if (mounted) Navigator.pop(context, true);
+              }
+            }
+          },
+        )
+        .subscribe();
+  }
+
   Future<void> _checkTransactionStatus(String? midtransId) async {
     if (midtransId == null || midtransId.isEmpty) {
       if (mounted)
@@ -503,7 +526,9 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
     final progress = collectedAmount / targetAmount;
     final daysRemaining = _getDaysRemaining();
 
-    return Scaffold(
+    return Stack(
+      children: [
+        Scaffold(
       backgroundColor: const Color(0xFF8FA3CC),
       body: SafeArea(
         child: Column(
@@ -969,6 +994,66 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
           ],
         ),
       ),
+        ),
+        if (_waitingForPayment)
+          Container(
+            color: Colors.black54,
+            child: Center(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 32),
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const CircularProgressIndicator(),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Menunggu konfirmasi pembayaran...',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Selesaikan pembayaran di tab/browser yang terbuka. Halaman ini akan otomatis diperbarui.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () async {
+                        final nav = Navigator.of(context);
+                        await _checkTransactionStatus(_lastMidtransId);
+                        if (mounted) {
+                          setState(() => _waitingForPayment = false);
+                          nav.pop(true);
+                        }
+                      },
+                      child: const Text('Cek status manual'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        _paymentChannel?.unsubscribe();
+                        _paymentChannel = null;
+                        setState(() => _waitingForPayment = false);
+                      },
+                      child: const Text(
+                        'Batal',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 
