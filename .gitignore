@@ -94,6 +94,11 @@ app.*.map.json
 # Supabase credentials (jangan commit!)
 lib/core/config/supabase_config.dart
 
+# GCP service account keys
+*-credentials.json
+*-e314fa30d733.json
+project-*-*.json
+
 # Large assets (optional, jika file terlalu besar)
 # assets/videos/
 # assets/fonts/*.ttf
