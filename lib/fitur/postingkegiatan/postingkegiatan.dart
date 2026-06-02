@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import '../../utils/place_service.dart';
+import '../../utils/place_suggestion.dart';
 import '../../utils/maps_availability.dart';
 import 'dart:async';
 
