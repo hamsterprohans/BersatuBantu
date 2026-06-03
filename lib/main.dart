@@ -136,13 +136,13 @@ class _MyAppState extends State<MyApp> {
           title: 'BersatuBantu',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primaryColor: const Color(0xFF768BBD),
+            primaryColor: const Color.fromARGB(255, 255, 168, 168),
             scaffoldBackgroundColor: Colors.white,
             fontFamily: 'CircularStd',
             colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xFF768BBD),
-              primary: const Color(0xFF768BBD),
-              secondary: const Color(0xFF364057),
+              seedColor: const Color.fromARGB(255, 255, 168, 168),
+              primary: const Color.fromARGB(255, 255, 168, 168),
+              secondary: const Color.fromARGB(255, 183, 187, 195),
             ),
             useMaterial3: true,
           ),

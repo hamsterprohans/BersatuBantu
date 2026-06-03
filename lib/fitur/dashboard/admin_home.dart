@@ -198,7 +198,7 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
     super.build(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF8FA3CC),
+      backgroundColor: const Color.fromARGB(255, 255, 168, 168),
       body: SafeArea(
         child: Column(
           children: [
@@ -755,7 +755,7 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF8FA3CC) : Colors.transparent,
+          color: isSelected ? const Color.fromARGB(255, 255, 168, 168) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(

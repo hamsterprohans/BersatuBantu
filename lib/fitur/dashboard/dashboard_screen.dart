@@ -313,7 +313,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF8FA3CC),
+      backgroundColor: const Color.fromARGB(255, 255, 179, 179),
       body: SafeArea(
         child: Column(
           children: [
