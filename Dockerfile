@@ -17,8 +17,9 @@ RUN flutter pub get
 # Copy the rest of the application
 COPY . .
 
-# Build web app
+# Build web app (--pwa-strategy=none disables service worker to prevent stale cache)
 RUN flutter build web --release \
+    --pwa-strategy=none \
     --dart-define=SUPABASE_URL=${SUPABASE_URL} \
     --dart-define=SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY} \
     --dart-define=GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}

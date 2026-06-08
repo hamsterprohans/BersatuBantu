@@ -39,6 +39,14 @@
     Example:
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
   -->
+  <script>
+    // Unregister any old service workers so stale cached assets are never served
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        registrations.forEach(function(reg) { reg.unregister(); });
+      });
+    }
+  </script>
 </head>
 
 <body>
