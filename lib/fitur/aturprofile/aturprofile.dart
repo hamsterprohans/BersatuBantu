@@ -8,6 +8,8 @@ import 'package:bersatubantu/fitur/widgets/bottom_navbar.dart';
 import 'package:bersatubantu/fitur/dashboard/dashboard_screen.dart';
 import 'package:bersatubantu/fitur/donasi/donasi_screen.dart';
 import 'package:bersatubantu/fitur/aksi/aksi_screen.dart';
+import 'package:bersatubantu/fitur/dashboard/admin_home.dart';
+import 'package:bersatubantu/fitur/auth/login/admin_dashboard_screen.dart';
 
 // ------------------------------------------------------------------
 // HALAMAN PROFIL (REAL DB CONNECTION)
@@ -311,8 +313,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
         // Use shared BottomNavBar widget for consistent behavior
         bottomNavigationBar: BottomNavBar(
           currentIndex: 3,
+          variant: widget.isAdmin
+              ? BottomNavBarVariant.admin
+              : BottomNavBarVariant.user,
           onTap: (index) {
             if (index == 3) return;
+
+            if (widget.isAdmin) {
+              switch (index) {
+                case 0:
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AdminHomeDashboard(
+                        initialSelectedIndex: 0,
+                      ),
+                    ),
+                  );
+                  return;
+                case 1:
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AdminHomeDashboard(
+                        initialSelectedIndex: 1,
+                      ),
+                    ),
+                  );
+                  return;
+                case 2:
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AdminDashboardScreen(),
+                    ),
+                  );
+                  return;
+                default:
+                  return;
+              }
+            }
+
             Widget screen;
             switch (index) {
               case 0:

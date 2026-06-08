@@ -11,7 +11,12 @@ import 'package:bersatubantu/fitur/berita_sosial/models/berita_model.dart';
 import 'package:bersatubantu/fitur/berita_sosial/screens/detail_berita.dart';
 
 class AdminHomeDashboard extends StatefulWidget {
-  const AdminHomeDashboard({super.key});
+  final int initialSelectedIndex;
+
+  const AdminHomeDashboard({
+    super.key,
+    this.initialSelectedIndex = 0,
+  });
 
   @override
   State<AdminHomeDashboard> createState() => _AdminHomeDashboardState();
@@ -49,6 +54,7 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.initialSelectedIndex;
     // Load both Campaigns and News from Database
     _loadCampaigns();
     _loadNews();
@@ -198,7 +204,7 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
     super.build(context);
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 168, 168),
+      backgroundColor: const Color(0xFF768BBD),
       body: SafeArea(
         child: Column(
           children: [
@@ -755,7 +761,7 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color.fromARGB(255, 255, 168, 168) : Colors.transparent,
+          color: isSelected ? const Color(0xFF768BBD) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(

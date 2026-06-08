@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
+enum BottomNavBarVariant { user, admin }
+
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
+  final BottomNavBarVariant variant;
 
   const BottomNavBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
+    this.variant = BottomNavBarVariant.user,
   });
 
   @override
@@ -28,12 +32,31 @@ class BottomNavBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(Icons.home_rounded, 'Beranda', 0),
-              _buildNavItem(Icons.card_giftcard_outlined, 'Donasi', 1),
-              _buildNavItem(Icons.volunteer_activism_outlined, 'Aksi', 2),
-              _buildNavItem(Icons.person_outline_rounded, 'Profil', 3),
-            ],
+            children: variant == BottomNavBarVariant.admin
+                ? [
+                    _buildNavItem(Icons.home_rounded, 'Beranda', 0),
+                    _buildNavItem(Icons.newspaper, 'Berita', 1),
+                    _buildNavItem(
+                      Icons.verified_user_outlined,
+                      'Verifikasi',
+                      2,
+                    ),
+                    _buildNavItem(Icons.person_outline_rounded, 'Profil', 3),
+                  ]
+                : [
+                    _buildNavItem(Icons.home_rounded, 'Beranda', 0),
+                    _buildNavItem(
+                      Icons.card_giftcard_outlined,
+                      'Donasi',
+                      1,
+                    ),
+                    _buildNavItem(
+                      Icons.volunteer_activism_outlined,
+                      'Aksi',
+                      2,
+                    ),
+                    _buildNavItem(Icons.person_outline_rounded, 'Profil', 3),
+                  ],
           ),
         ),
       ),
