@@ -13,6 +13,7 @@ import 'package:bersatubantu/fitur/auth/lupapassword/resetpassword.dart';
 import 'package:bersatubantu/fitur/auth/login/organization_login_screen.dart';
 import 'package:bersatubantu/fitur/auth/login/admin_dashboard_screen.dart';
 import 'package:bersatubantu/fitur/dashboard/dashboard_screen.dart';
+import 'package:bersatubantu/theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,6 +78,9 @@ Future<void> main() async {
     }
   }
 
+  final themeName = AppTheme.currentName();
+  print('[Theme] Active theme: $themeName');
+
   runApp(
     MultiProvider(
       providers: [
@@ -84,7 +88,7 @@ Future<void> main() async {
           create: (_) => VolunteerEventProvider(),
         ),
       ],
-      child: const MyApp(),
+      child: MyApp(themeName: themeName),
     ),
   );
 }
@@ -94,7 +98,9 @@ Future<void> main() async {
 final supabase = Supabase.instance.client;
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final String themeName;
+
+  const MyApp({super.key, required this.themeName});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -135,17 +141,7 @@ class _MyAppState extends State<MyApp> {
           navigatorKey: _navigatorKey,
           title: 'BersatuBantu',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primaryColor: const Color(0xFF768BBD),
-            scaffoldBackgroundColor: Colors.white,
-            fontFamily: 'CircularStd',
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xFF768BBD),
-              primary: const Color(0xFF768BBD),
-              secondary: const Color(0xFFB7BBC3),
-            ),
-            useMaterial3: true,
-          ),
+          theme: AppTheme.buildTheme(widget.themeName),
           onGenerateRoute: (settings) {
             print('[Router] Navigating to: ${settings.name}');
 
