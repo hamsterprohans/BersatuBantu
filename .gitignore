@@ -102,3 +102,6 @@ project-*-*.json
 # Large assets (optional, jika file terlalu besar)
 # assets/videos/
 # assets/fonts/*.ttf
+
+# Flutter SDK directory (installed by CI via flutter-action, not tracked in repo)
+/flutter/
