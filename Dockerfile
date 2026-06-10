@@ -5,6 +5,7 @@ FROM ghcr.io/cirruslabs/flutter:stable AS build
 ARG SUPABASE_URL
 ARG SUPABASE_ANON_KEY
 ARG GOOGLE_MAPS_API_KEY
+ARG APP_THEME=default
 
 WORKDIR /app
 
@@ -22,7 +23,8 @@ RUN flutter build web --release \
     --pwa-strategy=none \
     --dart-define=SUPABASE_URL=${SUPABASE_URL} \
     --dart-define=SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY} \
-    --dart-define=GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
+    --dart-define=GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY} \
+    --dart-define=APP_THEME=${APP_THEME}
 
 # Stage 2: Serve with nginx
 FROM nginx:alpine
