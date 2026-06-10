@@ -10,6 +10,7 @@ env:
   REGION: asia-southeast2
   SERVICE_NAME: bersatubantu
   APP_THEME: merdeka
+  BANNER_ENABLED: "true"      
 
 jobs:
   # ─────────────────────────────────────────────
@@ -106,6 +107,7 @@ jobs:
             --build-arg SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }} \
             --build-arg GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }} \
             --build-arg APP_THEME=${{ env.APP_THEME }} \
+            --build-arg BANNER_ENABLED=${{ env.BANNER_ENABLED }} \
             -t ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
             -t ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:latest \
             .

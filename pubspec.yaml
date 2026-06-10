@@ -46,6 +46,7 @@ flutter:
   # Assets untuk logo dan ilustrasi
   assets:
     - assets/bersatubantu.png
+    - assets/banners/   # ← banner images kamu taruh di sini
     - .env
   # Fonts configuration
   fonts:

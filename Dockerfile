@@ -6,6 +6,7 @@ ARG SUPABASE_URL
 ARG SUPABASE_ANON_KEY
 ARG GOOGLE_MAPS_API_KEY
 ARG APP_THEME=default
+ARG BANNER_ENABLED=false
 
 WORKDIR /app
 
@@ -24,7 +25,8 @@ RUN flutter build web --release \
     --dart-define=SUPABASE_URL=${SUPABASE_URL} \
     --dart-define=SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY} \
     --dart-define=GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY} \
-    --dart-define=APP_THEME=${APP_THEME}
+    --dart-define=APP_THEME=${APP_THEME} \
+    --dart-define=BANNER_ENABLED=${BANNER_ENABLED}
 
 # Stage 2: Serve with nginx
 FROM nginx:alpine
