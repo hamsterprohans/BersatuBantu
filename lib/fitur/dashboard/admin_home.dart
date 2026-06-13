@@ -13,15 +13,14 @@ import 'package:bersatubantu/fitur/berita_sosial/models/berita_model.dart';
 import 'package:bersatubantu/fitur/berita_sosial/screens/detail_berita.dart';
 import 'package:provider/provider.dart';
 import 'package:bersatubantu/providers/volunteer_event_provider.dart';
-import 'package:bersatubantu/fitur/pilihdaftar/register_volunteer_screen.dart' show EventDetailBottomSheet;
+import 'package:bersatubantu/fitur/pilihdaftar/register_volunteer_screen.dart'
+    show EventDetailBottomSheet;
+import 'package:bersatubantu/theme/app_theme.dart';
 
 class AdminHomeDashboard extends StatefulWidget {
   final int initialSelectedIndex;
 
-  const AdminHomeDashboard({
-    super.key,
-    this.initialSelectedIndex = 0,
-  });
+  const AdminHomeDashboard({super.key, this.initialSelectedIndex = 0});
 
   @override
   State<AdminHomeDashboard> createState() => _AdminHomeDashboardState();
@@ -141,9 +140,7 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
 
       await Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (_) => BerikanDonasiScreen(donation: data),
-        ),
+        MaterialPageRoute(builder: (_) => BerikanDonasiScreen(donation: data)),
       );
     } catch (e) {
       if (!mounted) return;
@@ -161,17 +158,21 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
     try {
       final user = supabase.auth.currentUser;
       final userId = user?.id ?? '';
-      
+
       if (!mounted) return;
-      
+
       // Load event details via provider
-      final provider = Provider.of<VolunteerEventProvider>(context, listen: false);
+      final provider = Provider.of<VolunteerEventProvider>(
+        context,
+        listen: false,
+      );
       provider.loadEventDetails(eventId: eventId, userId: userId);
 
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        builder: (_) => EventDetailBottomSheet(eventId: eventId, userId: userId),
+        builder: (_) =>
+            EventDetailBottomSheet(eventId: eventId, userId: userId),
       );
     } catch (e) {
       if (!mounted) return;
@@ -285,28 +286,50 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _getGreeting(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontFamily: 'CircularStd',
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _getGreeting(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontFamily: 'CircularStd',
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              const Text(
+                                ADMIN_USERNAME,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 32,
+                                  fontFamily: 'CircularStd',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      const Text(
-                        ADMIN_USERNAME,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32,
-                          fontFamily: 'CircularStd',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                        // TAMPILKAN GAMBAR GREETINGS JIKA TEMA MERDEKA AKTIF
+                        if (AppTheme.currentName() == AppTheme.merdekaName)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 8.0,
+                              right: 8.0,
+                            ),
+                            child: Image.asset(
+                              'assets/boy_merdeka.png',
+                              height: 70,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -379,70 +402,130 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
 
                       // === BANNER CAROUSEL (dikendalikan via BANNER_ENABLED di ci-cd.yml) ===
                       if (BannerConfig.isEnabled)
-                        BannerCarousel(
-                          banners: [
-                          // ── SLIDE 1: MBG ─────────────────────────────────
-                          BannerItem(
-                            title: 'Donasi MBG',
-                            subtitle: 'Bantu penuhi kebutuhan pangan masyarakat',
-                            buttonText: 'Donasi Sekarang',
-                            gradientColors: [Color(0xFF4A7FBD), Color(0xFF8FA3CC)],
-                            icon: Icons.volunteer_activism_rounded,
-                            imageAsset: 'assets/banners/banjir.png',
-                            imageType: BannerImageType.asset,
-                            showTextOverImage: false,
-                            onTap: () => _openCampaignById('490d6abe-8332-446d-befa-1875ae71671d'),
-                          ),
-                          // ── SLIDE 2: Bencana Aceh ────────────────────────
-                          BannerItem(
-                            title: 'Bencana Aceh',
-                            subtitle: 'Ringankan beban saudara kita di Aceh',
-                            buttonText: 'Bantu Sekarang',
-                            gradientColors: [Color(0xFF8B2500), Color(0xFFD9614C)],
-                            icon: Icons.warning_rounded,
-                            imageAsset: 'assets/banners/aceh.png',
-                            imageType: BannerImageType.asset,
-                            showTextOverImage: false,
-                            onTap: () => _openCampaignById('5716ea27-7e7b-4688-8eba-00a9c7020a64'),
-                          ),
-                          // ── SLIDE 3: Bencana Kelapa Sawit ────────────────
-                          BannerItem(
-                            title: 'Bencana Sawit',
-                            subtitle: 'Dukung pemulihan masyarakat terdampak sawit',
-                            buttonText: 'Bantu Sekarang',
-                            gradientColors: [Color(0xFF2E6B2E), Color(0xFF66BB6A)],
-                            icon: Icons.nature_rounded,
-                            imageAsset: 'assets/banners/sawit.png',
-                            imageType: BannerImageType.asset,
-                            showTextOverImage: false,
-                            onTap: () => _openCampaignById('9378ceff-d1e0-4241-93b1-df622eca4571'),
-                          ),
-                          // ── SLIDE 4: Aksi - Bantu Aceh ───────────────────
-                          BannerItem(
-                            title: 'Bantu Aceh',
-                            subtitle: 'Ayo bergabung jadi relawan kemanusiaan di Aceh',
-                            buttonText: 'Gabung Relawan',
-                            gradientColors: [Color(0xFF8B2500), Color(0xFFE8A45A)],
-                            icon: Icons.volunteer_activism_rounded,
-                            imageAsset: 'assets/banners/aksiaceh.png',
-                            imageType: BannerImageType.asset,
-                            showTextOverImage: false,
-                            onTap: () => _openEventById('e5fe54f5-c0e9-4df7-b8d8-10f448a151cd'),
-                          ),
-                          // ── SLIDE 5: Aksi - Bakti Sosial Bersih Sungai ────
-                          BannerItem(
-                            title: 'Bersih Sungai',
-                            subtitle: 'Ayo ikut bakti sosial membersihkan aliran sungai',
-                            buttonText: 'Gabung Relawan',
-                            gradientColors: [Color(0xFF1D8348), Color(0xFF52BE80)],
-                            icon: Icons.nature_people_rounded,
-                            imageAsset: 'assets/banners/aksisungai.png',
-                            imageType: BannerImageType.asset,
-                            showTextOverImage: false,
-                            onTap: () => _openEventById('a4f1ab38-f2bf-456c-bf5c-190065b1ae3c'),
-                          ),
-                        ],
-                      ),
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            BannerCarousel(
+                              banners: [
+                                // ── SLIDE 1: MBG ─────────────────────────────────
+                                BannerItem(
+                                  title: 'Donasi MBG',
+                                  subtitle:
+                                      'Bantu penuhi kebutuhan pangan masyarakat',
+                                  buttonText: 'Donasi Sekarang',
+                                  gradientColors: [
+                                    Color(0xFF4A7FBD),
+                                    Color(0xFF8FA3CC),
+                                  ],
+                                  icon: Icons.volunteer_activism_rounded,
+                                  imageAsset: 'assets/banners/banjir.png',
+                                  imageType: BannerImageType.asset,
+                                  showTextOverImage: false,
+                                  onTap: () => _openCampaignById(
+                                    '490d6abe-8332-446d-befa-1875ae71671d',
+                                  ),
+                                ),
+                                // ── SLIDE 2: Bencana Aceh ────────────────────────
+                                BannerItem(
+                                  title: 'Bencana Aceh',
+                                  subtitle:
+                                      'Ringankan beban saudara kita di Aceh',
+                                  buttonText: 'Bantu Sekarang',
+                                  gradientColors: [
+                                    Color(0xFF8B2500),
+                                    Color(0xFFD9614C),
+                                  ],
+                                  icon: Icons.warning_rounded,
+                                  imageAsset: 'assets/banners/aceh.png',
+                                  imageType: BannerImageType.asset,
+                                  showTextOverImage: false,
+                                  onTap: () => _openCampaignById(
+                                    '5716ea27-7e7b-4688-8eba-00a9c7020a64',
+                                  ),
+                                ),
+                                // ── SLIDE 3: Bencana Kelapa Sawit ────────────────
+                                BannerItem(
+                                  title: 'Bencana Sawit',
+                                  subtitle:
+                                      'Dukung pemulihan masyarakat terdampak sawit',
+                                  buttonText: 'Bantu Sekarang',
+                                  gradientColors: [
+                                    Color(0xFF2E6B2E),
+                                    Color(0xFF66BB6A),
+                                  ],
+                                  icon: Icons.nature_rounded,
+                                  imageAsset: 'assets/banners/sawit.png',
+                                  imageType: BannerImageType.asset,
+                                  showTextOverImage: false,
+                                  onTap: () => _openCampaignById(
+                                    '9378ceff-d1e0-4241-93b1-df622eca4571',
+                                  ),
+                                ),
+                                // ── SLIDE 4: Aksi - Bantu Aceh ───────────────────
+                                BannerItem(
+                                  title: 'Bantu Aceh',
+                                  subtitle:
+                                      'Ayo bergabung jadi relawan kemanusiaan di Aceh',
+                                  buttonText: 'Gabung Relawan',
+                                  gradientColors: [
+                                    Color(0xFF8B2500),
+                                    Color(0xFFE8A45A),
+                                  ],
+                                  icon: Icons.volunteer_activism_rounded,
+                                  imageAsset: 'assets/banners/aksiaceh.png',
+                                  imageType: BannerImageType.asset,
+                                  showTextOverImage: false,
+                                  onTap: () => _openEventById(
+                                    'e5fe54f5-c0e9-4df7-b8d8-10f448a151cd',
+                                  ),
+                                ),
+                                // ── SLIDE 5: Aksi - Bakti Sosial Bersih Sungai ────
+                                BannerItem(
+                                  title: 'Bersih Sungai',
+                                  subtitle:
+                                      'Ayo ikut bakti sosial membersihkan aliran sungai',
+                                  buttonText: 'Gabung Relawan',
+                                  gradientColors: [
+                                    Color(0xFF1D8348),
+                                    Color(0xFF52BE80),
+                                  ],
+                                  icon: Icons.nature_people_rounded,
+                                  imageAsset: 'assets/banners/aksisungai.png',
+                                  imageType: BannerImageType.asset,
+                                  showTextOverImage: false,
+                                  onTap: () => _openEventById(
+                                    'a4f1ab38-f2bf-456c-bf5c-190065b1ae3c',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // PITA KIRI ATAS
+                            if (AppTheme.currentName() == AppTheme.merdekaName)
+                              Positioned(
+                                top: -10,
+                                left: 0,
+                                child: Image.asset(
+                                  'assets/pita_bendera.png',
+                                  height: 60,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            // PITA KANAN BAWAH
+                            if (AppTheme.currentName() == AppTheme.merdekaName)
+                              Positioned(
+                                bottom: 10,
+                                right: 0,
+                                child: Transform.rotate(
+                                  angle: 3.14159,
+                                  child: Image.asset(
+                                    'assets/pita_bendera.png',
+                                    height: 60,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
 
                       // Title
                       const Padding(

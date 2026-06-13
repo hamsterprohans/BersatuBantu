@@ -10,21 +10,21 @@ import 'package:bersatubantu/fitur/aturprofile/aturprofile.dart';
 import 'package:bersatubantu/fitur/aksi/aksi_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:bersatubantu/providers/volunteer_event_provider.dart';
-import 'package:bersatubantu/fitur/pilihdaftar/register_volunteer_screen.dart' show EventDetailBottomSheet;
+import 'package:bersatubantu/fitur/pilihdaftar/register_volunteer_screen.dart'
+    show EventDetailBottomSheet;
+import 'package:bersatubantu/theme/app_theme.dart';
 
 class DashboardScreenOrganisasi extends StatefulWidget {
   final int requestId;
 
-  const DashboardScreenOrganisasi({
-    super.key,
-    required this.requestId,
-  });
+  const DashboardScreenOrganisasi({super.key, required this.requestId});
 
   @override
   State<DashboardScreenOrganisasi> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreenOrganisasi> with WidgetsBindingObserver {
+class _DashboardScreenState extends State<DashboardScreenOrganisasi>
+    with WidgetsBindingObserver {
   final supabase = Supabase.instance.client;
   late final StreamSubscription<AuthState> _authSubscription;
 
@@ -80,7 +80,7 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi> with Widget
   @override
   void initState() {
     super.initState();
-    
+
     // Register WidgetsBindingObserver untuk track lifecycle
     WidgetsBinding.instance.addObserver(this);
 
@@ -116,7 +116,10 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi> with Widget
       if (!mounted) return;
       if (data == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Kampanye tidak ditemukan'), backgroundColor: Colors.orange),
+          const SnackBar(
+            content: Text('Kampanye tidak ditemukan'),
+            backgroundColor: Colors.orange,
+          ),
         );
         return;
       }
@@ -127,7 +130,10 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi> with Widget
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal membuka kampanye: $e'), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text('Gagal membuka kampanye: $e'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -137,17 +143,21 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi> with Widget
     try {
       final user = supabase.auth.currentUser;
       final userId = user?.id ?? '';
-      
+
       if (!mounted) return;
-      
+
       // Load event details via provider
-      final provider = Provider.of<VolunteerEventProvider>(context, listen: false);
+      final provider = Provider.of<VolunteerEventProvider>(
+        context,
+        listen: false,
+      );
       provider.loadEventDetails(eventId: eventId, userId: userId);
 
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        builder: (_) => EventDetailBottomSheet(eventId: eventId, userId: userId),
+        builder: (_) =>
+            EventDetailBottomSheet(eventId: eventId, userId: userId),
       );
     } catch (e) {
       if (!mounted) return;
@@ -189,7 +199,9 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi> with Widget
       print('[Dashboard] User email: ${user.email}');
 
       // Query profiles table with the user ID - ALWAYS CHECK DATABASE FIRST
-      print('[Dashboard] Querying profiles table for fresh data from user ID: ${user.id}');
+      print(
+        '[Dashboard] Querying profiles table for fresh data from user ID: ${user.id}',
+      );
 
       final response = await supabase
           .from('profiles')
@@ -216,13 +228,17 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi> with Widget
               _userName = nameString;
               _isLoadingUser = false;
             });
-            print('[Dashboard] Successfully loaded user name from DB: $_userName');
+            print(
+              '[Dashboard] Successfully loaded user name from DB: $_userName',
+            );
             return;
           }
         }
 
         // Fallback: Try email prefix
-        print('[Dashboard] full_name is null or empty, using email prefix fallback');
+        print(
+          '[Dashboard] full_name is null or empty, using email prefix fallback',
+        );
         final email = response['email'] ?? user.email;
         final nameFromEmail = email?.split('@')[0] ?? 'Pengguna';
         setState(() {
@@ -339,7 +355,9 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi> with Widget
 
   // Refresh user data when returning from other screens
   void _onRoutePopped(dynamic result) {
-    print('[Dashboard] Route popped with result: $result - Refreshing user data');
+    print(
+      '[Dashboard] Route popped with result: $result - Refreshing user data',
+    );
     // Trigger immediate refresh
     _loadUserData();
     // Trigger delayed refresh untuk ensure data loaded properly
@@ -393,7 +411,9 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi> with Widget
         });
         await Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const AksiScreen(forceOrganizationMode: true)),
+          MaterialPageRoute(
+            builder: (context) => const AksiScreen(forceOrganizationMode: true),
+          ),
         );
         setState(() {
           _selectedIndex = 0;
@@ -465,30 +485,51 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi> with Widget
                               ),
                             ],
                           )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        : Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                _getGreeting(),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontFamily: 'CircularStd',
-                                  fontWeight: FontWeight.w400,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _getGreeting(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontFamily: 'CircularStd',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      _userName,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 32,
+                                        fontFamily: 'CircularStd',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const SizedBox(height: 6),
-                              Text(
-                                _userName,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontFamily: 'CircularStd',
-                                  fontWeight: FontWeight.bold,
+                              // TAMPILKAN GAMBAR GREETINGS JIKA TEMA MERDEKA AKTIF
+                              if (AppTheme.currentName() ==
+                                  AppTheme.merdekaName)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 8.0,
+                                    right: 8.0,
+                                  ),
+                                  child: Image.asset(
+                                    'assets/boy_merdeka.png', // Ubah ke nama file kamu jika berbeda
+                                    height: 70,
+                                    fit: BoxFit.contain,
+                                  ),
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                              ),
                             ],
                           ),
                   ),
@@ -564,70 +605,130 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi> with Widget
 
                       // === BANNER CAROUSEL (dikendalikan via BANNER_ENABLED di ci-cd.yml) ===
                       if (BannerConfig.isEnabled)
-                        BannerCarousel(
-                          banners: [
-                          // ── SLIDE 1: MBG ─────────────────────────────────
-                          BannerItem(
-                            title: 'Donasi MBG',
-                            subtitle: 'Bantu penuhi kebutuhan pangan masyarakat',
-                            buttonText: 'Donasi Sekarang',
-                            gradientColors: [Color(0xFF4A7FBD), Color(0xFF8FA3CC)],
-                            icon: Icons.volunteer_activism_rounded,
-                            imageAsset: 'assets/banners/banjir.png',
-                            imageType: BannerImageType.asset,
-                            showTextOverImage: false,
-                            onTap: () => _openCampaignById('490d6abe-8332-446d-befa-1875ae71671d'),
-                          ),
-                          // ── SLIDE 2: Bencana Aceh ────────────────────────
-                          BannerItem(
-                            title: 'Bencana Aceh',
-                            subtitle: 'Ringankan beban saudara kita di Aceh',
-                            buttonText: 'Bantu Sekarang',
-                            gradientColors: [Color(0xFF8B2500), Color(0xFFD9614C)],
-                            icon: Icons.warning_rounded,
-                            imageAsset: 'assets/banners/aceh.png',
-                            imageType: BannerImageType.asset,
-                            showTextOverImage: false,
-                            onTap: () => _openCampaignById('5716ea27-7e7b-4688-8eba-00a9c7020a64'),
-                          ),
-                          // ── SLIDE 3: Bencana Kelapa Sawit ────────────────
-                          BannerItem(
-                            title: 'Bencana Sawit',
-                            subtitle: 'Dukung pemulihan masyarakat terdampak sawit',
-                            buttonText: 'Bantu Sekarang',
-                            gradientColors: [Color(0xFF2E6B2E), Color(0xFF66BB6A)],
-                            icon: Icons.nature_rounded,
-                            imageAsset: 'assets/banners/sawit.png',
-                            imageType: BannerImageType.asset,
-                            showTextOverImage: false,
-                            onTap: () => _openCampaignById('9378ceff-d1e0-4241-93b1-df622eca4571'),
-                          ),
-                          // ── SLIDE 4: Aksi - Bantu Aceh ───────────────────
-                          BannerItem(
-                            title: 'Bantu Aceh',
-                            subtitle: 'Ayo bergabung jadi relawan kemanusiaan di Aceh',
-                            buttonText: 'Gabung Relawan',
-                            gradientColors: [Color(0xFF8B2500), Color(0xFFE8A45A)],
-                            icon: Icons.volunteer_activism_rounded,
-                            imageAsset: 'assets/banners/aksiaceh.png',
-                            imageType: BannerImageType.asset,
-                            showTextOverImage: false,
-                            onTap: () => _openEventById('e5fe54f5-c0e9-4df7-b8d8-10f448a151cd'),
-                          ),
-                          // ── SLIDE 5: Aksi - Bakti Sosial Bersih Sungai ────
-                          BannerItem(
-                            title: 'Bersih Sungai',
-                            subtitle: 'Ayo ikut bakti sosial membersihkan aliran sungai',
-                            buttonText: 'Gabung Relawan',
-                            gradientColors: [Color(0xFF1D8348), Color(0xFF52BE80)],
-                            icon: Icons.nature_people_rounded,
-                            imageAsset: 'assets/banners/aksisungai.png',
-                            imageType: BannerImageType.asset,
-                            showTextOverImage: false,
-                            onTap: () => _openEventById('a4f1ab38-f2bf-456c-bf5c-190065b1ae3c'),
-                          ),
-                        ],
-                      ),
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            BannerCarousel(
+                              banners: [
+                                // ── SLIDE 1: MBG ─────────────────────────────────
+                                BannerItem(
+                                  title: 'Donasi MBG',
+                                  subtitle:
+                                      'Bantu penuhi kebutuhan pangan masyarakat',
+                                  buttonText: 'Donasi Sekarang',
+                                  gradientColors: [
+                                    Color(0xFF4A7FBD),
+                                    Color(0xFF8FA3CC),
+                                  ],
+                                  icon: Icons.volunteer_activism_rounded,
+                                  imageAsset: 'assets/banners/banjir.png',
+                                  imageType: BannerImageType.asset,
+                                  showTextOverImage: false,
+                                  onTap: () => _openCampaignById(
+                                    '490d6abe-8332-446d-befa-1875ae71671d',
+                                  ),
+                                ),
+                                // ── SLIDE 2: Bencana Aceh ────────────────────────
+                                BannerItem(
+                                  title: 'Bencana Aceh',
+                                  subtitle:
+                                      'Ringankan beban saudara kita di Aceh',
+                                  buttonText: 'Bantu Sekarang',
+                                  gradientColors: [
+                                    Color(0xFF8B2500),
+                                    Color(0xFFD9614C),
+                                  ],
+                                  icon: Icons.warning_rounded,
+                                  imageAsset: 'assets/banners/aceh.png',
+                                  imageType: BannerImageType.asset,
+                                  showTextOverImage: false,
+                                  onTap: () => _openCampaignById(
+                                    '5716ea27-7e7b-4688-8eba-00a9c7020a64',
+                                  ),
+                                ),
+                                // ── SLIDE 3: Bencana Kelapa Sawit ────────────────
+                                BannerItem(
+                                  title: 'Bencana Sawit',
+                                  subtitle:
+                                      'Dukung pemulihan masyarakat terdampak sawit',
+                                  buttonText: 'Bantu Sekarang',
+                                  gradientColors: [
+                                    Color(0xFF2E6B2E),
+                                    Color(0xFF66BB6A),
+                                  ],
+                                  icon: Icons.nature_rounded,
+                                  imageAsset: 'assets/banners/sawit.png',
+                                  imageType: BannerImageType.asset,
+                                  showTextOverImage: false,
+                                  onTap: () => _openCampaignById(
+                                    '9378ceff-d1e0-4241-93b1-df622eca4571',
+                                  ),
+                                ),
+                                // ── SLIDE 4: Aksi - Bantu Aceh ───────────────────
+                                BannerItem(
+                                  title: 'Bantu Aceh',
+                                  subtitle:
+                                      'Ayo bergabung jadi relawan kemanusiaan di Aceh',
+                                  buttonText: 'Gabung Relawan',
+                                  gradientColors: [
+                                    Color(0xFF8B2500),
+                                    Color(0xFFE8A45A),
+                                  ],
+                                  icon: Icons.volunteer_activism_rounded,
+                                  imageAsset: 'assets/banners/aksiaceh.png',
+                                  imageType: BannerImageType.asset,
+                                  showTextOverImage: false,
+                                  onTap: () => _openEventById(
+                                    'e5fe54f5-c0e9-4df7-b8d8-10f448a151cd',
+                                  ),
+                                ),
+                                // ── SLIDE 5: Aksi - Bakti Sosial Bersih Sungai ────
+                                BannerItem(
+                                  title: 'Bersih Sungai',
+                                  subtitle:
+                                      'Ayo ikut bakti sosial membersihkan aliran sungai',
+                                  buttonText: 'Gabung Relawan',
+                                  gradientColors: [
+                                    Color(0xFF1D8348),
+                                    Color(0xFF52BE80),
+                                  ],
+                                  icon: Icons.nature_people_rounded,
+                                  imageAsset: 'assets/banners/aksisungai.png',
+                                  imageType: BannerImageType.asset,
+                                  showTextOverImage: false,
+                                  onTap: () => _openEventById(
+                                    'a4f1ab38-f2bf-456c-bf5c-190065b1ae3c',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // PITA KIRI ATAS
+                            if (AppTheme.currentName() == AppTheme.merdekaName)
+                              Positioned(
+                                top: -10,
+                                left: 0,
+                                child: Image.asset(
+                                  'assets/pita_bendera.png',
+                                  height: 60,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            // PITA KANAN BAWAH
+                            if (AppTheme.currentName() == AppTheme.merdekaName)
+                              Positioned(
+                                bottom: 10,
+                                right: 0,
+                                child: Transform.rotate(
+                                  angle: 3.14159, // Putar 180 derajat
+                                  child: Image.asset(
+                                    'assets/pita_bendera.png',
+                                    height: 60,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
 
                       // Berita Title
                       const Padding(
@@ -1180,11 +1281,9 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi> with Widget
     return GestureDetector(
       onTap: () async {
         if (index == 3) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => const ProfileScreen(),
-            ),
-          );
+          await Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (_) => const ProfileScreen()));
           // Refresh data user setelah kembali dari Atur Profil
           _loadUserData();
           return;

@@ -47,6 +47,9 @@ flutter:
   assets:
     - assets/bersatubantu.png
     - assets/banners/   # ← banner images kamu taruh di sini
+    - assets/boy_merdeka.png
+    - assets/pita_bendera.png
+    - assets/
     - .env
   # Fonts configuration
   fonts:

@@ -32,7 +32,7 @@ class AppTheme {
       case merdekaName:
         return const AppThemePalette(
           name: merdekaName,
-          primary: Color(0xFFD62828),
+          primary: Color.fromARGB(185, 214, 40, 40),
           secondary: Color(0xFFF4B400),
           background: Colors.white,
           surface: Colors.white,
