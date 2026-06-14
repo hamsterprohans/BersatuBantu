@@ -378,7 +378,6 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
@@ -433,6 +432,11 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
                               ),
                             ],
                           ),
+                  ),
+                  Image.asset(
+                    'assets/boy_merdeka.png',
+                    height: 90,
+                    fit: BoxFit.contain,
                   ),
                   const SizedBox(width: 12),
                   Container(
