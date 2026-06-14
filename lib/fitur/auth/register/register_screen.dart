@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -418,7 +419,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF768BBD),
+      backgroundColor: AppTheme.primaryColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -523,7 +524,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             _isPasswordVisible
                 ? Icons.visibility_rounded
                 : Icons.visibility_off_rounded,
-            color: const Color(0xFF768BBD),
+            color: AppTheme.primaryColor,
             size: 22,
           ),
           onPressed: () {
@@ -619,7 +620,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 _isConfirmPasswordVisible
                     ? Icons.visibility_rounded
                     : Icons.visibility_off_rounded,
-                color: const Color(0xFF768BBD),
+                color: AppTheme.primaryColor,
                 size: 22,
               ),
               onPressed: () {
@@ -668,7 +669,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: ElevatedButton(
         onPressed: _isLoading ? null : _register,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF768BBD),
+          backgroundColor: AppTheme.primaryColor,
           foregroundColor: Colors.white,
           disabledBackgroundColor: Colors.grey[400],
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -721,7 +722,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: const Text(
             'Masuk',
             style: TextStyle(
-              color: Color(0xFF768BBD),
+              color: AppTheme.primaryColor,
               fontSize: 14,
               fontWeight: FontWeight.bold,
               fontFamily: 'CircularStd',
@@ -746,7 +747,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         fontFamily: 'CircularStd',
       ),
       labelStyle: const TextStyle(
-        color: Color(0xFF768BBD),
+        color: AppTheme.primaryColor,
         fontSize: 14,
         fontWeight: FontWeight.w600,
         fontFamily: 'CircularStd',
@@ -764,7 +765,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: const BorderSide(
-          color: Color(0xFF768BBD),
+          color: AppTheme.primaryColor,
           width: 2,
         ),
       ),
@@ -803,7 +804,7 @@ class _RegisterHeader extends StatelessWidget {
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF768BBD),
+            color: AppTheme.primaryColor,
             fontFamily: 'CircularStd',
           ),
         ),
@@ -812,7 +813,7 @@ class _RegisterHeader extends StatelessWidget {
           'di Bersatu Bantu!',
           style: TextStyle(
             fontSize: 20,
-            color: Color(0xFF768BBD),
+            color: AppTheme.primaryColor,
             fontFamily: 'CircularStd',
           ),
         ),

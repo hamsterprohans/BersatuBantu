@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:bersatubantu/fitur/welcome/welcome_screen.dart';
@@ -93,7 +94,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       width: 280,
                       height: 280,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF768BBD),
+                        color: AppTheme.primaryColor,
                         borderRadius: BorderRadius.circular(40),
                       ),
                       child: const Icon(

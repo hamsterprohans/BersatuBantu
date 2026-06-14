@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'dart:async';
@@ -189,7 +190,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF768BBD),
+        backgroundColor: AppTheme.primaryColor,
         elevation: 0,
         title: Text(
           widget.senderName,
@@ -332,7 +333,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(25),
-                          borderSide: const BorderSide(color: Color(0xFF768BBD)),
+                          borderSide: const BorderSide(color: AppTheme.primaryColor),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16,

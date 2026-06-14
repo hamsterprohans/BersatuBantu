@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/verification_provider.dart';
@@ -47,7 +48,7 @@ class _OrganizationDataScreenState extends State<OrganizationDataScreen> {
                       onTap: () => provider.previousStep(),
                       child: const Icon(
                         Icons.arrow_back,
-                        color: Color(0xFF768BBD),
+                        color: AppTheme.primaryColor,
                         size: 28,
                       ),
                     ),
@@ -58,7 +59,7 @@ class _OrganizationDataScreenState extends State<OrganizationDataScreen> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF768BBD),
+                        color: AppTheme.primaryColor,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -67,7 +68,7 @@ class _OrganizationDataScreenState extends State<OrganizationDataScreen> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF768BBD),
+                        color: AppTheme.primaryColor,
                       ),
                     ),
                     const SizedBox(height: 32),
@@ -223,7 +224,7 @@ class _OrganizationDataScreenState extends State<OrganizationDataScreen> {
                           height: 12,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: const Color(0xFF768BBD),
+                            color: AppTheme.primaryColor,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -274,7 +275,7 @@ class _OrganizationDataScreenState extends State<OrganizationDataScreen> {
                               provider.nextStep();
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF768BBD),
+                              backgroundColor: AppTheme.primaryColor,
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),

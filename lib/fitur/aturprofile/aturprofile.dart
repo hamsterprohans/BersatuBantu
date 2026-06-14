@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bersatubantu/fitur/welcome/splash_screen.dart';
@@ -116,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   const CircleAvatar(
                     radius: 35,
-                    backgroundColor: Color(0xFF768BBD),
+                    backgroundColor: AppTheme.primaryColor,
                     child: Icon(Icons.person, size: 40, color: Colors.white),
                   ),
                   const SizedBox(width: 15),
@@ -164,7 +165,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       }
                     },
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Color(0xFF768BBD)),
+                      side: const BorderSide(color: AppTheme.primaryColor),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -176,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     child: const Text(
                       "Edit Profil",
-                      style: TextStyle(color: Color(0xFF768BBD)),
+                      style: TextStyle(color: AppTheme.primaryColor),
                     ),
                   ),
                 ],
@@ -408,10 +409,10 @@ Widget _buildMenuCard({
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFF768BBD).withOpacity(0.1),
+              color: AppTheme.primaryColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: const Color(0xFF768BBD), size: 24),
+            child: Icon(icon, color: AppTheme.primaryColor, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -572,7 +573,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF768BBD),
+                  backgroundColor: AppTheme.primaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -616,7 +617,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     children: [
                       const CircleAvatar(
                         radius: 35,
-                        backgroundColor: Color(0xFF768BBD),
+                        backgroundColor: AppTheme.primaryColor,
                         child: Icon(
                           Icons.person,
                           size: 40,
@@ -725,7 +726,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _updateProfile,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF768BBD),
+                      backgroundColor: AppTheme.primaryColor,
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -789,7 +790,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFF768BBD)),
+          borderSide: const BorderSide(color: AppTheme.primaryColor),
         ),
         filled: true,
         fillColor: Colors.white,

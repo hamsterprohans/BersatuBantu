@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bersatubantu/fitur/auth/login/organization_login_screen.dart';
@@ -131,13 +132,13 @@ class _WaitingVerificationScreenState extends State<WaitingVerificationScreen> {
                 height: 100,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF768BBD).withOpacity(0.1),
+                  color: AppTheme.primaryColor.withOpacity(0.1),
                 ),
                 child: const Center(
                   child: Icon(
                     Icons.hourglass_empty,
                     size: 50,
-                    color: Color(0xFF768BBD),
+                    color: AppTheme.primaryColor,
                   ),
                 ),
               ),
@@ -149,7 +150,7 @@ class _WaitingVerificationScreenState extends State<WaitingVerificationScreen> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF768BBD),
+                  color: AppTheme.primaryColor,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -210,7 +211,7 @@ class _WaitingVerificationScreenState extends State<WaitingVerificationScreen> {
 
               // Loading indicator
               const CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF768BBD)),
+                valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
                 strokeWidth: 2,
               ),
               const SizedBox(height: 16),

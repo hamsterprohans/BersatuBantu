@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
@@ -113,12 +114,12 @@ class _DonationHistoryScreenState extends State<DonationHistoryScreen> {
         elevation: 0,
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: Color(0xFF768BBD)))
+          ? const Center(child: CircularProgressIndicator(color: AppTheme.primaryColor))
           : _history.isEmpty
               ? _buildEmptyState()
               : RefreshIndicator(
                   onRefresh: _loadHistory,
-                  color: const Color(0xFF768BBD),
+                  color: AppTheme.primaryColor,
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: _history.length,
@@ -148,7 +149,7 @@ class _DonationHistoryScreenState extends State<DonationHistoryScreen> {
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF768BBD),
+              backgroundColor: AppTheme.primaryColor,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
@@ -210,7 +211,7 @@ class _DonationHistoryScreenState extends State<DonationHistoryScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(amount,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF768BBD))),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppTheme.primaryColor)),
                     Text(date, style: TextStyle(fontSize: 13, color: Colors.grey[600])),
                   ],
                 ),
@@ -244,10 +245,10 @@ class _DonationHistoryScreenState extends State<DonationHistoryScreen> {
                   child: OutlinedButton(
                     onPressed: () => _showDetail(tx, title, amount, date, statusLabel, statusColor),
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Color(0xFF768BBD)),
+                      side: const BorderSide(color: AppTheme.primaryColor),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     ),
-                    child: const Text('Lihat Detail', style: TextStyle(color: Color(0xFF768BBD))),
+                    child: const Text('Lihat Detail', style: TextStyle(color: AppTheme.primaryColor)),
                   ),
                 ),
               ],
@@ -284,7 +285,7 @@ class _DonationHistoryScreenState extends State<DonationHistoryScreen> {
               child: ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF768BBD),
+                  backgroundColor: AppTheme.primaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),

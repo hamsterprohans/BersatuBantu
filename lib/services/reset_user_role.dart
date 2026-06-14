@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -114,7 +115,7 @@ Role isEmpty: ${(role as String?)?.isEmpty ?? "N/A"}
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reset User Role (Debug)'),
-        backgroundColor: const Color(0xFF768BBD),
+        backgroundColor: AppTheme.primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -123,7 +124,7 @@ Role isEmpty: ${(role as String?)?.isEmpty ?? "N/A"}
             ElevatedButton(
               onPressed: _isLoading ? null : _checkCurrentUserRole,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF768BBD),
+                backgroundColor: AppTheme.primaryColor,
               ),
               child: const Text('Check Current User Role'),
             ),

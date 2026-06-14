@@ -24,6 +24,17 @@ class AppTheme {
   static const String defaultName = 'default';
   static const String merdekaName = 'merdeka';
 
+  // Compile-time constants — safe to use in const widget constructors
+  static const Color primaryColor =
+      String.fromEnvironment('APP_THEME', defaultValue: defaultName) == merdekaName
+          ? Color.fromARGB(185, 214, 40, 40)
+          : Color(0xFF768BBD);
+
+  static const Color accentColor =
+      String.fromEnvironment('APP_THEME', defaultValue: defaultName) == merdekaName
+          ? Color(0xFF1E5F74)
+          : Color(0xFF5A6F8F);
+
   static String currentName() =>
       const String.fromEnvironment('APP_THEME', defaultValue: defaultName);
 

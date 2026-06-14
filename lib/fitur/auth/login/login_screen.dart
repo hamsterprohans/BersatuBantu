@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bersatubantu/fitur/auth/register/register_screen.dart';
@@ -212,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF768BBD),
+      backgroundColor: AppTheme.primaryColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -259,7 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF768BBD),
+                          color: AppTheme.primaryColor,
                           fontFamily: 'CircularStd',
                         ),
                       ),
@@ -268,7 +269,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         'ke Bersatu Bantu!',
                         style: TextStyle(
                           fontSize: 20,
-                          color: Color(0xFF768BBD),
+                          color: AppTheme.primaryColor,
                           fontFamily: 'CircularStd',
                         ),
                       ),
@@ -293,7 +294,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontFamily: 'CircularStd',
                           ),
                           labelStyle: const TextStyle(
-                            color: Color(0xFF768BBD),
+                            color: AppTheme.primaryColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'CircularStd',
@@ -311,7 +312,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
                             borderSide: const BorderSide(
-                              color: Color(0xFF768BBD),
+                              color: AppTheme.primaryColor,
                               width: 2,
                             ),
                           ),
@@ -356,7 +357,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontFamily: 'CircularStd',
                           ),
                           labelStyle: const TextStyle(
-                            color: Color(0xFF768BBD),
+                            color: AppTheme.primaryColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'CircularStd',
@@ -374,7 +375,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
                             borderSide: const BorderSide(
-                              color: Color(0xFF768BBD),
+                              color: AppTheme.primaryColor,
                               width: 2,
                             ),
                           ),
@@ -401,7 +402,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               _isPasswordVisible
                                   ? Icons.visibility_rounded
                                   : Icons.visibility_off_rounded,
-                              color: const Color(0xFF768BBD),
+                              color: AppTheme.primaryColor,
                               size: 22,
                             ),
                             onPressed: () {
@@ -430,7 +431,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       _rememberMe = value ?? false;
                                     });
                                   },
-                                  activeColor: const Color(0xFF768BBD),
+                                  activeColor: AppTheme.primaryColor,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4),
                                   ),
@@ -459,7 +460,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: const Text(
                               'Lupa Password?',
                               style: TextStyle(
-                                color: Color(0xFF768BBD),
+                                color: AppTheme.primaryColor,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'CircularStd',
@@ -477,7 +478,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: ElevatedButton(
                           onPressed: _isLoading ? null : _login,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF768BBD),
+                            backgroundColor: AppTheme.primaryColor,
                             foregroundColor: Colors.white,
                             disabledBackgroundColor: Colors.grey[400],
                             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -534,7 +535,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: const Text(
                               'Daftar',
                               style: TextStyle(
-                                color: Color(0xFF768BBD),
+                                color: AppTheme.primaryColor,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'CircularStd',

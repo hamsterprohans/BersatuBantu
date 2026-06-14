@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -112,7 +113,7 @@ class _AksiScreenState extends State<AksiScreen> {
               title: Text(filter),
               value: filter,
               groupValue: _selectedFilter,
-              activeColor: const Color(0xFF768BBD),
+              activeColor: AppTheme.primaryColor,
               onChanged: (value) {
                 setState(() {
                   _selectedFilter = value!;
@@ -144,7 +145,7 @@ class _AksiScreenState extends State<AksiScreen> {
               title: Text(category),
               value: category,
               groupValue: _selectedCategory,
-              activeColor: const Color(0xFF768BBD),
+              activeColor: AppTheme.primaryColor,
               onChanged: (value) {
                 setState(() {
                   _selectedCategory = value!;
@@ -296,7 +297,7 @@ class _AksiScreenState extends State<AksiScreen> {
                             return const Center(
                               child: CircularProgressIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
-                                  Color(0xFF768BBD),
+                                  AppTheme.primaryColor,
                                 ),
                               ),
                             );
@@ -378,7 +379,7 @@ class _AksiScreenState extends State<AksiScreen> {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF768BBD),
+                                      backgroundColor: AppTheme.primaryColor,
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 24,
                                         vertical: 12,
@@ -395,7 +396,7 @@ class _AksiScreenState extends State<AksiScreen> {
 
                           return RefreshIndicator(
                             onRefresh: () => provider.loadOpenEvents(),
-                            color: const Color(0xFF768BBD),
+                            color: AppTheme.primaryColor,
                             child: ListView.builder(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
@@ -571,7 +572,7 @@ class _AksiScreenState extends State<AksiScreen> {
                     ).loadOpenEvents();
                   }
                 },
-                backgroundColor: const Color(0xFF5A6F8F),
+                backgroundColor: AppTheme.accentColor,
                 child: const Icon(Icons.add, color: Colors.white, size: 28),
               ),
             )

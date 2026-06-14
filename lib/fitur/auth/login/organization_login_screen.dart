@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -173,7 +174,7 @@ class _OrganizationLoginScreenState extends State<OrganizationLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF768BBD),
+      backgroundColor: AppTheme.primaryColor,
       body: SafeArea(
         child: Stack(
           children: [
@@ -249,7 +250,7 @@ class _OrganizationLoginScreenState extends State<OrganizationLoginScreen> {
                         },
                         child: const Icon(
                           Icons.arrow_back,
-                          color: Color(0xFF768BBD),
+                          color: AppTheme.primaryColor,
                           size: 28,
                         ),
                       ),
@@ -260,7 +261,7 @@ class _OrganizationLoginScreenState extends State<OrganizationLoginScreen> {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF768BBD),
+                          color: AppTheme.primaryColor,
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -339,7 +340,7 @@ class _OrganizationLoginScreenState extends State<OrganizationLoginScreen> {
                               _obscurePassword
                                   ? Icons.visibility_off
                                   : Icons.visibility,
-                              color: const Color(0xFF768BBD),
+                              color: AppTheme.primaryColor,
                             ),
                           ),
                         ),
@@ -354,7 +355,7 @@ class _OrganizationLoginScreenState extends State<OrganizationLoginScreen> {
                               Checkbox(
                                 value: false,
                                 onChanged: (_) {},
-                                activeColor: const Color(0xFF768BBD),
+                                activeColor: AppTheme.primaryColor,
                               ),
                               const Text(
                                 'Ingat Saya',
@@ -368,7 +369,7 @@ class _OrganizationLoginScreenState extends State<OrganizationLoginScreen> {
                               'Lupa Password?',
                               style: TextStyle(
                                 fontSize: 13,
-                                color: Color(0xFF768BBD),
+                                color: AppTheme.primaryColor,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -382,7 +383,7 @@ class _OrganizationLoginScreenState extends State<OrganizationLoginScreen> {
                         height: 48,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF768BBD),
+                            backgroundColor: AppTheme.primaryColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -428,7 +429,7 @@ class _OrganizationLoginScreenState extends State<OrganizationLoginScreen> {
                                 text: 'Daftar',
                                 style: const TextStyle(
                                   fontSize: 13,
-                                  color: Color(0xFF768BBD),
+                                  color: AppTheme.primaryColor,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 recognizer: TapGestureRecognizer()

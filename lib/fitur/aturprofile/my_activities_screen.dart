@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -126,7 +127,7 @@ class _MyActivitiesScreenState extends State<MyActivitiesScreen> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: _selectedTab == 'Berlangsung'
-                                    ? const Color(0xFF768BBD)
+                                    ? AppTheme.primaryColor
                                     : Colors.grey[200],
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -156,7 +157,7 @@ class _MyActivitiesScreenState extends State<MyActivitiesScreen> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: _selectedTab == 'Selesai'
-                                    ? const Color(0xFF768BBD)
+                                    ? AppTheme.primaryColor
                                     : Colors.grey[200],
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -198,7 +199,7 @@ class _MyActivitiesScreenState extends State<MyActivitiesScreen> {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF768BBD)),
+          valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
         ),
       );
     }
@@ -216,7 +217,7 @@ class _MyActivitiesScreenState extends State<MyActivitiesScreen> {
 
     return RefreshIndicator(
       onRefresh: _loadAllUserEvents,
-      color: const Color(0xFF768BBD),
+      color: AppTheme.primaryColor,
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: events.length,
@@ -272,7 +273,7 @@ class _MyActivitiesScreenState extends State<MyActivitiesScreen> {
               style: TextStyle(color: Colors.white),
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF768BBD),
+              backgroundColor: AppTheme.primaryColor,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
@@ -317,7 +318,7 @@ class _MyActivitiesScreenState extends State<MyActivitiesScreen> {
           ElevatedButton(
             onPressed: _loadAllUserEvents,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF768BBD),
+              backgroundColor: AppTheme.primaryColor,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
@@ -477,7 +478,7 @@ class _MyActivitiesScreenState extends State<MyActivitiesScreen> {
                         style: TextStyle(
                           fontSize: 12,
                           color: isOngoing
-                              ? const Color(0xFF768BBD)
+                              ? AppTheme.primaryColor
                               : Colors.grey[600],
                           fontWeight: FontWeight.w600,
                           fontFamily: 'CircularStd',
@@ -488,7 +489,7 @@ class _MyActivitiesScreenState extends State<MyActivitiesScreen> {
                         Icons.chevron_right,
                         size: 18,
                         color: isOngoing
-                            ? const Color(0xFF768BBD)
+                            ? AppTheme.primaryColor
                             : Colors.grey[600],
                       ),
                     ],
@@ -735,7 +736,7 @@ class _EventDetailModal extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF768BBD),
+                    backgroundColor: AppTheme.primaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),

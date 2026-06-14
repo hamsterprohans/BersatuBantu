@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -81,7 +82,7 @@ class _FilePickerDebugScreenState extends State<FilePickerDebugScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('File Picker Debug'),
-        backgroundColor: const Color(0xFF768BBD),
+        backgroundColor: AppTheme.primaryColor,
       ),
       body: Column(
         children: [
@@ -95,7 +96,7 @@ class _FilePickerDebugScreenState extends State<FilePickerDebugScreen> {
                   icon: const Icon(Icons.attach_file),
                   label: const Text('Test File Picker'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF768BBD),
+                    backgroundColor: AppTheme.primaryColor,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,

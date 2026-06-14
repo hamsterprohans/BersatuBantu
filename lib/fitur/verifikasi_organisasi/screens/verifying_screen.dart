@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -123,7 +124,7 @@ class _VerifyingScreenState extends State<VerifyingScreen>
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF768BBD), Color(0xFF768BBD)],
+            colors: [AppTheme.primaryColor, AppTheme.primaryColor],
           ),
         ),
         child: Center(

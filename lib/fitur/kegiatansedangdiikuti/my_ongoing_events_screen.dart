@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -87,7 +88,7 @@ class _MyOngoingEventsScreenState extends State<MyOngoingEventsScreen> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: _selectedTab == 'Berlangsung'
-                                    ? const Color(0xFF768BBD)
+                                    ? AppTheme.primaryColor
                                     : Colors.grey[200],
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -114,7 +115,7 @@ class _MyOngoingEventsScreenState extends State<MyOngoingEventsScreen> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: _selectedTab == 'Selesai'
-                                    ? const Color(0xFF768BBD)
+                                    ? AppTheme.primaryColor
                                     : Colors.grey[200],
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -145,7 +146,7 @@ class _MyOngoingEventsScreenState extends State<MyOngoingEventsScreen> {
                             return const Center(
                               child: CircularProgressIndicator(
                                 valueColor:
-                                    AlwaysStoppedAnimation<Color>(Color(0xFF768BBD)),
+                                    AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
                               ),
                             );
                           }
@@ -370,13 +371,13 @@ class _MyOngoingEventsScreenState extends State<MyOngoingEventsScreen> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           side: const BorderSide(
-                            color: Color(0xFF768BBD),
+                            color: AppTheme.primaryColor,
                           ),
                         ),
                         child: const Text(
                           'Berlangsung',
                           style: TextStyle(
-                            color: Color(0xFF768BBD),
+                            color: AppTheme.primaryColor,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'CircularStd',
                           ),
@@ -395,7 +396,7 @@ class _MyOngoingEventsScreenState extends State<MyOngoingEventsScreen> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF768BBD),
+                          backgroundColor: AppTheme.primaryColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),

@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
@@ -164,7 +165,7 @@ class _RegisterVolunteerScreenState extends State<RegisterVolunteerScreen> {
                                         children: [
                                           const Icon(
                                             Icons.tune,
-                                            color: Color(0xFF768BBD),
+                                            color: AppTheme.primaryColor,
                                             size: 20,
                                           ),
                                           const SizedBox(width: 8),
@@ -262,7 +263,7 @@ class _RegisterVolunteerScreenState extends State<RegisterVolunteerScreen> {
                             return const Center(
                               child: CircularProgressIndicator(
                                 valueColor:
-                                    AlwaysStoppedAnimation<Color>(Color(0xFF768BBD)),
+                                    AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
                               ),
                             );
                           }
@@ -454,13 +455,13 @@ class _RegisterVolunteerScreenState extends State<RegisterVolunteerScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             side: const BorderSide(
-                              color: Color(0xFF768BBD),
+                              color: AppTheme.primaryColor,
                             ),
                           ),
                           child: const Text(
                             'Bagikan',
                             style: TextStyle(
-                              color: Color(0xFF768BBD),
+                              color: AppTheme.primaryColor,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'CircularStd',
                             ),
@@ -472,7 +473,7 @@ class _RegisterVolunteerScreenState extends State<RegisterVolunteerScreen> {
                         child: ElevatedButton(
                           onPressed: () => _showEventDetail(event.id),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF768BBD),
+                            backgroundColor: AppTheme.primaryColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
@@ -528,7 +529,7 @@ class _EventDetailBottomSheetState extends State<EventDetailBottomSheet> {
             height: 300,
             child: Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF768BBD)),
+                valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
               ),
             ),
           );
@@ -723,7 +724,7 @@ class _EventDetailBottomSheetState extends State<EventDetailBottomSheet> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF768BBD),
+                          backgroundColor: AppTheme.primaryColor,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
@@ -777,7 +778,7 @@ class _EventDetailBottomSheetState extends State<EventDetailBottomSheet> {
                                 }
                               },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF768BBD),
+                          backgroundColor: AppTheme.primaryColor,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),

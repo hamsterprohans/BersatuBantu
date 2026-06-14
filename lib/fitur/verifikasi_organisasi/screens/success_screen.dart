@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/verification_provider.dart';
@@ -31,8 +32,8 @@ class _SuccessScreenState extends State<SuccessScreen> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xFF768BBD),
-                Color(0xFF768BBD),
+                AppTheme.primaryColor,
+                AppTheme.primaryColor,
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -85,7 +86,7 @@ class _TestUserDataScreenState extends State<TestUserDataScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Debug User Data'),
-        backgroundColor: const Color(0xFF768BBD),
+        backgroundColor: AppTheme.primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -94,7 +95,7 @@ class _TestUserDataScreenState extends State<TestUserDataScreen> {
             ElevatedButton(
               onPressed: _isLoading ? null : _runDebug,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF768BBD),
+                backgroundColor: AppTheme.primaryColor,
               ),
               child: _isLoading
                   ? const SizedBox(

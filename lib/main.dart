@@ -170,7 +170,7 @@ class _MyAppState extends State<MyApp> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Scaffold(
-                  backgroundColor: Color(0xFF768BBD),
+                  backgroundColor: AppTheme.primaryColor,
                   body: Center(
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),

@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:file_picker/file_picker.dart';
@@ -251,7 +252,7 @@ class _PostingDonasiScreenState extends State<PostingDonasiScreen> {
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _submitDonation,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF768BBD),
+                    backgroundColor: AppTheme.primaryColor,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),

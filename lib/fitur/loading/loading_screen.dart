@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bersatubantu/fitur/dashboard/dashboard_screen.dart';
 
@@ -94,7 +95,7 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
                           'Bersiaplah menjadi',
                           style: TextStyle(
                             fontSize: 24,
-                            color: const Color(0xFF768BBD).withOpacity(0.7),
+                            color: AppTheme.primaryColor.withOpacity(0.7),
                             fontFamily: 'CircularStd',
                             fontWeight: FontWeight.w400,
                           ),
@@ -106,7 +107,7 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
                           style: TextStyle(
                             fontSize: 52,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF768BBD),
+                            color: AppTheme.primaryColor,
                             fontFamily: 'CircularStd',
                             height: 1.1,
                             letterSpacing: -1,
@@ -130,12 +131,12 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
                       color: Colors.white,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: const Color(0xFF768BBD),
+                        color: AppTheme.primaryColor,
                         width: 3,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF768BBD).withOpacity(0.2),
+                          color: AppTheme.primaryColor.withOpacity(0.2),
                           blurRadius: 15,
                           offset: const Offset(0, 5),
                         ),
@@ -144,7 +145,7 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
                     child: const Center(
                       child: CircularProgressIndicator(
                         strokeWidth: 3,
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF768BBD)),
+                        valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
                       ),
                     ),
                   ),
@@ -159,7 +160,7 @@ class _LoadingScreenState extends State<LoadingScreen> with SingleTickerProvider
                     'Mempersiapkan pengalaman terbaik...',
                     style: TextStyle(
                       fontSize: 14,
-                      color: const Color(0xFF768BBD).withOpacity(0.6),
+                      color: AppTheme.primaryColor.withOpacity(0.6),
                       fontFamily: 'CircularStd',
                       fontWeight: FontWeight.w400,
                     ),

@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bersatubantu/fitur/dashboard/admin_home.dart';
@@ -200,7 +201,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               _approveOrganization(requestId);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF768BBD),
+              backgroundColor: AppTheme.primaryColor,
             ),
             child: const Text('Ya, Terima'),
           ),
@@ -238,7 +239,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF768BBD),
+        backgroundColor: AppTheme.primaryColor,
         elevation: 0,
         title: const Text(
           'Verifikasi Akun',
@@ -272,7 +273,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF768BBD)),
+                valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
               ),
             );
           }
@@ -427,7 +428,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 child: ElevatedButton(
                   onPressed: () => _showDetailsDialog(context, verification),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF768BBD),
+                    backgroundColor: AppTheme.primaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -480,7 +481,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     verification['request_id']?.toString() ?? '',
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF768BBD),
+                    backgroundColor: AppTheme.primaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
@@ -599,7 +600,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               child: const Icon(
                 Icons.download,
                 size: 16,
-                color: Color(0xFF768BBD),
+                color: AppTheme.primaryColor,
               ),
             ),
         ],

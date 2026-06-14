@@ -117,74 +117,6 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
     }
   }
 
-  /// Fetch campaign dari DB berdasarkan ID, lalu buka BerikanDonasiScreen
-  Future<void> _openCampaignById(String campaignId) async {
-    try {
-      final data = await supabase
-          .from('donation_campaigns')
-          .select('*')
-          .eq('id', campaignId)
-          .maybeSingle();
-
-      if (!mounted) return;
-
-      if (data == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Kampanye tidak ditemukan'),
-            backgroundColor: Colors.orange,
-          ),
-        );
-        return;
-      }
-
-      await Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => BerikanDonasiScreen(donation: data)),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Gagal membuka kampanye: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-  /// Fetch event dari DB berdasarkan ID, lalu buka EventDetailBottomSheet
-  Future<void> _openEventById(String eventId) async {
-    try {
-      final user = supabase.auth.currentUser;
-      final userId = user?.id ?? '';
-
-      if (!mounted) return;
-
-      // Load event details via provider
-      final provider = Provider.of<VolunteerEventProvider>(
-        context,
-        listen: false,
-      );
-      provider.loadEventDetails(eventId: eventId, userId: userId);
-
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (_) =>
-            EventDetailBottomSheet(eventId: eventId, userId: userId),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Gagal membuka kegiatan: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
   // --- HELPER: Date Formatting ---
   String _formatDate(String? dateStr) {
     if (dateStr == null) return '';
@@ -204,8 +136,9 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
       final now = DateTime.now();
       final diff = end.difference(now);
       if (diff.isNegative) return {'text': 'Selesai', 'days': diff.inDays};
-      if (diff.inDays >= 1)
+      if (diff.inDays >= 1) {
         return {'text': '${diff.inDays} hari lagi', 'days': diff.inDays};
+      }
       return {'text': '${diff.inHours} jam lagi', 'days': 0};
     } catch (e) {
       return {'text': 'Tidak tersedia', 'days': null};
@@ -286,50 +219,28 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _getGreeting(),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontFamily: 'CircularStd',
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              const Text(
-                                ADMIN_USERNAME,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontFamily: 'CircularStd',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _getGreeting(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: 'CircularStd',
                         ),
-                        // TAMPILKAN GAMBAR GREETINGS JIKA TEMA MERDEKA AKTIF
-                        if (AppTheme.currentName() == AppTheme.merdekaName)
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 8.0,
-                              right: 8.0,
-                            ),
-                            child: Image.asset(
-                              'assets/boy_merdeka.png',
-                              height: 70,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 6),
+                      const Text(
+                        ADMIN_USERNAME,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontFamily: 'CircularStd',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -363,190 +274,62 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
                     topRight: Radius.circular(30),
                   ),
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Search Bar
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF5F6FA),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.search, color: Colors.grey[400]),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    hintText: 'Telusuri Berita (Admin Mode)',
-                                    hintStyle: TextStyle(
-                                      color: Colors.grey[400],
-                                      fontFamily: 'CircularStd',
-                                    ),
-                                    border: InputBorder.none,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                child: Column(
+                  children: [
+                    // Search Bar
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF5F6FA),
+                          borderRadius: BorderRadius.circular(25),
                         ),
-                      ),
-
-                      // === BANNER CAROUSEL (dikendalikan via BANNER_ENABLED di ci-cd.yml) ===
-                      if (BannerConfig.isEnabled)
-                        Stack(
-                          clipBehavior: Clip.none,
+                        child: Row(
                           children: [
-                            BannerCarousel(
-                              banners: [
-                                // ── SLIDE 1: MBG ─────────────────────────────────
-                                BannerItem(
-                                  title: 'Donasi MBG',
-                                  subtitle:
-                                      'Bantu penuhi kebutuhan pangan masyarakat',
-                                  buttonText: 'Donasi Sekarang',
-                                  gradientColors: [
-                                    Color(0xFF4A7FBD),
-                                    Color(0xFF8FA3CC),
-                                  ],
-                                  icon: Icons.volunteer_activism_rounded,
-                                  imageAsset: 'assets/banners/banjir.png',
-                                  imageType: BannerImageType.asset,
-                                  showTextOverImage: false,
-                                  onTap: () => _openCampaignById(
-                                    '490d6abe-8332-446d-befa-1875ae71671d',
+                            Icon(Icons.search, color: Colors.grey[400]),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Telusuri Berita (Admin Mode)',
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey[400],
+                                    fontFamily: 'CircularStd',
+                                  ),
+                                  border: InputBorder.none,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 12,
                                   ),
                                 ),
-                                // ── SLIDE 2: Bencana Aceh ────────────────────────
-                                BannerItem(
-                                  title: 'Bencana Aceh',
-                                  subtitle:
-                                      'Ringankan beban saudara kita di Aceh',
-                                  buttonText: 'Bantu Sekarang',
-                                  gradientColors: [
-                                    Color(0xFF8B2500),
-                                    Color(0xFFD9614C),
-                                  ],
-                                  icon: Icons.warning_rounded,
-                                  imageAsset: 'assets/banners/aceh.png',
-                                  imageType: BannerImageType.asset,
-                                  showTextOverImage: false,
-                                  onTap: () => _openCampaignById(
-                                    '5716ea27-7e7b-4688-8eba-00a9c7020a64',
-                                  ),
-                                ),
-                                // ── SLIDE 3: Bencana Kelapa Sawit ────────────────
-                                BannerItem(
-                                  title: 'Bencana Sawit',
-                                  subtitle:
-                                      'Dukung pemulihan masyarakat terdampak sawit',
-                                  buttonText: 'Bantu Sekarang',
-                                  gradientColors: [
-                                    Color(0xFF2E6B2E),
-                                    Color(0xFF66BB6A),
-                                  ],
-                                  icon: Icons.nature_rounded,
-                                  imageAsset: 'assets/banners/sawit.png',
-                                  imageType: BannerImageType.asset,
-                                  showTextOverImage: false,
-                                  onTap: () => _openCampaignById(
-                                    '9378ceff-d1e0-4241-93b1-df622eca4571',
-                                  ),
-                                ),
-                                // ── SLIDE 4: Aksi - Bantu Aceh ───────────────────
-                                BannerItem(
-                                  title: 'Bantu Aceh',
-                                  subtitle:
-                                      'Ayo bergabung jadi relawan kemanusiaan di Aceh',
-                                  buttonText: 'Gabung Relawan',
-                                  gradientColors: [
-                                    Color(0xFF8B2500),
-                                    Color(0xFFE8A45A),
-                                  ],
-                                  icon: Icons.volunteer_activism_rounded,
-                                  imageAsset: 'assets/banners/aksiaceh.png',
-                                  imageType: BannerImageType.asset,
-                                  showTextOverImage: false,
-                                  onTap: () => _openEventById(
-                                    'e5fe54f5-c0e9-4df7-b8d8-10f448a151cd',
-                                  ),
-                                ),
-                                // ── SLIDE 5: Aksi - Bakti Sosial Bersih Sungai ────
-                                BannerItem(
-                                  title: 'Bersih Sungai',
-                                  subtitle:
-                                      'Ayo ikut bakti sosial membersihkan aliran sungai',
-                                  buttonText: 'Gabung Relawan',
-                                  gradientColors: [
-                                    Color(0xFF1D8348),
-                                    Color(0xFF52BE80),
-                                  ],
-                                  icon: Icons.nature_people_rounded,
-                                  imageAsset: 'assets/banners/aksisungai.png',
-                                  imageType: BannerImageType.asset,
-                                  showTextOverImage: false,
-                                  onTap: () => _openEventById(
-                                    'a4f1ab38-f2bf-456c-bf5c-190065b1ae3c',
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                            // PITA KIRI ATAS
-                            if (AppTheme.currentName() == AppTheme.merdekaName)
-                              Positioned(
-                                top: -10,
-                                left: 0,
-                                child: Image.asset(
-                                  'assets/pita_bendera.png',
-                                  height: 60,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            // PITA KANAN BAWAH
-                            if (AppTheme.currentName() == AppTheme.merdekaName)
-                              Positioned(
-                                bottom: 10,
-                                right: 0,
-                                child: Transform.rotate(
-                                  angle: 3.14159,
-                                  child: Image.asset(
-                                    'assets/pita_bendera.png',
-                                    height: 60,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),
                           ],
                         ),
+                      ),
+                    ),
 
-                      // Title
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Kelola Berita',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF364057),
-                              fontFamily: 'CircularStd',
-                            ),
+                    // Title
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Kelola Berita',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF364057),
+                            fontFamily: 'CircularStd',
                           ),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                    ),
+                    const SizedBox(height: 16),
 
-                      // Scrollable Content
-                      Padding(
+                    // Scrollable Content
+                    Expanded(
+                      child: SingleChildScrollView(
                         padding: const EdgeInsets.all(16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -942,8 +725,8 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

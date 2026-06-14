@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/verification_provider.dart';
@@ -106,9 +107,9 @@ class VerificationTestScreen extends StatelessWidget {
         width: MediaQuery.of(context).size.width - 48,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF768BBD).withOpacity(0.1),
+          color: AppTheme.primaryColor.withOpacity(0.1),
           border: Border.all(
-            color: const Color(0xFF768BBD),
+            color: AppTheme.primaryColor,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -121,7 +122,7 @@ class VerificationTestScreen extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF768BBD),
+                color: AppTheme.primaryColor,
               ),
             ),
             const SizedBox(height: 8),

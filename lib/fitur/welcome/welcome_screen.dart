@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bersatubantu/fitur/pilihrole/role_selection_screen.dart';
 
@@ -71,7 +72,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                         'Selamat Datang,',
                         style: TextStyle(
                           fontSize: 24,
-                          color: const Color(0xFF768BBD).withOpacity(0.7),
+                          color: AppTheme.primaryColor.withOpacity(0.7),
                           fontFamily: 'CircularStd',
                           fontWeight: FontWeight.w400,
                         ),
@@ -82,7 +83,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                         style: TextStyle(
                           fontSize: 52,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF768BBD),
+                          color: AppTheme.primaryColor,
                           fontFamily: 'CircularStd',
                           height: 1.1,
                           letterSpacing: -1,

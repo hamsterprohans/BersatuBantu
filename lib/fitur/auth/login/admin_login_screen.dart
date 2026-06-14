@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bersatubantu/fitur/pilihrole/role_selection_screen.dart';
 import 'package:bersatubantu/fitur/dashboard/admin_home.dart';
@@ -96,7 +97,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF768BBD),
+      backgroundColor: AppTheme.primaryColor,
       body: SafeArea(
         child: Stack(
           children: [
@@ -172,7 +173,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         },
                         child: const Icon(
                           Icons.arrow_back,
-                          color: Color(0xFF768BBD),
+                          color: AppTheme.primaryColor,
                           size: 28,
                         ),
                       ),
@@ -183,7 +184,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF768BBD),
+                          color: AppTheme.primaryColor,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -269,7 +270,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                               _obscurePassword
                                   ? Icons.visibility_off
                                   : Icons.visibility,
-                              color: const Color(0xFF768BBD),
+                              color: AppTheme.primaryColor,
                             ),
                           ),
                         ),
@@ -281,7 +282,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         height: 48,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF768BBD),
+                            backgroundColor: AppTheme.primaryColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),

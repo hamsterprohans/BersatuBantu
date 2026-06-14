@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'chat_detail_screen.dart';
@@ -160,7 +161,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF768BBD),
+        backgroundColor: AppTheme.primaryColor,
         elevation: 0,
         title: const Text(
           'Pesan',
@@ -198,7 +199,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
-                  borderSide: const BorderSide(color: Color(0xFF768BBD)),
+                  borderSide: const BorderSide(color: AppTheme.primaryColor),
                 ),
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
               ),
@@ -258,7 +259,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                                     width: 56,
                                     height: 56,
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFF768BBD),
+                                      color: AppTheme.primaryColor,
                                       shape: BoxShape.circle,
                                     ),
                                     child: Center(

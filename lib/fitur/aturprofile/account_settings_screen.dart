@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -240,7 +241,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeThumbColor: const Color(0xFF768BBD),
+            activeThumbColor: AppTheme.primaryColor,
           ),
         ],
       ),
@@ -267,10 +268,10 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: const Color(0xFF768BBD).withOpacity(0.1),
+                color: AppTheme.primaryColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, color: const Color(0xFF768BBD), size: 24),
+              child: Icon(icon, color: AppTheme.primaryColor, size: 24),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -462,7 +463,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                       }
                     },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF768BBD),
+                backgroundColor: AppTheme.primaryColor,
               ),
               child: isLoading
                   ? const SizedBox(

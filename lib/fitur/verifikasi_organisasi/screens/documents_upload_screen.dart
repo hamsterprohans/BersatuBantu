@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/verification_provider.dart';
@@ -29,7 +30,7 @@ class _DocumentsUploadScreenState extends State<DocumentsUploadScreen> {
                     onTap: () => provider.previousStep(),
                     child: const Icon(
                       Icons.arrow_back,
-                      color: Color(0xFF768BBD),
+                      color: AppTheme.primaryColor,
                       size: 28,
                     ),
                   ),
@@ -40,7 +41,7 @@ class _DocumentsUploadScreenState extends State<DocumentsUploadScreen> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF768BBD),
+                      color: AppTheme.primaryColor,
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -95,7 +96,7 @@ class _DocumentsUploadScreenState extends State<DocumentsUploadScreen> {
                         height: 12,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: const Color(0xFF768BBD),
+                          color: AppTheme.primaryColor,
                         ),
                       ),
                     ],
@@ -164,8 +165,8 @@ class _DocumentsUploadScreenState extends State<DocumentsUploadScreen> {
                                 }
                               : null,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF768BBD),
-                            disabledBackgroundColor: const Color(0xFF768BBD).withOpacity(0.5),
+                            backgroundColor: AppTheme.primaryColor,
+                            disabledBackgroundColor: AppTheme.primaryColor.withOpacity(0.5),
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -255,7 +256,7 @@ class _DocumentsUploadScreenState extends State<DocumentsUploadScreen> {
                     ),
                     child: const Icon(
                       Icons.add,
-                      color: Color(0xFF768BBD),
+                      color: AppTheme.primaryColor,
                       size: 18,
                     ),
                   ),
@@ -429,7 +430,7 @@ class _DocumentsUploadScreenState extends State<DocumentsUploadScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF768BBD)),
+              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
             ),
             const SizedBox(height: 16),
             Text(

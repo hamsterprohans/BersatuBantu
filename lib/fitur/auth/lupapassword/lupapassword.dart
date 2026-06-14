@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -109,7 +110,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF768BBD),
+      backgroundColor: AppTheme.primaryColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -156,13 +157,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFF768BBD).withOpacity(0.1),
+              color: AppTheme.primaryColor.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(
               Icons.lock_reset_rounded,
               size: 50,
-              color: Color(0xFF768BBD),
+              color: AppTheme.primaryColor,
             ),
           ),
           const SizedBox(height: 24),
@@ -173,7 +174,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF768BBD),
+              color: AppTheme.primaryColor,
               fontFamily: 'CircularStd',
             ),
           ),
@@ -205,7 +206,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               hintText: 'Masukkan email Anda',
               prefixIcon: const Icon(
                 Icons.email_outlined,
-                color: Color(0xFF768BBD),
+                color: AppTheme.primaryColor,
               ),
               hintStyle: TextStyle(
                 color: Colors.grey[400],
@@ -213,7 +214,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 fontFamily: 'CircularStd',
               ),
               labelStyle: const TextStyle(
-                color: Color(0xFF768BBD),
+                color: AppTheme.primaryColor,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'CircularStd',
@@ -231,7 +232,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
                 borderSide: const BorderSide(
-                  color: Color(0xFF768BBD),
+                  color: AppTheme.primaryColor,
                   width: 2,
                 ),
               ),
@@ -264,7 +265,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: ElevatedButton(
               onPressed: _isLoading ? null : _sendResetEmail,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF768BBD),
+                backgroundColor: AppTheme.primaryColor,
                 foregroundColor: Colors.white,
                 disabledBackgroundColor: Colors.grey[400],
                 padding: const EdgeInsets.symmetric(vertical: 16),
@@ -353,7 +354,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF768BBD),
+            color: AppTheme.primaryColor,
             fontFamily: 'CircularStd',
           ),
         ),
@@ -375,7 +376,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF768BBD),
+            color: AppTheme.primaryColor,
             fontFamily: 'CircularStd',
           ),
         ),
@@ -395,7 +396,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 children: [
                   const Icon(
                     Icons.info_outline_rounded,
-                    color: Color(0xFF768BBD),
+                    color: AppTheme.primaryColor,
                     size: 20,
                   ),
                   const SizedBox(width: 12),
@@ -436,7 +437,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Navigator.of(context).pop();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF768BBD),
+              backgroundColor: AppTheme.primaryColor,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
@@ -469,7 +470,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           child: const Text(
             'Kirim Ulang Email',
             style: TextStyle(
-              color: Color(0xFF768BBD),
+              color: AppTheme.primaryColor,
               fontSize: 14,
               fontWeight: FontWeight.bold,
               fontFamily: 'CircularStd',

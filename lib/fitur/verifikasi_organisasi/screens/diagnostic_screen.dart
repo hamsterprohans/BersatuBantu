@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bersatubantu/services/diagnostic_org_request.dart';
 
@@ -54,7 +55,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Diagnostic: Organization Request'),
-        backgroundColor: const Color(0xFF768BBD),
+        backgroundColor: AppTheme.primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -66,7 +67,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _runDiagnostic,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF768BBD),
+                      backgroundColor: AppTheme.primaryColor,
                     ),
                     child: const Text('Run Diagnostic'),
                   ),

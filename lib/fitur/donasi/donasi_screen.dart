@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bersatubantu/fitur/widgets/bottom_navbar.dart';
@@ -305,7 +306,7 @@ class _DonasiScreenState extends State<DonasiScreen> {
               _loadDonations();
             }
           },
-          backgroundColor: const Color(0xFF5A6F8F),
+          backgroundColor: AppTheme.accentColor,
           child: const Icon(Icons.add, color: Colors.white, size: 28),
         ),
       ),
