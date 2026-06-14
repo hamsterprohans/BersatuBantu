@@ -43,7 +43,7 @@ class _PostingDonasiScreenState extends State<PostingDonasiScreen> {
 
   // --- Fungsi Upload Gambar Cover ---
     Future<void> _pickImage() async {
-    final result = await FilePicker.platform.pickFiles(
+    final result = await FilePicker.pickFiles(
         type: FileType.image,
         allowMultiple: false,
         withData: true, // penting untuk web

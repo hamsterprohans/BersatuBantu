@@ -30,9 +30,9 @@ class _FilePickerDebugScreenState extends State<FilePickerDebugScreen> {
     _addLog('Starting FilePicker test...');
     
     try {
-      _addLog('Calling FilePicker.platform.pickFiles()');
+      _addLog('Calling FilePicker.pickFiles()');
       
-      final result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf'],
         withData: true,
