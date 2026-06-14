@@ -237,7 +237,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Tampilkan dialog konfirmasi logout
                     showDialog(
                       context: context,
-                      builder: (context) => AlertDialog(
+                      builder: (dialogContext) => AlertDialog(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
@@ -250,7 +250,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         actions: [
                           TextButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => Navigator.pop(dialogContext),
                             child: const Text(
                               "Batal",
                               style: TextStyle(color: Colors.grey),
@@ -258,7 +258,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              Navigator.pop(context); // Tutup dialog
+                              Navigator.pop(dialogContext); // Tutup dialog
                               try {
                                 // Logout dari Supabase
                                 await Supabase.instance.client.auth.signOut();
@@ -527,6 +527,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         );
         // Wait a bit for the snackbar to be visible then pop
         await Future.delayed(const Duration(milliseconds: 500));
+        if (!mounted) return;
         Navigator.pop(
           context,
           true,

@@ -1,37 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:bersatubantu/fitur/berita_sosial/models/berita_model.dart';
 import 'dart:typed_data';
 
-class EditBeritaScreen extends StatefulWidget {
-  final BeritaModel berita;
-
-  const EditBeritaScreen({super.key, required this.berita});
+class TambahBeritaScreen extends StatefulWidget {
+  const TambahBeritaScreen({super.key});
 
   @override
-  State<EditBeritaScreen> createState() => _EditBeritaScreenState();
+  State<TambahBeritaScreen> createState() => _TambahBeritaScreenState();
 }
 
-class _EditBeritaScreenState extends State<EditBeritaScreen> {
+class _TambahBeritaScreenState extends State<TambahBeritaScreen> {
   final _formKey = GlobalKey<FormState>();
   final supabase = Supabase.instance.client;
 
-  late TextEditingController _judulController;
-  late TextEditingController _isiController;
+  final _judulController = TextEditingController();
+  final _isiController = TextEditingController();
 
   Uint8List? _imageBytes;
   String? _imageFileName;
   bool _isLoading = false;
 
   static const String _storageBucket = 'news-image';
-
-  @override
-  void initState() {
-    super.initState();
-    _judulController = TextEditingController(text: widget.berita.judul);
-    _isiController = TextEditingController(text: widget.berita.isi);
-  }
 
   @override
   void dispose() {
@@ -49,7 +39,9 @@ class _EditBeritaScreenState extends State<EditBeritaScreen> {
         maxWidth: 1920,
         maxHeight: 1080,
       );
+
       if (picked == null) return;
+
       final bytes = await picked.readAsBytes();
       setState(() {
         _imageBytes = bytes;
@@ -69,61 +61,52 @@ class _EditBeritaScreenState extends State<EditBeritaScreen> {
 
   Future<String?> _uploadImage() async {
     if (_imageBytes == null) return null;
-    final ext =
-        (_imageFileName ?? 'image.jpg').split('.').last.toLowerCase();
+
+    final ext = (_imageFileName ?? 'image.jpg').split('.').last.toLowerCase();
     final mimeType = ext == 'jpg' ? 'image/jpeg' : 'image/$ext';
     final fileName = 'news_${DateTime.now().millisecondsSinceEpoch}.$ext';
+    final path = fileName;
 
     await supabase.storage.from(_storageBucket).uploadBinary(
-      fileName,
+      path,
       _imageBytes!,
       fileOptions: FileOptions(upsert: false, contentType: mimeType),
     );
 
-    return supabase.storage.from(_storageBucket).getPublicUrl(fileName);
+    return supabase.storage.from(_storageBucket).getPublicUrl(path);
   }
 
-  Future<void> _saveData() async {
+  Future<void> _simpanBerita() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
 
     try {
-      String? imageUrl = widget.berita.image.isNotEmpty
-          ? widget.berita.image
-          : null;
-
+      String? imageUrl;
       if (_imageBytes != null) {
         imageUrl = await _uploadImage();
       }
 
-      await supabase.from('news').update({
+      await supabase.from('news').insert({
         'title': _judulController.text.trim(),
         'content': _isiController.text.trim(),
-        if (imageUrl != null) 'image_url': imageUrl,
-      }).eq('id', widget.berita.id);
-
-      final updatedBerita = BeritaModel(
-        id: widget.berita.id,
-        judul: _judulController.text.trim(),
-        isi: _isiController.text.trim(),
-        tanggal: widget.berita.tanggal,
-        image: imageUrl ?? '',
-        source: widget.berita.source,
-        category: widget.berita.category,
-      );
+        'source': 'Admin',
+        'is_popular': false,
+        'image_url': imageUrl,
+        'created_at': DateTime.now().toIso8601String(),
+      });
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Perubahan berhasil disimpan')),
+          const SnackBar(content: Text('Berita berhasil ditambahkan')),
         );
-        Navigator.pop(context, updatedBerita);
+        Navigator.pop(context, true);
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Gagal menyimpan: $e'),
+            content: Text('Gagal menyimpan berita: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -134,10 +117,6 @@ class _EditBeritaScreenState extends State<EditBeritaScreen> {
   }
 
   Widget _buildImagePicker() {
-    final existingImage = widget.berita.image;
-    final hasExisting = existingImage.isNotEmpty;
-    final hasNew = _imageBytes != null;
-
     return InkWell(
       onTap: _isLoading ? null : _pickImage,
       borderRadius: BorderRadius.circular(10),
@@ -148,11 +127,13 @@ class _EditBeritaScreenState extends State<EditBeritaScreen> {
           color: Colors.grey[100],
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: hasNew ? Colors.blue.shade300 : Colors.grey.shade400,
-            width: hasNew ? 2 : 1,
+            color: _imageBytes != null
+                ? Colors.blue.shade300
+                : Colors.grey.shade400,
+            width: _imageBytes != null ? 2 : 1,
           ),
         ),
-        child: hasNew
+        child: _imageBytes != null
             ? ClipRRect(
                 borderRadius: BorderRadius.circular(9),
                 child: Stack(
@@ -212,54 +193,10 @@ class _EditBeritaScreenState extends State<EditBeritaScreen> {
                   ],
                 ),
               )
-            : hasExisting
-            ? ClipRRect(
-                borderRadius: BorderRadius.circular(9),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    existingImage.startsWith('http')
-                        ? Image.network(existingImage, fit: BoxFit.cover)
-                        : Image.asset(existingImage, fit: BoxFit.cover),
-                    Positioned(
-                      bottom: 8,
-                      right: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black54,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.edit, color: Colors.white, size: 12),
-                            SizedBox(width: 4),
-                            Text(
-                              'Ganti Foto',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.add_a_photo_outlined,
-                    size: 44,
-                    color: Colors.grey[400],
-                  ),
+                  Icon(Icons.add_a_photo_outlined, size: 44, color: Colors.grey[400]),
                   const SizedBox(height: 8),
                   Text(
                     'Ketuk untuk memilih foto',
@@ -284,7 +221,7 @@ class _EditBeritaScreenState extends State<EditBeritaScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Edit Berita Sosial',
+          'Tambah Berita',
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
@@ -351,8 +288,7 @@ class _EditBeritaScreenState extends State<EditBeritaScreen> {
                 children: [
                   Expanded(
                     child: OutlinedButton(
-                      onPressed:
-                          _isLoading ? null : () => Navigator.pop(context),
+                      onPressed: _isLoading ? null : () => Navigator.pop(context),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -368,7 +304,7 @@ class _EditBeritaScreenState extends State<EditBeritaScreen> {
                   const SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: _isLoading ? null : _saveData,
+                      onPressed: _isLoading ? null : _simpanBerita,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.indigo,
                         padding: const EdgeInsets.symmetric(vertical: 16),

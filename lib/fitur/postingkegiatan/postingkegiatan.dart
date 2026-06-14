@@ -1031,6 +1031,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                     try {
                       final apiKey = dotenv.env['GOOGLE_MAPS_API_KEY'];
                       final loaded = await injectGoogleMapsScript(apiKey);
+                      if (!mounted) return;
                       if (loaded) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Google Maps berhasil dimuat. Jika peta belum muncul, tekan kembali atau reload halaman.')),
@@ -1042,9 +1043,11 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                         );
                       }
                     } finally {
-                      setState(() {
-                        _isInjectingMap = false;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          _isInjectingMap = false;
+                        });
+                      }
                     }
                   },
                   child: const Text('Petunjuk setup'),

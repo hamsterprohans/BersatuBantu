@@ -93,6 +93,7 @@ class _PostingKegiatanDonasiScreenState
               ],
             ),
           );
+          if (!mounted) return;
           Navigator.of(context).maybePop();
         }
       }
@@ -148,7 +149,7 @@ class _PostingKegiatanDonasiScreenState
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: AppTheme.primaryLightColor,
+              primary: Color(0xFF8FA3CC),
               onPrimary: Colors.white,
               onSurface: Color(0xFF364057),
             ),
@@ -759,8 +760,9 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                     });
                   },
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty)
+                    if (value == null || value.trim().isEmpty) {
                       return 'Pilih kategori';
+                    }
                     return null;
                   },
                 ),
@@ -850,7 +852,7 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: _latitude != null
-                            ? AppTheme.primaryLightColor
+                            ? const Color(0xFF8FA3CC)
                             : Colors.grey[300]!,
                         width: 1,
                       ),
@@ -877,7 +879,7 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                           Icons.location_on,
                           size: 20,
                           color: _latitude != null
-                              ? AppTheme.primaryLightColor
+                              ? const Color(0xFF8FA3CC)
                               : Colors.grey[600],
                         ),
                       ],
@@ -964,7 +966,7 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                               : () => Navigator.pop(context),
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(
-                              color: AppTheme.primaryLightColor,
+                              color: Color(0xFF8FA3CC),
                               width: 2,
                             ),
                             shape: RoundedRectangleBorder(
@@ -974,7 +976,7 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                           child: const Text(
                             'Keluar & Simpan',
                             style: TextStyle(
-                              color: AppTheme.primaryLightColor,
+                              color: Color(0xFF8FA3CC),
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'CircularStd',
@@ -1183,7 +1185,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppTheme.primaryColor,
+        backgroundColor: const Color(0xFF8FA3CC),
         title: const Text(
           'Pilih Lokasi',
           style: TextStyle(color: Colors.white, fontFamily: 'CircularStd'),
@@ -1339,7 +1341,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.place, color: AppTheme.primaryLightColor),
+                  const Icon(Icons.place, color: Color(0xFF8FA3CC)),
                   const SizedBox(width: 8),
                   Expanded(
                     child: _isResolvingAddress
@@ -1415,6 +1417,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                     try {
                       final apiKey = dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
                       final loaded = await injectGoogleMapsScript(apiKey);
+                      if (!mounted) return;
                       if (loaded) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -1434,9 +1437,11 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
                         );
                       }
                     } finally {
-                      setState(() {
-                        _isInjectingMap = false;
-                      });
+                      if (mounted) {
+                        setState(() {
+                          _isInjectingMap = false;
+                        });
+                      }
                     }
                   },
                   child: const Text('Petunjuk setup'),

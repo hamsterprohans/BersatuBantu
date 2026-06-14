@@ -603,6 +603,21 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
                                           offset: const Offset(0, 4),
                                         ),
                                       ],
+                                      image: (news['image_url'] != null &&
+                                              (news['image_url'] as String)
+                                                  .isNotEmpty)
+                                          ? DecorationImage(
+                                              image: NetworkImage(
+                                                news['image_url'] as String,
+                                              ),
+                                              fit: BoxFit.cover,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                    Color(0x66000000),
+                                                    BlendMode.darken,
+                                                  ),
+                                            )
+                                          : null,
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(16),
