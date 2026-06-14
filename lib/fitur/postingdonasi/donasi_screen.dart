@@ -54,7 +54,7 @@ class _DonasiScreenState extends State<DonasiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.primaryLightColor,
+      backgroundColor: AppTheme.primaryColor,
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: widget.userRole == "volunteer"

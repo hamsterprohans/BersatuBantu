@@ -87,7 +87,7 @@ class _DebugAuthScreenState extends State<DebugAuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.primaryLightColor,
+      backgroundColor: AppTheme.primaryColor,
       appBar: AppBar(
         backgroundColor: const Color(0xFF364057),
         title: const Text(

@@ -530,7 +530,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
     return Stack(
       children: [
         Scaffold(
-      backgroundColor: AppTheme.primaryLightColor,
+      backgroundColor: AppTheme.primaryColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -772,7 +772,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                 ElevatedButton(
                                   onPressed: _loadUserData,
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppTheme.primaryLightColor,
+                                    backgroundColor: AppTheme.primaryColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -1254,7 +1254,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                       ? null
                       : _openInExternalMaps,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryLightColor,
+                    backgroundColor: AppTheme.primaryColor,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 8,
@@ -1327,7 +1327,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.primaryLightColor,
+              backgroundColor: AppTheme.primaryColor,
             ),
             child: const Text('Petunjuk setup'),
           ),

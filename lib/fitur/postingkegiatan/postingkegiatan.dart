@@ -820,7 +820,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppTheme.primaryLightColor,
+        backgroundColor: AppTheme.primaryColor,
         title: const Text(
           'Pilih Lokasi',
           style: TextStyle(

@@ -34,7 +34,7 @@ class _MyPastEventsScreenState extends State<MyPastEventsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.primaryLightColor,
+      backgroundColor: AppTheme.primaryColor,
       body: SafeArea(
         child: Column(
           children: [

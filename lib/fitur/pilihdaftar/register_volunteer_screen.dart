@@ -82,7 +82,7 @@ class _RegisterVolunteerScreenState extends State<RegisterVolunteerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.primaryLightColor,
+      backgroundColor: AppTheme.primaryColor,
       body: SafeArea(
         child: Column(
           children: [

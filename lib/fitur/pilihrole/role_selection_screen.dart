@@ -171,7 +171,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : () => _selectRole('personal'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryLightColor,
+                      backgroundColor: AppTheme.primaryColor,
                       foregroundColor: Colors.white,
                       disabledBackgroundColor: AppTheme.primaryLightColor.withOpacity(0.5),
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -211,7 +211,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : () => _selectRole('organization'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryLightColor,
+                      backgroundColor: AppTheme.primaryColor,
                       foregroundColor: Colors.white,
                       disabledBackgroundColor: AppTheme.primaryLightColor.withOpacity(0.5),
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -251,7 +251,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : () => _selectRole('admin'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryLightColor,
+                      backgroundColor: AppTheme.primaryColor,
                       foregroundColor: Colors.white,
                       disabledBackgroundColor: AppTheme.primaryLightColor.withOpacity(0.5),
                       padding: const EdgeInsets.symmetric(vertical: 16),

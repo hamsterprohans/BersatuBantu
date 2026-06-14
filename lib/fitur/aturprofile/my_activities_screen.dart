@@ -77,9 +77,9 @@ class _MyActivitiesScreenState extends State<MyActivitiesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.primaryLightColor,
+      backgroundColor: AppTheme.primaryColor,
       appBar: AppBar(
-        backgroundColor: AppTheme.primaryLightColor,
+        backgroundColor: AppTheme.primaryColor,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
