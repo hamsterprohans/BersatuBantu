@@ -29,7 +29,7 @@ jobs:
         with:
           flutter-version: '3.44.1'
           channel: stable
-          cache: true
+          cache: false
 
       - name: Create .env file
         run: |
@@ -43,10 +43,10 @@ jobs:
         run: flutter pub get
 
       - name: Flutter analyze
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings --no-pub
 
       - name: Flutter test
-        run: flutter test
+        run: flutter test --no-pub
 
   # ─────────────────────────────────────────────
   # JOB 2: Build & Deploy — only on push to main
