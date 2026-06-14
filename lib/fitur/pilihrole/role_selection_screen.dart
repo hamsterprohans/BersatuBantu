@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:bersatubantu/fitur/auth/login/organization_login_screen.dart';
@@ -143,7 +144,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   'Kenalkan dirimu,',
                   style: TextStyle(
                     fontSize: 22,
-                    color: Color(0xFF8FA3CC),
+                    color: AppTheme.primaryLightColor,
                     fontFamily: 'CircularStd',
                     fontWeight: FontWeight.w500,
                   ),
@@ -154,7 +155,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   'Pahlawan!',
                   style: TextStyle(
                     fontSize: 36,
-                    color: Color(0xFF8FA3CC),
+                    color: AppTheme.primaryLightColor,
                     fontFamily: 'CircularStd',
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.5,
@@ -170,9 +171,9 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : () => _selectRole('personal'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF8FA3CC),
+                      backgroundColor: AppTheme.primaryLightColor,
                       foregroundColor: Colors.white,
-                      disabledBackgroundColor: const Color(0xFF8FA3CC).withOpacity(0.5),
+                      disabledBackgroundColor: AppTheme.primaryLightColor.withOpacity(0.5),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -210,9 +211,9 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : () => _selectRole('organization'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF8FA3CC),
+                      backgroundColor: AppTheme.primaryLightColor,
                       foregroundColor: Colors.white,
-                      disabledBackgroundColor: const Color(0xFF8FA3CC).withOpacity(0.5),
+                      disabledBackgroundColor: AppTheme.primaryLightColor.withOpacity(0.5),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -250,9 +251,9 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : () => _selectRole('admin'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF8FA3CC),
+                      backgroundColor: AppTheme.primaryLightColor,
                       foregroundColor: Colors.white,
-                      disabledBackgroundColor: const Color(0xFF8FA3CC).withOpacity(0.5),
+                      disabledBackgroundColor: AppTheme.primaryLightColor.withOpacity(0.5),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),

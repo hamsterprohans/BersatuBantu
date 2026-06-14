@@ -189,7 +189,7 @@ class _DonasiScreenState extends State<DonasiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF8FA3CC),
+      backgroundColor: AppTheme.primaryLightColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -255,14 +255,14 @@ class _DonasiScreenState extends State<DonasiScreen> {
                       child: _isLoading
                           ? const Center(
                               child: CircularProgressIndicator(
-                                color: Color(0xFF8FA3CC),
+                                color: AppTheme.primaryLightColor,
                               ),
                             )
                           : _filteredDonations.isEmpty
                               ? _buildEmptyState()
                               : RefreshIndicator(
                                   onRefresh: _loadDonations,
-                                  color: const Color(0xFF8FA3CC),
+                                  color: AppTheme.primaryLightColor,
                                   child: ListView.builder(
                                     padding: const EdgeInsets.symmetric(horizontal: 16),
                                     itemCount: _filteredDonations.length,
@@ -330,7 +330,7 @@ class _DonasiScreenState extends State<DonasiScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 20, color: const Color(0xFF8FA3CC)),
+            Icon(icon, size: 20, color: AppTheme.primaryLightColor),
             const SizedBox(width: 8),
             Flexible(
               child: Text(
@@ -589,7 +589,7 @@ class _DonasiScreenState extends State<DonasiScreen> {
                         value: progress.clamp(0.0, 1.0),
                         backgroundColor: Colors.grey[200],
                         valueColor: const AlwaysStoppedAnimation<Color>(
-                          Color(0xFF8FA3CC),
+                          AppTheme.primaryLightColor,
                         ),
                         minHeight: 8,
                       ),
@@ -612,7 +612,7 @@ class _DonasiScreenState extends State<DonasiScreen> {
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF8FA3CC),
+                            color: AppTheme.primaryLightColor,
                             fontFamily: 'CircularStd',
                           ),
                         ),
@@ -672,7 +672,7 @@ class _DonasiScreenState extends State<DonasiScreen> {
               ),
               value: filter,
               groupValue: _selectedFilter,
-              activeColor: const Color(0xFF8FA3CC),
+              activeColor: AppTheme.primaryLightColor,
               onChanged: (value) {
                 setState(() {
                   _selectedFilter = value!;
@@ -704,7 +704,7 @@ class _DonasiScreenState extends State<DonasiScreen> {
               ),
               value: category,
               groupValue: _selectedCategory,
-              activeColor: const Color(0xFF8FA3CC),
+              activeColor: AppTheme.primaryLightColor,
               onChanged: (value) {
                 setState(() {
                   _selectedCategory = value!;

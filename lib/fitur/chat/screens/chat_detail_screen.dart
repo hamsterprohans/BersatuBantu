@@ -257,7 +257,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                                   ),
                                   decoration: BoxDecoration(
                                     color: isSentByMe
-                                        ? const Color(0xFF8FA3CC)
+                                        ? AppTheme.primaryLightColor
                                         : Colors.grey[200],
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -354,7 +354,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       width: 44,
                       height: 44,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF8FA3CC),
+                        color: AppTheme.primaryLightColor,
                         shape: BoxShape.circle,
                       ),
                       child: Center(

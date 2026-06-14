@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -147,7 +148,7 @@ class _PostingKegiatanDonasiScreenState
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF8FA3CC),
+              primary: AppTheme.primaryLightColor,
               onPrimary: Colors.white,
               onSurface: Color(0xFF364057),
             ),
@@ -849,7 +850,7 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: _latitude != null
-                            ? const Color(0xFF8FA3CC)
+                            ? AppTheme.primaryLightColor
                             : Colors.grey[300]!,
                         width: 1,
                       ),
@@ -876,7 +877,7 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                           Icons.location_on,
                           size: 20,
                           color: _latitude != null
-                              ? const Color(0xFF8FA3CC)
+                              ? AppTheme.primaryLightColor
                               : Colors.grey[600],
                         ),
                       ],
@@ -963,7 +964,7 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                               : () => Navigator.pop(context),
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(
-                              color: Color(0xFF8FA3CC),
+                              color: AppTheme.primaryLightColor,
                               width: 2,
                             ),
                             shape: RoundedRectangleBorder(
@@ -973,7 +974,7 @@ Jika Anda lebih suka tidak menjalankan migrasi dari repo, Anda bisa menambahkan 
                           child: const Text(
                             'Keluar & Simpan',
                             style: TextStyle(
-                              color: Color(0xFF8FA3CC),
+                              color: AppTheme.primaryLightColor,
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'CircularStd',
@@ -1182,7 +1183,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF8FA3CC),
+        backgroundColor: AppTheme.primaryLightColor,
         title: const Text(
           'Pilih Lokasi',
           style: TextStyle(color: Colors.white, fontFamily: 'CircularStd'),
@@ -1338,7 +1339,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.place, color: Color(0xFF8FA3CC)),
+                  const Icon(Icons.place, color: AppTheme.primaryLightColor),
                   const SizedBox(width: 8),
                   Expanded(
                     child: _isResolvingAddress

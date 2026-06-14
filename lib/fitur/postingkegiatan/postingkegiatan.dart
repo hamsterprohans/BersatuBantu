@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -75,7 +76,7 @@ class _PostingKegiatanScreenState extends State<PostingKegiatanScreen> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF8FA3CC),
+              primary: AppTheme.primaryLightColor,
               onPrimary: Colors.white,
               onSurface: Color(0xFF364057),
             ),
@@ -107,7 +108,7 @@ class _PostingKegiatanScreenState extends State<PostingKegiatanScreen> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF8FA3CC),
+              primary: AppTheme.primaryLightColor,
               onPrimary: Colors.white,
               onSurface: Color(0xFF364057),
             ),
@@ -525,7 +526,7 @@ class _PostingKegiatanScreenState extends State<PostingKegiatanScreen> {
                       color: const Color(0xFFF5F6FA),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: _latitude != null ? const Color(0xFF8FA3CC) : Colors.grey[300]!,
+                        color: _latitude != null ? AppTheme.primaryLightColor : Colors.grey[300]!,
                         width: 1,
                       ),
                     ),
@@ -551,7 +552,7 @@ class _PostingKegiatanScreenState extends State<PostingKegiatanScreen> {
                           Icons.location_on,
                           size: 20,
                           color: _latitude != null 
-                              ? const Color(0xFF8FA3CC) 
+                              ? AppTheme.primaryLightColor 
                               : Colors.grey[600],
                         ),
                       ],
@@ -819,7 +820,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF8FA3CC),
+        backgroundColor: AppTheme.primaryLightColor,
         title: const Text(
           'Pilih Lokasi',
           style: TextStyle(
@@ -957,7 +958,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.place, color: Color(0xFF8FA3CC)),
+                  const Icon(Icons.place, color: AppTheme.primaryLightColor),
                   const SizedBox(width: 8),
                   Expanded(
                     child: _isResolvingAddress

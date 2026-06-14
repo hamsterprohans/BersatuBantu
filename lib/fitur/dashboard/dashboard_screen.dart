@@ -537,7 +537,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                   buttonText: 'Donasi Sekarang',
                                   gradientColors: [
                                     Color(0xFF4A7FBD),
-                                    Color(0xFF8FA3CC),
+                                    AppTheme.primaryLightColor,
                                   ],
                                   icon: Icons.volunteer_activism_rounded,
                                   imageAsset: 'assets/banners/banjir.png',
@@ -910,7 +910,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         'Lihat Semua',
                                         style: TextStyle(
                                           fontSize: 13,
-                                          color: const Color(0xFF8FA3CC),
+                                          color: AppTheme.primaryLightColor,
                                           fontWeight: FontWeight.w600,
                                           fontFamily: 'CircularStd',
                                         ),
@@ -942,7 +942,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                     height: 160,
                                     child: Center(
                                       child: CircularProgressIndicator(
-                                        color: Color(0xFF8FA3CC),
+                                        color: AppTheme.primaryLightColor,
                                       ),
                                     ),
                                   );

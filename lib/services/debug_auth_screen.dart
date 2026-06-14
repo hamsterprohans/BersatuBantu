@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -86,7 +87,7 @@ class _DebugAuthScreenState extends State<DebugAuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF8FA3CC),
+      backgroundColor: AppTheme.primaryLightColor,
       appBar: AppBar(
         backgroundColor: const Color(0xFF364057),
         title: const Text(

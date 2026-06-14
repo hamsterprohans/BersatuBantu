@@ -206,7 +206,7 @@ class _AksiScreenState extends State<AksiScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 20, color: const Color(0xFF8FA3CC)),
+            Icon(icon, size: 20, color: AppTheme.primaryLightColor),
             const SizedBox(width: 8),
             Text(
               label,
@@ -226,7 +226,7 @@ class _AksiScreenState extends State<AksiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF8FA3CC),
+      backgroundColor: AppTheme.primaryLightColor,
       body: SafeArea(
         child: Column(
           children: [

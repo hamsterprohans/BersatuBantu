@@ -448,7 +448,7 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF8FA3CC),
+      backgroundColor: AppTheme.primaryLightColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -618,7 +618,7 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
                                   buttonText: 'Donasi Sekarang',
                                   gradientColors: [
                                     Color(0xFF4A7FBD),
-                                    Color(0xFF8FA3CC),
+                                    AppTheme.primaryLightColor,
                                   ],
                                   icon: Icons.volunteer_activism_rounded,
                                   imageAsset: 'assets/banners/banjir.png',
@@ -1122,9 +1122,7 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
                                                                 vertical: 6,
                                                               ),
                                                           decoration: BoxDecoration(
-                                                            color: const Color(
-                                                              0xFF8FA3CC,
-                                                            ),
+                                                            color: AppTheme.primaryLightColor,
                                                             borderRadius:
                                                                 BorderRadius.circular(
                                                                   8,
@@ -1295,7 +1293,7 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF8FA3CC) : Colors.transparent,
+          color: isSelected ? AppTheme.primaryLightColor : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(

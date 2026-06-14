@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -529,7 +530,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
     return Stack(
       children: [
         Scaffold(
-      backgroundColor: const Color(0xFF8FA3CC),
+      backgroundColor: AppTheme.primaryLightColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -640,7 +641,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                           style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w600,
-                                            color: Color(0xFF8FA3CC),
+                                            color: AppTheme.primaryLightColor,
                                             fontFamily: 'CircularStd',
                                           ),
                                         ),
@@ -663,7 +664,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                         backgroundColor: Colors.grey[200],
                                         valueColor:
                                             const AlwaysStoppedAnimation<Color>(
-                                              Color(0xFF8FA3CC),
+                                              AppTheme.primaryLightColor,
                                             ),
                                         minHeight: 8,
                                       ),
@@ -761,7 +762,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                   ),
                                   controlAffinity:
                                       ListTileControlAffinity.leading,
-                                  activeColor: const Color(0xFF8FA3CC),
+                                  activeColor: AppTheme.primaryLightColor,
                                   contentPadding: EdgeInsets.zero,
                                 ),
                               const SizedBox(height: 12),
@@ -771,7 +772,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                                 ElevatedButton(
                                   onPressed: _loadUserData,
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF8FA3CC),
+                                    backgroundColor: AppTheme.primaryLightColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -1068,10 +1069,10 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF8FA3CC) : Colors.white,
+          color: isSelected ? AppTheme.primaryLightColor : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? const Color(0xFF8FA3CC) : Colors.grey[300]!,
+            color: isSelected ? AppTheme.primaryLightColor : Colors.grey[300]!,
             width: 2,
           ),
         ),
@@ -1153,7 +1154,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isSelected ? const Color(0xFF8FA3CC) : Colors.grey[300]!,
+            color: isSelected ? AppTheme.primaryLightColor : Colors.grey[300]!,
             width: 3,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -1238,7 +1239,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 6.0),
             child: Row(
               children: [
-                const Icon(Icons.place, size: 18, color: Color(0xFF8FA3CC)),
+                const Icon(Icons.place, size: 18, color: AppTheme.primaryLightColor),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -1253,7 +1254,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                       ? null
                       : _openInExternalMaps,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF8FA3CC),
+                    backgroundColor: AppTheme.primaryLightColor,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 8,
@@ -1326,7 +1327,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF8FA3CC),
+              backgroundColor: AppTheme.primaryLightColor,
             ),
             child: const Text('Petunjuk setup'),
           ),

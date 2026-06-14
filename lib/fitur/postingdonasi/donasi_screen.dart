@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 // lib/fitur/donasi/donasi_screen.dart
 
 import 'package:flutter/material.dart';
@@ -53,7 +54,7 @@ class _DonasiScreenState extends State<DonasiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF8FA3CC),
+      backgroundColor: AppTheme.primaryLightColor,
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: widget.userRole == "volunteer"

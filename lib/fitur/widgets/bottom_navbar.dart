@@ -1,3 +1,4 @@
+import 'package:bersatubantu/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 enum BottomNavBarVariant { user, admin }
@@ -70,7 +71,7 @@ class BottomNavBar extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF8FA3CC) : Colors.transparent,
+          color: isSelected ? AppTheme.primaryLightColor : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(

@@ -30,6 +30,12 @@ class AppTheme {
           ? Color.fromARGB(185, 214, 40, 40)
           : Color(0xFF768BBD);
 
+  // Lighter variant of primary (used for AppBar, chips, secondary accents)
+  static const Color primaryLightColor =
+      String.fromEnvironment('APP_THEME', defaultValue: defaultName) == merdekaName
+          ? Color(0xFFE57373)
+          : Color(0xFF8FA3CC);
+
   static const Color accentColor =
       String.fromEnvironment('APP_THEME', defaultValue: defaultName) == merdekaName
           ? Color(0xFF1E5F74)
