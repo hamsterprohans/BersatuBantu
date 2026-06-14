@@ -105,3 +105,6 @@ project-*-*.json
 
 # Flutter SDK directory (installed by CI via flutter-action, not tracked in repo)
 /flutter/
+
+# Supabase CLI binary
+supabase
