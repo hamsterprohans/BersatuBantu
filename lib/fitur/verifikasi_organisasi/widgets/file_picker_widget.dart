@@ -7,7 +7,7 @@ class FilePickerUtil {
     try {
       print('[FilePickerUtil] Starting PDF file picker...');
       
-      final result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf'],
         withData: true,

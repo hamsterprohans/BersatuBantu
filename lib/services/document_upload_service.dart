@@ -12,7 +12,7 @@ class DocumentUploadService {
   /// Pick file dari perangkat
   Future<FilePickerResult?> pickDocument() async {
     try {
-      return await FilePicker.platform.pickFiles(
+      return await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf'],
         allowMultiple: false,
