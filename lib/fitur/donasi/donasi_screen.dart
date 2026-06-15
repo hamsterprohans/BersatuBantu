@@ -9,7 +9,8 @@ import 'package:bersatubantu/fitur/aksi/aksi_screen.dart';
 import 'package:bersatubantu/fitur/aturprofile/aturprofile.dart';
 
 class DonasiScreen extends StatefulWidget {
-  const DonasiScreen({super.key});
+  final bool fromOrganization;
+  const DonasiScreen({super.key, this.fromOrganization = false});
 
   @override
   State<DonasiScreen> createState() => _DonasiScreenState();
@@ -720,6 +721,13 @@ class _DonasiScreenState extends State<DonasiScreen> {
 
   void _navigateToScreen(BuildContext context, int index) {
     if (index == _selectedIndex) return;
+
+    // Kalau org mode dan tap Beranda → pop balik ke org dashboard
+    if (index == 0 && widget.fromOrganization) {
+      Navigator.of(context).pop();
+      return;
+    }
+
     Widget screen;
     switch (index) {
       case 0:

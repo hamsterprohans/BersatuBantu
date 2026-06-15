@@ -252,6 +252,58 @@ class _DashboardScreenState extends State<DashboardScreen>
     }
   }
 
+  Future<void> _openCampaignById(String campaignId) async {
+    try {
+      final data = await supabase
+          .from('donation_campaigns')
+          .select('*')
+          .eq('id', campaignId)
+          .maybeSingle();
+
+      if (!mounted) return;
+
+      if (data == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Kampanye tidak ditemukan'), backgroundColor: Colors.orange),
+        );
+        return;
+      }
+
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => BerikanDonasiScreen(donation: data)),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal membuka kampanye: $e'), backgroundColor: Colors.red),
+      );
+    }
+  }
+
+  Future<void> _openEventById(String eventId) async {
+    try {
+      final user = supabase.auth.currentUser;
+      final userId = user?.id ?? '';
+
+      if (!mounted) return;
+
+      final provider = Provider.of<VolunteerEventProvider>(context, listen: false);
+      provider.loadEventDetails(eventId: eventId, userId: userId);
+
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) => EventDetailBottomSheet(eventId: eventId, userId: userId),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal membuka kegiatan: $e'), backgroundColor: Colors.red),
+      );
+    }
+  }
+
   void _onNavTap(int index) async {
     if (index == _selectedIndex) return;
 
@@ -479,6 +531,88 @@ class _DashboardScreenState extends State<DashboardScreen>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // === BANNER CAROUSEL ===
+                            if (BannerConfig.isEnabled)
+                              Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  BannerCarousel(
+                                    banners: [
+                                      BannerItem(
+                                        title: 'Donasi MBG',
+                                        subtitle: 'Bantu masyarakat',
+                                        buttonText: 'Donasi Sekarang',
+                                        gradientColors: [Color(0xFF4A7FBD), Color(0xFF8FA3CC)],
+                                        icon: Icons.volunteer_activism_rounded,
+                                        imageAsset: 'assets/banners/banjir.png',
+                                        imageType: BannerImageType.asset,
+                                        showTextOverImage: false,
+                                        onTap: () => _openCampaignById('490d6abe-8332-446d-befa-1875ae71671d'),
+                                      ),
+                                      BannerItem(
+                                        title: 'Bencana Aceh',
+                                        subtitle: 'Ringankan beban saudara kita di Aceh',
+                                        buttonText: 'Bantu Sekarang',
+                                        gradientColors: [Color(0xFF8B2500), Color(0xFFD9614C)],
+                                        icon: Icons.warning_rounded,
+                                        imageAsset: 'assets/banners/aceh.png',
+                                        imageType: BannerImageType.asset,
+                                        showTextOverImage: false,
+                                        onTap: () => _openCampaignById('5716ea27-7e7b-4688-8eba-00a9c7020a64'),
+                                      ),
+                                      BannerItem(
+                                        title: 'Bencana Sawit',
+                                        subtitle: 'Dukung pemulihan masyarakat terdampak sawit',
+                                        buttonText: 'Bantu Sekarang',
+                                        gradientColors: [Color(0xFF2E6B2E), Color(0xFF66BB6A)],
+                                        icon: Icons.nature_rounded,
+                                        imageAsset: 'assets/banners/sawit.png',
+                                        imageType: BannerImageType.asset,
+                                        showTextOverImage: false,
+                                        onTap: () => _openCampaignById('9378ceff-d1e0-4241-93b1-df622eca4571'),
+                                      ),
+                                      BannerItem(
+                                        title: 'Bantu Aceh',
+                                        subtitle: 'Ayo bergabung jadi relawan kemanusiaan di Aceh',
+                                        buttonText: 'Gabung Relawan',
+                                        gradientColors: [Color(0xFF8B2500), Color(0xFFE8A45A)],
+                                        icon: Icons.volunteer_activism_rounded,
+                                        imageAsset: 'assets/banners/aksiaceh.png',
+                                        imageType: BannerImageType.asset,
+                                        showTextOverImage: false,
+                                        onTap: () => _openEventById('e5fe54f5-c0e9-4df7-b8d8-10f448a151cd'),
+                                      ),
+                                      BannerItem(
+                                        title: 'Bersih Sungai',
+                                        subtitle: 'Ayo ikut bakti sosial membersihkan aliran sungai',
+                                        buttonText: 'Gabung Relawan',
+                                        gradientColors: [Color(0xFF1D8348), Color(0xFF52BE80)],
+                                        icon: Icons.nature_people_rounded,
+                                        imageAsset: 'assets/banners/aksisungai.png',
+                                        imageType: BannerImageType.asset,
+                                        showTextOverImage: false,
+                                        onTap: () => _openEventById('a4f1ab38-f2bf-456c-bf5c-190065b1ae3c'),
+                                      ),
+                                    ],
+                                  ),
+                                  if (AppTheme.currentName() == AppTheme.merdekaName)
+                                    Positioned(
+                                      top: -10,
+                                      left: 0,
+                                      child: Image.asset('assets/pita_bendera.png', height: 60, fit: BoxFit.contain),
+                                    ),
+                                  if (AppTheme.currentName() == AppTheme.merdekaName)
+                                    Positioned(
+                                      bottom: 10,
+                                      right: 0,
+                                      child: Transform.rotate(
+                                        angle: 3.14159,
+                                        child: Image.asset('assets/pita_bendera.png', height: 60, fit: BoxFit.contain),
+                                      ),
+                                    ),
+                                ],
+                              ),
+
                             // Berita Terbaru Section
                             const Text(
                               'Berita Terbaru',

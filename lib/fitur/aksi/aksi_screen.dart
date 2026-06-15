@@ -162,6 +162,12 @@ class _AksiScreenState extends State<AksiScreen> {
   void _navigateToScreen(BuildContext context, int index) {
     if (index == _selectedIndex) return;
 
+    // Kalau org mode dan tap Beranda → pop balik ke org dashboard
+    if (index == 0 && widget.forceOrganizationMode) {
+      Navigator.of(context).pop();
+      return;
+    }
+
     Widget screen;
     switch (index) {
       case 0:
@@ -288,6 +294,47 @@ class _AksiScreenState extends State<AksiScreen> {
                         ],
                       ),
                     ),
+
+                    // Tombol Tambah Aksi (hanya untuk organisasi)
+                    if (_isOrganization)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: () async {
+                              final provider = Provider.of<VolunteerEventProvider>(context, listen: false);
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const PostingKegiatanDonasiScreen(),
+                                ),
+                              );
+                              if (result == true && mounted) {
+                                provider.loadOpenEvents();
+                              }
+                            },
+                            icon: const Icon(Icons.add_circle_outline, color: Colors.white, size: 20),
+                            label: const Text(
+                              'Tambah Aksi Baru',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'CircularStd',
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppTheme.primaryColor,
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              elevation: 0,
+                            ),
+                          ),
+                        ),
+                      ),
 
                     // Events list
                     Expanded(
