@@ -596,34 +596,6 @@ class _AksiScreenState extends State<AksiScreen> {
         ),
       ),
 
-      // FAB only for organization users
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: _isOrganization
-          ? Padding(
-              padding: const EdgeInsets.only(
-                bottom: kBottomNavigationBarHeight + 12,
-              ),
-              child: FloatingActionButton(
-                onPressed: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PostingKegiatanDonasiScreen(),
-                    ),
-                  );
-
-                  if (result == true) {
-                    Provider.of<VolunteerEventProvider>(
-                      context,
-                      listen: false,
-                    ).loadOpenEvents();
-                  }
-                },
-                backgroundColor: AppTheme.accentColor,
-                child: const Icon(Icons.add, color: Colors.white, size: 28),
-              ),
-            )
-          : null,
     );
   }
 }

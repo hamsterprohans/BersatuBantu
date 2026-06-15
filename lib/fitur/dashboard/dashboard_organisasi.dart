@@ -409,21 +409,6 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
   }
 
   // Refresh user data when returning from other screens
-  void _onRoutePopped(dynamic result) {
-    print(
-      '[Dashboard] Route popped with result: $result - Refreshing user data',
-    );
-    // Trigger immediate refresh
-    _loadUserData();
-    // Trigger delayed refresh untuk ensure data loaded properly
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        print('[Dashboard] Delayed refresh - reloading user data');
-        _loadUserData();
-      }
-    });
-  }
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -445,35 +430,29 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
       case 1:
         // Navigate to Donasi screen
         print('[Dashboard] Navigate to Donasi');
-        setState(() {
-          _selectedIndex = index;
-        });
-        final result = await Navigator.push(
+        setState(() { _selectedIndex = index; });
+        await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const DonasiScreen(fromOrganization: true)),
         );
-        // Refresh data after returning from Donasi
-        _onRoutePopped(result);
+        setState(() { _selectedIndex = 0; });
         break;
       case 2:
         // Navigate to Aksi screen
         print('[Dashboard] Navigate to Aksi');
-        setState(() {
-          _selectedIndex = index;
-        });
+        setState(() { _selectedIndex = index; });
         await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => const AksiScreen(forceOrganizationMode: true),
           ),
         );
+        setState(() { _selectedIndex = 0; });
         break;
       case 3:
         // Navigate to Profil (Atur Profil)
         print('[Dashboard] Navigate to Profil');
-        setState(() {
-          _selectedIndex = index;
-        });
+        setState(() { _selectedIndex = index; });
         await Navigator.push(
           context,
           MaterialPageRoute(
@@ -484,9 +463,7 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
             ),
           ),
         );
-        setState(() {
-          _selectedIndex = 0;
-        });
+        setState(() { _selectedIndex = 0; });
         break;
     }
   }
