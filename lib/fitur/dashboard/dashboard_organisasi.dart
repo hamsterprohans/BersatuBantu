@@ -40,6 +40,7 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
   int _selectedIndex = 0;
   String _selectedCategory = 'Semua';
   String _userName = '';
+  String _userEmail = '';
   bool _isLoadingUser = true;
   // Campaigns
   bool _isLoadingCampaigns = true;
@@ -69,13 +70,12 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
     // Org users don't use Supabase Auth — ignore auth state changes for name
     _authSubscription = supabase.auth.onAuthStateChange.listen((_) {});
 
-    // Initial load: prefer passed name, fallback to DB lookup by requestId
+    // Tampilkan nama langsung jika sudah ada, tetap fetch DB untuk email
     if (widget.organizationName.isNotEmpty) {
       _userName = widget.organizationName;
       _isLoadingUser = false;
-    } else {
-      _loadOrgName();
     }
+    _loadOrgName(); // selalu fetch untuk dapat email (dan nama jika belum ada)
     _loadCampaigns();
     _loadNews();
     _loadMyEvents();
@@ -92,14 +92,18 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
     try {
       final response = await supabase
           .from('organization_request')
-          .select('nama_organisasi')
+          .select('nama_organisasi, email_organisasi')
           .eq('request_id', widget.requestId)
           .maybeSingle();
       if (mounted) {
+        final fetchedName = (response?['nama_organisasi'] as String?)?.trim() ?? '';
+        final fetchedEmail = (response?['email_organisasi'] as String?)?.trim() ?? '';
         setState(() {
-          _userName = (response?['nama_organisasi'] as String?)?.trim().isNotEmpty == true
-              ? response!['nama_organisasi'] as String
-              : 'Organisasi';
+          // Jangan overwrite nama jika sudah ada dari parameter widget
+          if (_userName.isEmpty || _userName == 'Organisasi') {
+            _userName = fetchedName.isNotEmpty ? fetchedName : 'Organisasi';
+          }
+          _userEmail = fetchedEmail;
           _isLoadingUser = false;
         });
       }
@@ -364,6 +368,7 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
             builder: (context) => ProfileScreen(
               fromOrganization: true,
               organizationName: _userName,
+              organizationEmail: _userEmail,
               requestId: widget.requestId,
             ),
           ),
