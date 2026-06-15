@@ -126,9 +126,15 @@ class _PostingKegiatanScreenState extends State<PostingKegiatanScreen> {
   }
 
   Future<void> _pickLocation() async {
+    // Google Maps tidak support Linux desktop — gunakan input teks manual
+    final bool isLinux = !kIsWeb && Platform.isLinux;
+    if (isLinux) {
+      await _pickLocationManually();
+      return;
+    }
+
     // Default ke Jakarta jika GPS tidak tersedia
     LatLng initialPosition = const LatLng(-6.2088, 106.8456);
-
     try {
       final serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (serviceEnabled) {
@@ -145,7 +151,7 @@ class _PostingKegiatanScreenState extends State<PostingKegiatanScreen> {
         }
       }
     } catch (_) {
-      // GPS tidak tersedia (misal di emulator/Linux), pakai posisi default
+      // GPS tidak tersedia, pakai posisi default
     }
 
     if (!mounted) return;
@@ -153,9 +159,7 @@ class _PostingKegiatanScreenState extends State<PostingKegiatanScreen> {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => LocationPickerScreen(
-          initialPosition: initialPosition,
-        ),
+        builder: (context) => LocationPickerScreen(initialPosition: initialPosition),
       ),
     );
 
@@ -165,6 +169,43 @@ class _PostingKegiatanScreenState extends State<PostingKegiatanScreen> {
         _longitude = result['longitude'] as double?;
         _locationName = result['locationName'] as String?;
         _locationController.text = _locationName ?? 'Lokasi dipilih';
+      });
+    }
+  }
+
+  Future<void> _pickLocationManually() async {
+    final controller = TextEditingController(text: _locationController.text);
+    final result = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Masukkan Lokasi'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            hintText: 'Contoh: Taman Bungkul, Surabaya',
+            prefixIcon: Icon(Icons.location_on),
+          ),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Batal'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.primaryColor),
+            child: const Text('Simpan', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+    if (result != null && result.isNotEmpty && mounted) {
+      setState(() {
+        _locationName = result;
+        _locationController.text = result;
+        _latitude = null;
+        _longitude = null;
       });
     }
   }
