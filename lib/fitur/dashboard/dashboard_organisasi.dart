@@ -20,8 +20,13 @@ import 'package:bersatubantu/fitur/postingkegiatandonasi/postingkegiatandonasi.d
 
 class DashboardScreenOrganisasi extends StatefulWidget {
   final int requestId;
+  final String organizationName;
 
-  const DashboardScreenOrganisasi({super.key, required this.requestId});
+  const DashboardScreenOrganisasi({
+    super.key,
+    required this.requestId,
+    this.organizationName = '',
+  });
 
   @override
   State<DashboardScreenOrganisasi> createState() => _DashboardScreenState();
@@ -77,7 +82,12 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
     });
 
     // Initial load
-    _loadUserData();
+    if (widget.organizationName.isNotEmpty) {
+      _userName = widget.organizationName;
+      _isLoadingUser = false;
+    } else {
+      _loadUserData();
+    }
     _loadCampaigns();
     _loadNews();
     _loadMyEvents();

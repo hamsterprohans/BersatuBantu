@@ -136,6 +136,7 @@ class _OrganizationLoginScreenState extends State<OrganizationLoginScreen> {
           MaterialPageRoute(
             builder: (_) => DashboardScreenOrganisasi(
               requestId: orgResponse['request_id'] as int,
+              organizationName: orgName ?? 'Organisasi',
             ),
           ),
         );
