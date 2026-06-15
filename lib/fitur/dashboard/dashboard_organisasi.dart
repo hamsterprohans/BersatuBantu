@@ -66,27 +66,15 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
     // Register WidgetsBindingObserver untuk track lifecycle
     WidgetsBinding.instance.addObserver(this);
 
-    // Listen to auth state changes
-    _authSubscription = supabase.auth.onAuthStateChange.listen((data) {
-      final session = data.session;
-      if (session != null) {
-        print('[Dashboard] Auth state changed - User is logged in');
-        _loadUserData();
-      } else {
-        print('[Dashboard] Auth state changed - User is logged out');
-        setState(() {
-          _userName = 'Pengguna';
-          _isLoadingUser = false;
-        });
-      }
-    });
+    // Org users don't use Supabase Auth — ignore auth state changes for name
+    _authSubscription = supabase.auth.onAuthStateChange.listen((_) {});
 
-    // Initial load
+    // Initial load: prefer passed name, fallback to DB lookup by requestId
     if (widget.organizationName.isNotEmpty) {
       _userName = widget.organizationName;
       _isLoadingUser = false;
     } else {
-      _loadUserData();
+      _loadOrgName();
     }
     _loadCampaigns();
     _loadNews();
@@ -196,6 +184,31 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
         _userName = nameFromEmail;
         _isLoadingUser = false;
       });
+    }
+  }
+
+  Future<void> _loadOrgName() async {
+    try {
+      final response = await supabase
+          .from('organization_request')
+          .select('nama_organisasi')
+          .eq('request_id', widget.requestId)
+          .maybeSingle();
+      if (mounted) {
+        setState(() {
+          _userName = (response?['nama_organisasi'] as String?)?.trim().isNotEmpty == true
+              ? response!['nama_organisasi'] as String
+              : 'Organisasi';
+          _isLoadingUser = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _userName = 'Organisasi';
+          _isLoadingUser = false;
+        });
+      }
     }
   }
 
