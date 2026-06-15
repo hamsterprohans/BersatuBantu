@@ -445,7 +445,7 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
         final aksiResult = await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const AksiScreen(forceOrganizationMode: true),
+            builder: (context) => AksiScreen(forceOrganizationMode: true, requestId: widget.requestId),
           ),
         );
         setState(() { _selectedIndex = 0; });

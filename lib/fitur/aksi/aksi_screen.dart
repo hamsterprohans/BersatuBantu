@@ -6,17 +6,21 @@ import 'package:intl/intl.dart';
 import 'package:bersatubantu/providers/volunteer_event_provider.dart';
 import 'package:bersatubantu/fitur/pilihdaftar/register_volunteer_screen.dart'
     show EventDetailBottomSheet;
-import 'package:bersatubantu/fitur/postingkegiatandonasi/postingkegiatandonasi.dart';
+import 'package:bersatubantu/fitur/postingkegiatan/postingkegiatan.dart';
 import 'package:bersatubantu/fitur/widgets/bottom_navbar.dart';
 import 'package:bersatubantu/fitur/dashboard/dashboard_screen.dart';
 import 'package:bersatubantu/fitur/donasi/donasi_screen.dart';
 import 'package:bersatubantu/fitur/aturprofile/aturprofile.dart';
 
 class AksiScreen extends StatefulWidget {
-  /// If true, always show the FAB for posting events (used by organization dashboard)
   final bool forceOrganizationMode;
-  
-  const AksiScreen({super.key, this.forceOrganizationMode = false});
+  final int? requestId;
+
+  const AksiScreen({
+    super.key,
+    this.forceOrganizationMode = false,
+    this.requestId,
+  });
 
   @override
   State<AksiScreen> createState() => _AksiScreenState();
@@ -307,7 +311,7 @@ class _AksiScreenState extends State<AksiScreen> {
                               final result = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => const PostingKegiatanDonasiScreen(),
+                                  builder: (_) => PostingKegiatanScreen(requestId: widget.requestId ?? 0),
                                 ),
                               );
                               if (result == true && mounted) {
