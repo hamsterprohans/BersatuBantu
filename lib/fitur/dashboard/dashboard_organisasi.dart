@@ -88,105 +88,6 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
     super.dispose();
   }
 
-  Future<void> _loadUserData() async {
-    setState(() {
-      _isLoadingUser = true;
-    });
-
-    try {
-      // Get current user ID from auth
-      final user = supabase.auth.currentUser;
-
-      if (user == null) {
-        print('[Dashboard] No authenticated user found');
-        setState(() {
-          _userName = 'Pengguna';
-          _isLoadingUser = false;
-        });
-        return;
-      }
-
-      print('[Dashboard] Current user ID: ${user.id}');
-      print('[Dashboard] User email: ${user.email}');
-
-      // Query profiles table with the user ID - ALWAYS CHECK DATABASE FIRST
-      print(
-        '[Dashboard] Querying profiles table for fresh data from user ID: ${user.id}',
-      );
-
-      final response = await supabase
-          .from('profiles')
-          .select('full_name, email, id')
-          .eq('id', user.id)
-          .maybeSingle();
-
-      print('[Dashboard] Query response: $response');
-
-      if (response != null) {
-        print('[Dashboard] Profile found in database');
-
-        final fullName = response['full_name'];
-        print(
-          '[Dashboard] Full name value: "$fullName" (type: ${fullName.runtimeType})',
-        );
-
-        if (fullName != null) {
-          final nameString = fullName.toString().trim();
-          print('[Dashboard] After trim: "$nameString"');
-
-          if (nameString.isNotEmpty) {
-            setState(() {
-              _userName = nameString;
-              _isLoadingUser = false;
-            });
-            print(
-              '[Dashboard] Successfully loaded user name from DB: $_userName',
-            );
-            return;
-          }
-        }
-
-        // Fallback: Try email prefix
-        print(
-          '[Dashboard] full_name is null or empty, using email prefix fallback',
-        );
-        final email = response['email'] ?? user.email;
-        final nameFromEmail = email?.split('@')[0] ?? 'Pengguna';
-        setState(() {
-          _userName = nameFromEmail;
-          _isLoadingUser = false;
-        });
-        print('[Dashboard] Using email prefix: $_userName');
-      } else {
-        // Profile not found in database
-        print(
-          '[Dashboard] No profile found in database for user ID: ${user.id}',
-        );
-
-        final email = user.email;
-        final nameFromEmail = email?.split('@')[0] ?? 'Pengguna';
-        setState(() {
-          _userName = nameFromEmail;
-          _isLoadingUser = false;
-        });
-        print('[Dashboard] Using email prefix as fallback: $_userName');
-      }
-    } catch (e, stackTrace) {
-      print('[Dashboard] Error loading user data: $e');
-      print('[Dashboard] Stack trace: $stackTrace');
-
-      // Fallback to email prefix
-      final user = supabase.auth.currentUser;
-      final email = user?.email;
-      final nameFromEmail = email?.split('@')[0] ?? 'Pengguna';
-
-      setState(() {
-        _userName = nameFromEmail;
-        _isLoadingUser = false;
-      });
-    }
-  }
-
   Future<void> _loadOrgName() async {
     try {
       final response = await supabase
@@ -408,12 +309,13 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
     }
   }
 
-  // Refresh user data when returning from other screens
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      print('[Dashboard] App resumed - Refreshing user data');
-      _loadUserData();
+      // Org users don't use Supabase Auth — only reload name if it got wiped
+      if (_userName.isEmpty || _userName == 'Pengguna' || _userName == 'Organisasi') {
+        _loadOrgName();
+      }
     }
   }
 
