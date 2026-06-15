@@ -260,7 +260,12 @@ class _PostingKegiatanScreenState extends State<PostingKegiatanScreen> {
 
         
 
-        final imageUrl = await _uploadImage();
+        String? imageUrl;
+        try {
+          imageUrl = await _uploadImage();
+        } catch (uploadError) {
+          // Upload gagal (RLS/auth), lanjut posting tanpa gambar
+        }
     
 
       // Validate that the provided requestId exists and is approved in organization_request
