@@ -162,9 +162,9 @@ class _AksiScreenState extends State<AksiScreen> {
   void _navigateToScreen(BuildContext context, int index) {
     if (index == _selectedIndex) return;
 
-    // Org mode: semua tab non-Aksi pop ke org dashboard
+    // Org mode: pop ke org dashboard dan kirim target index agar langsung dinavigasi
     if (widget.forceOrganizationMode) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(index);
       return;
     }
 

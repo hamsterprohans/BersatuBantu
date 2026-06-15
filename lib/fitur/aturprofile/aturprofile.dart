@@ -367,9 +367,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onTap: (index) {
             if (index == 3) return;
 
-            // Org users: pop kembali ke org dashboard
+            // Org users: pop ke org dashboard dan kirim target index agar langsung dinavigasi
             if (widget.fromOrganization) {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(index);
               return;
             }
 

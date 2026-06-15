@@ -428,32 +428,35 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
         });
         break;
       case 1:
-        // Navigate to Donasi screen
         print('[Dashboard] Navigate to Donasi');
         setState(() { _selectedIndex = index; });
-        await Navigator.push(
+        final donasiResult = await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const DonasiScreen(fromOrganization: true)),
         );
         setState(() { _selectedIndex = 0; });
+        if (mounted && donasiResult is int && donasiResult != 1) {
+          _onNavTap(donasiResult);
+        }
         break;
       case 2:
-        // Navigate to Aksi screen
         print('[Dashboard] Navigate to Aksi');
         setState(() { _selectedIndex = index; });
-        await Navigator.push(
+        final aksiResult = await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => const AksiScreen(forceOrganizationMode: true),
           ),
         );
         setState(() { _selectedIndex = 0; });
+        if (mounted && aksiResult is int && aksiResult != 2) {
+          _onNavTap(aksiResult);
+        }
         break;
       case 3:
-        // Navigate to Profil (Atur Profil)
         print('[Dashboard] Navigate to Profil');
         setState(() { _selectedIndex = index; });
-        await Navigator.push(
+        final profileResult = await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ProfileScreen(
@@ -464,6 +467,9 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
           ),
         );
         setState(() { _selectedIndex = 0; });
+        if (mounted && profileResult is int && profileResult != 3) {
+          _onNavTap(profileResult);
+        }
         break;
     }
   }
