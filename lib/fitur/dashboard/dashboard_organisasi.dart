@@ -474,19 +474,16 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
         setState(() {
           _selectedIndex = index;
         });
-        final result = await Navigator.push(
+        await Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const ProfileScreen()),
+          MaterialPageRoute(
+            builder: (context) => ProfileScreen(
+              fromOrganization: true,
+              organizationName: _userName,
+              requestId: widget.requestId,
+            ),
+          ),
         );
-        // Refresh user data immediately after returning from profile edit
-        print('[Dashboard] Returned from ProfileScreen with result: $result');
-        // Force reload data regardless of result
-        await _loadUserData();
-        // Add another delayed refresh to ensure DB sync
-        await Future.delayed(const Duration(milliseconds: 300));
-        if (mounted) {
-          await _loadUserData();
-        }
         setState(() {
           _selectedIndex = 0;
         });
@@ -1410,11 +1407,15 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
     return GestureDetector(
       onTap: () async {
         if (index == 3) {
-          await Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (_) => const ProfileScreen()));
-          // Refresh data user setelah kembali dari Atur Profil
-          _loadUserData();
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ProfileScreen(
+                fromOrganization: true,
+                organizationName: _userName,
+                requestId: widget.requestId,
+              ),
+            ),
+          );
           return;
         }
         setState(() {

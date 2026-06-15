@@ -17,8 +17,19 @@ import 'package:bersatubantu/fitur/auth/login/admin_dashboard_screen.dart';
 // ------------------------------------------------------------------
 class ProfileScreen extends StatefulWidget {
   final bool isAdmin;
+  final bool fromOrganization;
+  final String organizationName;
+  final String organizationEmail;
+  final int? requestId;
 
-  const ProfileScreen({super.key, this.isAdmin = false});
+  const ProfileScreen({
+    super.key,
+    this.isAdmin = false,
+    this.fromOrganization = false,
+    this.organizationName = '',
+    this.organizationEmail = '',
+    this.requestId,
+  });
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -47,6 +58,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _name = "admin";
           _email = "admin@gmail.com";
         });
+      }
+      return;
+    }
+
+    // Jika organisasi, ambil dari parameter atau query DB by requestId
+    if (widget.fromOrganization) {
+      if (widget.organizationName.isNotEmpty) {
+        if (mounted) {
+          setState(() {
+            _name = widget.organizationName;
+            _email = widget.organizationEmail.isNotEmpty ? widget.organizationEmail : '-';
+          });
+        }
+        return;
+      }
+      // Fallback: query organization_request by requestId
+      if (widget.requestId != null) {
+        try {
+          final resp = await supabase
+              .from('organization_request')
+              .select('nama_organisasi, email_organisasi')
+              .eq('request_id', widget.requestId!)
+              .maybeSingle();
+          if (mounted) {
+            setState(() {
+              _name = (resp?['nama_organisasi'] as String?)?.trim().isNotEmpty == true
+                  ? resp!['nama_organisasi'] as String
+                  : 'Organisasi';
+              _email = (resp?['email_organisasi'] as String?) ?? '-';
+            });
+          }
+        } catch (_) {
+          if (mounted) setState(() { _name = 'Organisasi'; _email = '-'; });
+        }
+      } else {
+        if (mounted) setState(() { _name = 'Organisasi'; _email = '-'; });
       }
       return;
     }
@@ -259,25 +306,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ElevatedButton(
                             onPressed: () async {
                               Navigator.pop(dialogContext); // Tutup dialog
+                              final messenger = ScaffoldMessenger.of(context);
+                              final navigator = Navigator.of(context);
                               try {
-                                // Logout dari Supabase
-                                await Supabase.instance.client.auth.signOut();
+                                // Org users tidak pakai Supabase Auth, langsung ke SplashScreen
+                                if (!widget.fromOrganization) {
+                                  await Supabase.instance.client.auth.signOut();
+                                }
                                 if (mounted) {
-                                  // Navigasi ke Splash Screen dan hapus semua route sebelumnya
-                                  Navigator.of(context).pushAndRemoveUntil(
+                                  navigator.pushAndRemoveUntil(
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SplashScreen(),
+                                      builder: (context) => const SplashScreen(),
                                     ),
                                     (route) => false,
                                   );
                                 }
                               } catch (e) {
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text("Gagal logout: $e")),
-                                  );
-                                }
+                                messenger.showSnackBar(
+                                  SnackBar(content: Text("Gagal logout: $e")),
+                                );
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -319,6 +366,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               : BottomNavBarVariant.user,
           onTap: (index) {
             if (index == 3) return;
+
+            // Org users: pop kembali ke org dashboard
+            if (widget.fromOrganization) {
+              Navigator.of(context).pop();
+              return;
+            }
 
             if (widget.isAdmin) {
               switch (index) {
