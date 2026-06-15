@@ -126,55 +126,46 @@ class _PostingKegiatanScreenState extends State<PostingKegiatanScreen> {
   }
 
   Future<void> _pickLocation() async {
+    // Default ke Jakarta jika GPS tidak tersedia
+    LatLng initialPosition = const LatLng(-6.2088, 106.8456);
+
     try {
-      // Request location permission
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (serviceEnabled) {
+        LocationPermission permission = await Geolocator.checkPermission();
         if (permission == LocationPermission.denied) {
-          throw 'Izin lokasi ditolak';
+          permission = await Geolocator.requestPermission();
+        }
+        if (permission != LocationPermission.denied &&
+            permission != LocationPermission.deniedForever) {
+          final position = await Geolocator.getCurrentPosition(
+            locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+          ).timeout(const Duration(seconds: 5));
+          initialPosition = LatLng(position.latitude, position.longitude);
         }
       }
+    } catch (_) {
+      // GPS tidak tersedia (misal di emulator/Linux), pakai posisi default
+    }
 
-      if (permission == LocationPermission.deniedForever) {
-        throw 'Izin lokasi ditolak permanen. Silakan aktifkan di pengaturan.';
-      }
+    if (!mounted) return;
 
-      // Get current position
-      final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-
-      if (!mounted) return;
-
-      // Navigate to map picker
-      final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LocationPickerScreen(
-            initialPosition: LatLng(position.latitude, position.longitude),
-          ),
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LocationPickerScreen(
+          initialPosition: initialPosition,
         ),
-      );
+      ),
+    );
 
-      if (result != null && result is Map<String, dynamic>) {
-        setState(() {
-          _latitude = result['latitude'];
-          _longitude = result['longitude'];
-          _locationName = result['locationName'];
-          _locationController.text = _locationName ?? 'Lokasi dipilih';
-        });
-      }
-    } catch (e) {
-      print('[PostingDonasi] Error picking location: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Gagal memilih lokasi: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+    if (result != null && result is Map<String, dynamic> && mounted) {
+      setState(() {
+        _latitude = result['latitude'] as double?;
+        _longitude = result['longitude'] as double?;
+        _locationName = result['locationName'] as String?;
+        _locationController.text = _locationName ?? 'Lokasi dipilih';
+      });
     }
   }
 
