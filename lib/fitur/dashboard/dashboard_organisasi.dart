@@ -447,11 +447,12 @@ class _DashboardScreenState extends State<DashboardScreenOrganisasi>
                             ],
                           ),
                   ),
-                  Image.asset(
-                    'assets/boy_merdeka.png',
-                    height: 90,
-                    fit: BoxFit.contain,
-                  ),
+                  if (AppTheme.currentName() == AppTheme.merdekaName)
+                    Image.asset(
+                      'assets/boy_merdeka.png',
+                      height: 90,
+                      fit: BoxFit.contain,
+                    ),
                   const SizedBox(width: 12),
                   Container(
                     padding: const EdgeInsets.symmetric(
