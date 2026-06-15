@@ -162,8 +162,8 @@ class _AksiScreenState extends State<AksiScreen> {
   void _navigateToScreen(BuildContext context, int index) {
     if (index == _selectedIndex) return;
 
-    // Kalau org mode dan tap Beranda → pop balik ke org dashboard
-    if (index == 0 && widget.forceOrganizationMode) {
+    // Org mode: semua tab non-Aksi pop ke org dashboard
+    if (widget.forceOrganizationMode) {
       Navigator.of(context).pop();
       return;
     }
@@ -177,7 +177,7 @@ class _AksiScreenState extends State<AksiScreen> {
         screen = const DonasiScreen();
         break;
       case 2:
-        return; // Already on Aksi
+        return;
       case 3:
         screen = const ProfileScreen();
         break;

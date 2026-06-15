@@ -722,8 +722,8 @@ class _DonasiScreenState extends State<DonasiScreen> {
   void _navigateToScreen(BuildContext context, int index) {
     if (index == _selectedIndex) return;
 
-    // Kalau org mode dan tap Beranda → pop balik ke org dashboard
-    if (index == 0 && widget.fromOrganization) {
+    // Org mode: semua tab non-Donasi pop ke org dashboard
+    if (widget.fromOrganization) {
       Navigator.of(context).pop();
       return;
     }
