@@ -9,8 +9,8 @@ on:
 env:
   REGION: asia-southeast2
   SERVICE_NAME: bersatubantu
-  APP_THEME: merdeka
-  BANNER_ENABLED: "true"      
+  APP_THEME: default
+  BANNER_ENABLED: "false"      
 
 jobs:
   # ─────────────────────────────────────────────
