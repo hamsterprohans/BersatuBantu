@@ -279,7 +279,6 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
         } else {
           throw 'Server tidak mengembalikan URL pembayaran.';
         }
-
       }
 
       // For goods donations (jenis barang), proceed as before
@@ -426,8 +425,8 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
             value: midtransId,
           ),
           callback: (payload) async {
-            final newStatus =
-                (payload.newRecord['status'] as String? ?? '').toLowerCase();
+            final newStatus = (payload.newRecord['status'] as String? ?? '')
+                .toLowerCase();
             const settled = ['settlement', 'paid', 'capture', 'completed'];
             if (settled.contains(newStatus)) {
               _paymentChannel?.unsubscribe();
@@ -455,13 +454,14 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
 
   Future<void> _checkTransactionStatus(String? midtransId) async {
     if (midtransId == null || midtransId.isEmpty) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('ID pembayaran tidak tersedia'),
             backgroundColor: Colors.orange,
           ),
         );
+      }
       return;
     }
 
@@ -472,13 +472,14 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
           .eq('midtrans_order_id', midtransId)
           .maybeSingle();
       if (tx == null) {
-        if (mounted)
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Transaksi belum ditemukan'),
               backgroundColor: Colors.orange,
             ),
           );
+        }
         return;
       }
 
@@ -487,32 +488,35 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
 
       final settled = ['settlement', 'paid', 'capture', 'completed'];
       if (settled.contains(status.toLowerCase())) {
-        if (mounted)
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Donasi masuk: ${_formatCurrency(amount)}'),
               backgroundColor: Colors.green,
             ),
           );
+        }
         await _refreshCampaign();
       } else {
-        if (mounted)
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Status pembayaran: $status'),
               backgroundColor: Colors.orange,
             ),
           );
+        }
       }
     } catch (e) {
       print('[BerikanDonasi] Error checking tx status: $e');
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Gagal memeriksa status pembayaran'),
             backgroundColor: Colors.red,
           ),
         );
+      }
     }
   }
 
@@ -530,471 +534,494 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
     return Stack(
       children: [
         Scaffold(
-      backgroundColor: AppTheme.primaryColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  const Expanded(
-                    child: Text(
-                      'Berikan Donasi',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'CircularStd',
+          backgroundColor: const Color(0xFF8FA3CC),
+          body: SafeArea(
+            child: Column(
+              children: [
+                // Header
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        onPressed: () => Navigator.pop(context),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(width: 48),
-                ],
-              ),
-            ),
-
-            // Content
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+                      const Expanded(
+                        child: Text(
+                          'Berikan Donasi',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'CircularStd',
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(width: 48),
+                    ],
                   ),
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Donation Info Card
-                      Container(
-                        margin: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Image
-                              if (imageUrl != null)
-                                Container(
-                                  height: 180,
-                                  width: double.infinity,
-                                  color: Colors.grey[300],
-                                  child: Image.network(
-                                    imageUrl,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Center(
-                                        child: Icon(
-                                          Icons.image_outlined,
-                                          size: 50,
-                                          color: Colors.grey[400],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
 
-                              // Info
-                              Container(
-                                color: Colors.white,
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      title,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF364057),
-                                        fontFamily: 'CircularStd',
+                // Content
+                Expanded(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Donation Info Card
+                          Container(
+                            margin: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.05),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Image
+                                  if (imageUrl != null)
+                                    Container(
+                                      height: 180,
+                                      width: double.infinity,
+                                      color: Colors.grey[300],
+                                      child: Image.network(
+                                        imageUrl,
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                              return Center(
+                                                child: Icon(
+                                                  Icons.image_outlined,
+                                                  size: 50,
+                                                  color: Colors.grey[400],
+                                                ),
+                                              );
+                                            },
                                       ),
                                     ),
-                                    const SizedBox(height: 12),
 
-                                    // Progress
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                  // Info
+                                  Container(
+                                    color: Colors.white,
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '${_formatNumber(collectedAmount)} / ${_formatNumber(targetAmount)}',
+                                          title,
                                           style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            color: AppTheme.primaryLightColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF364057),
                                             fontFamily: 'CircularStd',
                                           ),
                                         ),
+                                        const SizedBox(height: 12),
+
+                                        // Progress
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '${_formatNumber(collectedAmount)} / ${_formatNumber(targetAmount)}',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                                color: Color(0xFF8FA3CC),
+                                                fontFamily: 'CircularStd',
+                                              ),
+                                            ),
+                                            Text(
+                                              '$daysRemaining hari lagi',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey[600],
+                                                fontFamily: 'CircularStd',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                          child: LinearProgressIndicator(
+                                            value: progress.clamp(0.0, 1.0),
+                                            backgroundColor: Colors.grey[200],
+                                            valueColor:
+                                                const AlwaysStoppedAnimation<
+                                                  Color
+                                                >(Color(0xFF8FA3CC)),
+                                            minHeight: 8,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 16),
+
+                                        // Description
                                         Text(
-                                          '$daysRemaining hari lagi',
+                                          description,
                                           style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey[600],
+                                            fontSize: 14,
+                                            color: Colors.grey[700],
                                             fontFamily: 'CircularStd',
+                                            height: 1.5,
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 8),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
 
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(4),
-                                      child: LinearProgressIndicator(
-                                        value: progress.clamp(0.0, 1.0),
-                                        backgroundColor: Colors.grey[200],
-                                        valueColor:
-                                            const AlwaysStoppedAnimation<Color>(
-                                              AppTheme.primaryLightColor,
-                                            ),
-                                        minHeight: 8,
+                          // Location Map (if available)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 8,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Lokasi Kejadian',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF364057),
+                                    fontFamily: 'CircularStd',
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                _buildLocationMap(),
+                              ],
+                            ),
+                          ),
+
+                          // Donation Type Toggle
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: _buildTypeButton(
+                                    'Berikan Donasi Jenis Uang',
+                                    'uang',
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _buildTypeButton(
+                                    'Berikan Donasi Jenis Barang',
+                                    'barang',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          // Form
+                          Form(
+                            key: _formKey,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Anonymous checkbox (only for money)
+                                  if (_donationType == 'uang')
+                                    CheckboxListTile(
+                                      value: _isAnonymous,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _isAnonymous = value ?? false;
+                                        });
+                                      },
+                                      title: const Text(
+                                        'Berdonasi Secara Anonim',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'CircularStd',
+                                        ),
                                       ),
+                                      controlAffinity:
+                                          ListTileControlAffinity.leading,
+                                      activeColor: const Color(0xFF8FA3CC),
+                                      contentPadding: EdgeInsets.zero,
+                                    ),
+                                  const SizedBox(height: 12),
+
+                                  // Fill with Profile button (only for money)
+                                  if (_donationType == 'uang')
+                                    ElevatedButton(
+                                      onPressed: _loadUserData,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(
+                                          0xFF8FA3CC,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Isi Sesuai Profile',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'CircularStd',
+                                        ),
+                                      ),
+                                    ),
+                                  const SizedBox(height: 30),
+
+                                  // Name
+                                  _buildLabel('Nama Pendonasi'),
+                                  const SizedBox(height: 8),
+                                  TextFormField(
+                                    controller: _nameController,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: 'CircularStd',
+                                    ),
+                                    decoration: _buildInputDecoration('Nama'),
+                                    validator: (value) {
+                                      if (!_isAnonymous &&
+                                          (value == null ||
+                                              value.trim().isEmpty)) {
+                                        return 'Nama tidak boleh kosong';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  // Email
+                                  _buildLabel('Email'),
+                                  const SizedBox(height: 8),
+                                  TextFormField(
+                                    controller: _emailController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: 'CircularStd',
+                                    ),
+                                    decoration: _buildInputDecoration('Email'),
+                                    validator: (value) {
+                                      if (value == null ||
+                                          value.trim().isEmpty) {
+                                        return 'Email tidak boleh kosong';
+                                      }
+                                      if (!value.contains('@')) {
+                                        return 'Email tidak valid';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  // Amount (only for money)
+                                  if (_donationType == 'uang') ...[
+                                    _buildLabel('Nominal Donasi'),
+                                    const SizedBox(height: 8),
+                                    TextFormField(
+                                      controller: _amountController,
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        _ThousandsSeparatorInputFormatter(),
+                                      ],
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: 'CircularStd',
+                                      ),
+                                      decoration: InputDecoration(
+                                        hintText: '0',
+                                        prefixText: 'Rp ',
+                                        hintStyle: TextStyle(
+                                          color: Colors.grey[400],
+                                          fontFamily: 'CircularStd',
+                                        ),
+                                        filled: true,
+                                        fillColor: const Color(0xFFF5F6FA),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                              horizontal: 16,
+                                              vertical: 14,
+                                            ),
+                                      ),
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value.trim().isEmpty) {
+                                          return 'Nominal donasi tidak boleh kosong';
+                                        }
+                                        final amount = int.tryParse(
+                                          value.replaceAll('.', ''),
+                                        );
+                                        if (amount == null || amount <= 0) {
+                                          return 'Nominal harus lebih dari 0';
+                                        }
+                                        return null;
+                                      },
                                     ),
                                     const SizedBox(height: 16),
 
-                                    // Description
-                                    Text(
-                                      description,
+                                    // Payment Method
+                                    _buildLabel('Metode Pembayaran'),
+                                    const SizedBox(height: 12),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: _paymentMethods.map((method) {
+                                        return _buildPaymentMethodButton(
+                                          method,
+                                        );
+                                      }).toList(),
+                                    ),
+                                    const SizedBox(height: 16),
+                                  ],
+
+                                  // Address (only for goods)
+                                  if (_donationType == 'barang') ...[
+                                    _buildLabel('Alamat'),
+                                    const Text(
+                                      '*Untuk lokasi penjemputan donasi',
                                       style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey[700],
+                                        fontSize: 12,
+                                        color: Colors.grey,
                                         fontFamily: 'CircularStd',
-                                        height: 1.5,
                                       ),
                                     ),
+                                    const SizedBox(height: 8),
+                                    TextFormField(
+                                      controller: _addressController,
+                                      maxLines: 3,
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: 'CircularStd',
+                                      ),
+                                      decoration: _buildInputDecoration(
+                                        'Alamat lengkap',
+                                      ),
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value.trim().isEmpty) {
+                                          return 'Alamat tidak boleh kosong';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const SizedBox(height: 16),
                                   ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
 
-                      // Location Map (if available)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 8,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Lokasi Kejadian',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF364057),
-                                fontFamily: 'CircularStd',
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            _buildLocationMap(),
-                          ],
-                        ),
-                      ),
-
-                      // Donation Type Toggle
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _buildTypeButton(
-                                'Berikan Donasi Jenis Uang',
-                                'uang',
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _buildTypeButton(
-                                'Berikan Donasi Jenis Barang',
-                                'barang',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Form
-                      Form(
-                        key: _formKey,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Anonymous checkbox (only for money)
-                              if (_donationType == 'uang')
-                                CheckboxListTile(
-                                  value: _isAnonymous,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _isAnonymous = value ?? false;
-                                    });
-                                  },
-                                  title: const Text(
-                                    'Berdonasi Secara Anonim',
-                                    style: TextStyle(
-                                      fontSize: 14,
+                                  // Message
+                                  _buildLabel('Pesan'),
+                                  const SizedBox(height: 8),
+                                  TextFormField(
+                                    controller: _messageController,
+                                    maxLines: 3,
+                                    style: const TextStyle(
+                                      fontSize: 15,
                                       fontFamily: 'CircularStd',
                                     ),
-                                  ),
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  activeColor: AppTheme.primaryLightColor,
-                                  contentPadding: EdgeInsets.zero,
-                                ),
-                              const SizedBox(height: 12),
-
-                              // Fill with Profile button (only for money)
-                              if (_donationType == 'uang')
-                                ElevatedButton(
-                                  onPressed: _loadUserData,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppTheme.primaryColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 12,
+                                    decoration: _buildInputDecoration(
+                                      'Pesan (opsional)',
                                     ),
                                   ),
-                                  child: const Text(
-                                    'Isi Sesuai Profile',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'CircularStd',
-                                    ),
-                                  ),
-                                ),
-                              const SizedBox(height: 30),
+                                  const SizedBox(height: 32),
 
-                              // Name
-                              _buildLabel('Nama Pendonasi'),
-                              const SizedBox(height: 8),
-                              TextFormField(
-                                controller: _nameController,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: 'CircularStd',
-                                ),
-                                decoration: _buildInputDecoration('Nama'),
-                                validator: (value) {
-                                  if (!_isAnonymous &&
-                                      (value == null || value.trim().isEmpty)) {
-                                    return 'Nama tidak boleh kosong';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 16),
-
-                              // Email
-                              _buildLabel('Email'),
-                              const SizedBox(height: 8),
-                              TextFormField(
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: 'CircularStd',
-                                ),
-                                decoration: _buildInputDecoration('Email'),
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Email tidak boleh kosong';
-                                  }
-                                  if (!value.contains('@')) {
-                                    return 'Email tidak valid';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 16),
-
-                              // Amount (only for money)
-                              if (_donationType == 'uang') ...[
-                                _buildLabel('Nominal Donasi'),
-                                const SizedBox(height: 8),
-                                TextFormField(
-                                  controller: _amountController,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    _ThousandsSeparatorInputFormatter(),
-                                  ],
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: 'CircularStd',
-                                  ),
-                                  decoration: InputDecoration(
-                                    hintText: '0',
-                                    prefixText: 'Rp ',
-                                    hintStyle: TextStyle(
-                                      color: Colors.grey[400],
-                                      fontFamily: 'CircularStd',
-                                    ),
-                                    filled: true,
-                                    fillColor: const Color(0xFFF5F6FA),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                      vertical: 14,
-                                    ),
-                                  ),
-                                  validator: (value) {
-                                    if (value == null || value.trim().isEmpty) {
-                                      return 'Nominal donasi tidak boleh kosong';
-                                    }
-                                    final amount = int.tryParse(
-                                      value.replaceAll('.', ''),
-                                    );
-                                    if (amount == null || amount <= 0) {
-                                      return 'Nominal harus lebih dari 0';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 16),
-
-                                // Payment Method
-                                _buildLabel('Metode Pembayaran'),
-                                const SizedBox(height: 12),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: _paymentMethods.map((method) {
-                                    return _buildPaymentMethodButton(method);
-                                  }).toList(),
-                                ),
-                                const SizedBox(height: 16),
-                              ],
-
-                              // Address (only for goods)
-                              if (_donationType == 'barang') ...[
-                                _buildLabel('Alamat'),
-                                const Text(
-                                  '*Untuk lokasi penjemputan donasi',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                    fontFamily: 'CircularStd',
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                TextFormField(
-                                  controller: _addressController,
-                                  maxLines: 3,
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: 'CircularStd',
-                                  ),
-                                  decoration: _buildInputDecoration(
-                                    'Alamat lengkap',
-                                  ),
-                                  validator: (value) {
-                                    if (value == null || value.trim().isEmpty) {
-                                      return 'Alamat tidak boleh kosong';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 16),
-                              ],
-
-                              // Message
-                              _buildLabel('Pesan'),
-                              const SizedBox(height: 8),
-                              TextFormField(
-                                controller: _messageController,
-                                maxLines: 3,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: 'CircularStd',
-                                ),
-                                decoration: _buildInputDecoration(
-                                  'Pesan (opsional)',
-                                ),
-                              ),
-                              const SizedBox(height: 32),
-
-                              // Submit Button
-                              SizedBox(
-                                width: double.infinity,
-                                height: 50,
-                                child: ElevatedButton(
-                                  onPressed: _isLoading
-                                      ? null
-                                      : _submitDonation,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF5E72E4),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    elevation: 0,
-                                  ),
-                                  child: _isLoading
-                                      ? const SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                  Colors.white,
-                                                ),
-                                          ),
-                                        )
-                                      : const Text(
-                                          'Kirim Donasi',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'CircularStd',
+                                  // Submit Button
+                                  SizedBox(
+                                    width: double.infinity,
+                                    height: 50,
+                                    child: ElevatedButton(
+                                      onPressed: _isLoading
+                                          ? null
+                                          : _submitDonation,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(
+                                          0xFF5E72E4,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
                                           ),
                                         ),
-                                ),
+                                        elevation: 0,
+                                      ),
+                                      child: _isLoading
+                                          ? const SizedBox(
+                                              height: 20,
+                                              width: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                      Color
+                                                    >(Colors.white),
+                                              ),
+                                            )
+                                          : const Text(
+                                              'Kirim Donasi',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'CircularStd',
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 32),
+                                ],
                               ),
-                              const SizedBox(height: 32),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
         ),
         if (_waitingForPayment)
           Container(
@@ -1069,10 +1096,10 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primaryLightColor : Colors.white,
+          color: isSelected ? const Color(0xFF8FA3CC) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? AppTheme.primaryLightColor : Colors.grey[300]!,
+            color: isSelected ? const Color(0xFF8FA3CC) : Colors.grey[300]!,
             width: 2,
           ),
         ),
@@ -1154,7 +1181,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isSelected ? AppTheme.primaryLightColor : Colors.grey[300]!,
+            color: isSelected ? const Color(0xFF8FA3CC) : Colors.grey[300]!,
             width: 3,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -1239,7 +1266,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 6.0),
             child: Row(
               children: [
-                const Icon(Icons.place, size: 18, color: AppTheme.primaryLightColor),
+                const Icon(Icons.place, size: 18, color: Color(0xFF8FA3CC)),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -1254,7 +1281,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
                       ? null
                       : _openInExternalMaps,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
+                    backgroundColor: const Color(0xFF8FA3CC),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 8,
@@ -1327,7 +1354,7 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.primaryColor,
+              backgroundColor: const Color(0xFF8FA3CC),
             ),
             child: const Text('Petunjuk setup'),
           ),
@@ -1345,17 +1372,19 @@ class _BerikanDonasiScreenState extends State<BerikanDonasiScreen> {
     );
     try {
       if (!await launchUrl(googleUrl, mode: LaunchMode.externalApplication)) {
-        if (mounted)
+        if (mounted) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(const SnackBar(content: Text('Gagal membuka Maps')));
+        }
       }
     } catch (e) {
       print('[BerikanDonasi] Error opening external maps: $e');
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(const SnackBar(content: Text('Gagal membuka Maps')));
+      }
     }
   }
 }

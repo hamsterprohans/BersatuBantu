@@ -428,7 +428,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 child: ElevatedButton(
                   onPressed: () => _showDetailsDialog(context, verification),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
+                    backgroundColor: const Color(0xFF768BBD),
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -481,7 +481,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     verification['request_id']?.toString() ?? '',
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
+                    backgroundColor: const Color(0xFF768BBD),
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
@@ -600,7 +600,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               child: const Icon(
                 Icons.download,
                 size: 16,
-                color: AppTheme.primaryColor,
+                color: Color(0xFF768BBD),
               ),
             ),
         ],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'dart:async';
+import 'package:bersatubantu/fitur/widgets/banner_carousel.dart';
+import 'package:bersatubantu/config/banner_config.dart';
 
 // Import necessary screens
 import 'package:bersatubantu/fitur/berikandonasi/berikandonasi.dart';
@@ -526,6 +528,99 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
             ),
           ),
 
+          // Banner Carousel (same as personal/org dashboard)
+          if (BannerConfig.isEnabled)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  BannerCarousel(
+                    banners: [
+                      BannerItem(
+                        title: 'Donasi MBG',
+                        subtitle: 'Bantu masyarakat',
+                        buttonText: 'Donasi Sekarang',
+                        gradientColors: [Color(0xFF4A7FBD), Color(0xFF8FA3CC)],
+                        icon: Icons.volunteer_activism_rounded,
+                        imageAsset: 'assets/banners/banjir.png',
+                        imageType: BannerImageType.asset,
+                        showTextOverImage: false,
+                        onTap: () {},
+                      ),
+                      BannerItem(
+                        title: 'Bencana Aceh',
+                        subtitle: 'Ringankan beban saudara kita di Aceh',
+                        buttonText: 'Bantu Sekarang',
+                        gradientColors: [Color(0xFF8B2500), Color(0xFFD9614C)],
+                        icon: Icons.warning_rounded,
+                        imageAsset: 'assets/banners/aceh.png',
+                        imageType: BannerImageType.asset,
+                        showTextOverImage: false,
+                        onTap: () {},
+                      ),
+                      BannerItem(
+                        title: 'Bencana Sawit',
+                        subtitle: 'Dukung pemulihan masyarakat terdampak sawit',
+                        buttonText: 'Bantu Sekarang',
+                        gradientColors: [Color(0xFF2E6B2E), Color(0xFF66BB6A)],
+                        icon: Icons.nature_rounded,
+                        imageAsset: 'assets/banners/sawit.png',
+                        imageType: BannerImageType.asset,
+                        showTextOverImage: false,
+                        onTap: () {},
+                      ),
+                      BannerItem(
+                        title: 'Bantu Aceh',
+                        subtitle: 'Ayo bergabung jadi relawan kemanusiaan di Aceh',
+                        buttonText: 'Gabung Relawan',
+                        gradientColors: [Color(0xFF8B2500), Color(0xFFE8A45A)],
+                        icon: Icons.volunteer_activism_rounded,
+                        imageAsset: 'assets/banners/aksiaceh.png',
+                        imageType: BannerImageType.asset,
+                        showTextOverImage: false,
+                        onTap: () {},
+                      ),
+                      BannerItem(
+                        title: 'Bersih Sungai',
+                        subtitle: 'Ayo ikut bakti sosial membersihkan aliran sungai',
+                        buttonText: 'Gabung Relawan',
+                        gradientColors: [Color(0xFF1D8348), Color(0xFF52BE80)],
+                        icon: Icons.nature_people_rounded,
+                        imageAsset: 'assets/banners/aksisungai.png',
+                        imageType: BannerImageType.asset,
+                        showTextOverImage: false,
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
+                  if (AppTheme.currentName() == AppTheme.merdekaName)
+                    Positioned(
+                      top: -10,
+                      left: 0,
+                      child: Image.asset(
+                        'assets/pita_bendera.png',
+                        height: 60,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  if (AppTheme.currentName() == AppTheme.merdekaName)
+                    Positioned(
+                      bottom: 10,
+                      right: 0,
+                      child: Transform.rotate(
+                        angle: 3.14159,
+                        child: Image.asset(
+                          'assets/pita_bendera.png',
+                          height: 60,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+
           // Title + Tambah Berita button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -848,23 +943,33 @@ class _AdminHomeDashboardState extends State<AdminHomeDashboard>
                       ),
                     ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF364057),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      _selectedIndex == 0 ? 'Admin' : 'Kelola Berita',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontFamily: 'CircularStd',
+                  Row(
+                    children: [
+                      if (AppTheme.currentName() == AppTheme.merdekaName)
+                        Image.asset(
+                          'assets/boy_merdeka.png',
+                          height: 90,
+                          fit: BoxFit.contain,
+                        ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF364057),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          _selectedIndex == 0 ? 'Admin' : 'Kelola Berita',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontFamily: 'CircularStd',
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
