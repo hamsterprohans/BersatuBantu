@@ -9,8 +9,7 @@ on:
 env:
   REGION: asia-southeast2
   SERVICE_NAME: bersatubantu
-  APP_THEME: default
-  BANNER_ENABLED: "false"      
+  APP_THEME: merdeka
 
 jobs:
   # ─────────────────────────────────────────────
@@ -29,7 +28,7 @@ jobs:
         with:
           flutter-version: '3.44.1'
           channel: stable
-          cache: false
+          cache: true
 
       - name: Create .env file
         run: |
@@ -43,10 +42,16 @@ jobs:
         run: flutter pub get
 
       - name: Flutter analyze
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings --no-pub
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
 
       - name: Flutter test
-        run: flutter test --no-pub
+        run: flutter test
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   # ─────────────────────────────────────────────
   # JOB 2: Build & Deploy — only on push to main
@@ -62,9 +67,11 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Authenticate to Google Cloud
+        id: auth
         uses: google-github-actions/auth@v3
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+          token_format: 'access_token'
 
       - name: Setup gcloud CLI
         uses: google-github-actions/setup-gcloud@v3
@@ -72,7 +79,11 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Login to Artifact Registry
-        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGION }}-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
 
       - name: Create .env file for Docker build
         run: |
@@ -101,7 +112,6 @@ jobs:
             --build-arg SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }} \
             --build-arg GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }} \
             --build-arg APP_THEME=${{ env.APP_THEME }} \
-            --build-arg BANNER_ENABLED=${{ env.BANNER_ENABLED }} \
             -t ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
             -t ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:latest \
             .
@@ -147,6 +157,22 @@ jobs:
           done
           echo "❌ Health check failed"
           exit 1
+
+      - name: Run Smoke Test
+        run: |
+          echo "Menjalankan Smoke Test Kelayakan pada $SERVICE_URL"
+          STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" "$SERVICE_URL")
+          if [ "$STATUS_CODE" -eq 200 ]; then
+            echo "Smoke Test Berhasil! Aplikasi merespon dengan status 200."
+          else
+            echo "Smoke Test Gagal! Status code: $STATUS_CODE"
+            exit 1
+          fi
+
+      - name: Run Cypress E2E Tests
+        uses: cypress-io/github-action@v6
+        with:
+          command: npx cypress run --config baseUrl=${{ env.SERVICE_URL }}
 
       - name: Notify success
         if: success()
