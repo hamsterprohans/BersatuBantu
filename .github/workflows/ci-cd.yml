@@ -48,7 +48,7 @@ jobs:
         run: flutter test
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: sonarsource/sonarcloud-github-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -171,6 +171,8 @@ jobs:
 
       - name: Run Cypress E2E Tests
         uses: cypress-io/github-action@v6
+        env:
+          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
         with:
           command: npx cypress run --config baseUrl=${{ env.SERVICE_URL }}
 
