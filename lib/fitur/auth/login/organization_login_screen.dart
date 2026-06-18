@@ -39,12 +39,14 @@ class _OrganizationLoginScreenState extends State<OrganizationLoginScreen> {
 
     try {
       final supabase = Supabase.instance.client;
+      final email = _emailController.text.trim();
+      final password = _passwordController.text;
 
       // Query organization_request by email
       final orgResponse = await supabase
           .from('organization_request')
           .select('*')
-          .eq('email_organisasi', _emailController.text)
+          .eq('email_organisasi', email)
           .maybeSingle();
 
       if (orgResponse == null) {
@@ -56,17 +58,22 @@ class _OrganizationLoginScreenState extends State<OrganizationLoginScreen> {
         return;
       }
 
-      // Validate password hash
+      // Validate password — support BCrypt hash or plaintext (for dev/test data)
       final storedPasswordHash = orgResponse['password_organisasi'] as String?;
       bool passwordValid = false;
-      
-      try {
-        passwordValid = BCrypt.checkpw(
-          _passwordController.text,
-          storedPasswordHash ?? ''
-        );
-      } catch (e) {
-        print('[Login] Error checking password: $e');
+
+      if (storedPasswordHash == null || storedPasswordHash.isEmpty) {
+        passwordValid = false;
+      } else if (storedPasswordHash.startsWith('\$2')) {
+        try {
+          passwordValid = BCrypt.checkpw(password, storedPasswordHash);
+        } catch (e) {
+          print('[Login] BCrypt error: $e');
+          passwordValid = false;
+        }
+      } else {
+        // Plaintext password stored in DB (manually inserted data)
+        passwordValid = password == storedPasswordHash;
       }
 
       if (!passwordValid) {

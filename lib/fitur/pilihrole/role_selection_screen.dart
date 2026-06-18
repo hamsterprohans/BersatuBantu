@@ -31,7 +31,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
     String mappedRole;
     if (role == 'personal') {
       mappedRole = 'user';
-    } else if (role == 'organization') mappedRole = 'volunteer';
+    } else if (role == 'organization') mappedRole = 'organization';
     else if (role == 'admin') mappedRole = 'admin';
     else mappedRole = 'user';
 
