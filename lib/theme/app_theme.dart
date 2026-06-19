@@ -27,7 +27,7 @@ class AppTheme {
   // Compile-time constants — safe to use in const widget constructors
   static const Color primaryColor =
       String.fromEnvironment('APP_THEME', defaultValue: defaultName) == merdekaName
-          ? Color.fromARGB(185, 214, 40, 40)
+          ? Color(0xFFD62828)
           : Color(0xFF768BBD);
 
   // Lighter variant of primary (used for AppBar, chips, secondary accents)
@@ -49,7 +49,7 @@ class AppTheme {
       case merdekaName:
         return const AppThemePalette(
           name: merdekaName,
-          primary: Color.fromARGB(185, 214, 40, 40),
+          primary: Color(0xFFD62828),
           secondary: Color(0xFFF4B400),
           background: Colors.white,
           surface: Colors.white,
