@@ -9,8 +9,8 @@ on:
 env:
   REGION: asia-southeast2
   SERVICE_NAME: bersatubantu
-  APP_THEME: default
-  BANNER_ENABLED: false
+  APP_THEME: merdeka
+  BANNER_ENABLED: true
 
 jobs:
   # ─────────────────────────────────────────────
@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -54,7 +56,7 @@ jobs:
           flutter test --coverage
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v8
+        uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995 # v8.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
