@@ -48,6 +48,11 @@ jobs:
       - name: Flutter test
         run: flutter test
 
+      - name: Run Flutter Tests & Coverage
+        run: |
+          flutter test --machine > flutter_test_report.json
+          flutter test --coverage
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v8
         env:
