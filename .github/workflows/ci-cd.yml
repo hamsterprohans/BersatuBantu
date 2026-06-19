@@ -9,8 +9,8 @@ on:
 env:
   REGION: asia-southeast2
   SERVICE_NAME: bersatubantu
-  APP_THEME: merdeka
-  BANNER_ENABLED: true
+  APP_THEME: default
+  BANNER_ENABLED: false
 
 jobs:
   # ─────────────────────────────────────────────
@@ -49,11 +49,11 @@ jobs:
         run: flutter test
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
+          SONAR_HOST_URL: https://sonarcloud.io
 
   # ─────────────────────────────────────────────
   # JOB 2: Build & Deploy — only on push to main
@@ -173,9 +173,7 @@ jobs:
           fi
 
       - name: Run Cypress E2E Tests
-        uses: cypress-io/github-action@v6
-        env:
-          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
+        uses: cypress-io/github-action@v7
         with:
           command: npx cypress run --config baseUrl=${{ env.SERVICE_URL }}
 
